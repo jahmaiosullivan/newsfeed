@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 import underscore from 'lodash';
+import util from 'util';
 
 const thumbwidthHeight = '100px';
 const dropZoneStyle = {
@@ -33,19 +34,23 @@ export default class DropZone extends Component {
   static propTypes = {
     uploadImageHandler: PropTypes.func.isRequired,
     onChangeHandler: PropTypes.func,
+    showOpenButton: PropTypes.bool,
     images: PropTypes.any
   };
 
   constructor(props) {
     super( props );
-    this.state = {files: props.images ? props.images : [], showOpenButton: false};
     this._onOpenClick = () => { this.onOpenClick(); };
     this._onDrop = (files) => { this.onDrop( files ); };
   }
 
+  componentWillMount() {
+    console.log(`component mount ${util.inspect(this.props.images)}`);
+  }
+
   onDrop(files) {
-    const appendedFiles = [...this.state.files];
-    const {uploadImageHandler, onChangeHandler} = this.props;
+    const {uploadImageHandler, onChangeHandler, images} = this.props;
+    const appendedFiles = [...images];
     let filesChanged = false;
     files.forEach( (file) => {
       const indexOfFile = underscore.findIndex( appendedFiles, (filename) => {
@@ -59,7 +64,6 @@ export default class DropZone extends Component {
           if (result.response.isSuccessful && result.response.statusCode === 201) {
             const index = underscore.indexOf( appendedFiles, underscore.find( appendedFiles, file ) );
             appendedFiles.splice( index, 1, {...file, uploadedUrl: result.url, loading: false} );
-            this.setState({ files: appendedFiles });
             onChangeHandler(appendedFiles);
           }
         });
@@ -68,7 +72,7 @@ export default class DropZone extends Component {
     });
 
     if (filesChanged) {
-      this.setState({ files: appendedFiles });
+      onChangeHandler(appendedFiles);
     }
   }
 
@@ -77,25 +81,24 @@ export default class DropZone extends Component {
   }
 
   onRemove(file) {
-    const updatedFiles = underscore.remove( this.state.files, (currentFile) => {
+    const {onChangeHandler, images } = this.props;
+    const updatedFiles = underscore.remove( images, (currentFile) => {
       return currentFile.name !== file.name;
     });
-
-    this.setState( {
-      files: updatedFiles
-    });
+    onChangeHandler(updatedFiles);
   }
 
   render() {
-    const {files, showOpenButton} = this.state;
+    const { images, showOpenButton } = this.props;
+    console.log(`rendering DropZone again. Images are ${util.inspect(images)}`);
     return (
       <div>
-        <input type="hidden" name="selectedImages" value={`${files.map( JSON.stringify )}`}/>
+        <input type="hidden" name="selectedImages" value={`${images.map( JSON.stringify )}`}/>
         <div className="container-fluid">
           <div className="row">
-            {files && files.map( (file) => {
-              return (<div key={`img.${file.name}`} className="col-md-2">
-                        <ThumbnailBox file={file} onRemoveHandler={() => { this.onRemove( file ); }} />
+            {images && images.map( (image) => {
+              return (<div key={`img.${image.uploadedUrl}`} className="col-md-2">
+                        <ThumbnailBox file={image} onRemoveHandler={() => { this.onRemove( image ); }} />
                      </div>);
             })}
             <div className="col-md-2">

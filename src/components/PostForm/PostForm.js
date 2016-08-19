@@ -11,7 +11,7 @@ export default class PostForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {postTitle: '', postBody: '', images: this.props.images ? this.props.images : [] };
+    this.state = {title: '', body: '', images: this.props.images ? this.props.images : [] };
     this._handleSubmit = (event) => { this.handleSubmit(event); };
     this._handleTitleChange = (event) => { this.handleTitleChange(event); };
     this._handleBodyChange = (event) => { this.handleBodyChange(event); };
@@ -19,11 +19,11 @@ export default class PostForm extends Component {
   }
 
   handleTitleChange(event) {
-    this.setState({postTitle: event.target.value});
+    this.setState({title: event.target.value});
   }
 
   handleBodyChange(event) {
-    this.setState({postBody: event.target.value});
+    this.setState({body: event.target.value});
   }
 
   handleImagesChange(images) {
@@ -32,17 +32,16 @@ export default class PostForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const title = this.state.postTitle.trim();
-    const body = this.state.postBody.trim();
+    const title = this.state.title.trim();
+    const body = this.state.body.trim();
     const images = this.state.images;
     if (!title || !body) {
       console.warn('both post title and body are blank');
       return;
     }
-    console.log(`submit to handler ${title} ${body}`);
-    console.log(`images to handler ${util.inspect(images)}`);
+    console.log(`submit to handler ${title} ${body}  ${util.inspect(images)}`);
     // TODO: send request to the server
-    // this.setState({title: '', body: ''});
+    this.setState({title: '', body: '', images: []});
   }
 
   render() {
@@ -62,10 +61,10 @@ export default class PostForm extends Component {
           <input
             type="text"
             placeholder="Body of your post ..."
-            value={this.state.postBody}
+            value={this.state.body}
             onChange={this._handleBodyChange}
           />
-          <DropZone images={this.props.images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
+          <DropZone images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
         </div>
         <input type="submit" value="Post"/>
       </form>
