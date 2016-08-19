@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 import underscore from 'lodash';
-import util from 'util';
 
 const thumbwidthHeight = '100px';
 const dropZoneStyle = {
@@ -10,6 +9,7 @@ const dropZoneStyle = {
   border: '2px dashed rgb(102, 102, 102)',
   borderRadius: '5px'
 };
+const thumbnailBoxStyle = {position: 'relative' };
 const spinner = require( './images/ajax_loader_blue_48.gif' );
 const spinnerOverlay = {
   position: 'absolute',
@@ -22,7 +22,7 @@ const spinnerOverlay = {
 
 const ThumbnailBox = ({image, onRemoveHandler}) => {
   return (
-    <div key={`img.${image.preview}`} style={{ position: 'relative' }}>
+    <div key={`img.${image.preview}`} style={thumbnailBoxStyle}>
       <img height={thumbwidthHeight} width={thumbwidthHeight} src={image.preview}/>
       <a onClick={onRemoveHandler}>Remove</a>
       {image.loading && <div style={spinnerOverlay} />}
@@ -43,11 +43,12 @@ export default class DropZone extends Component {
     this.state = {images: props.images ? props.images : []};
     this._onOpenClick = () => { this.onOpenClick(); };
     this._onDrop = (images) => { this.onDrop( images ); };
+    this.__updateImagesView = (images) => { this.updateImagesView( images ); };
   }
 
   onDrop(images) {
     const appendedImages = [...this.state.images];
-    const {uploadImageHandler, onChangeHandler} = this.props;
+    const {uploadImageHandler} = this.props;
     let imagesChanged = false;
     images.forEach( (newImage) => {
       const indexOfFile = underscore.findIndex( appendedImages, (image) => {
@@ -61,8 +62,7 @@ export default class DropZone extends Component {
           if (result.response.isSuccessful && result.response.statusCode === 201) {
             const index = underscore.indexOf( appendedImages, underscore.find( appendedImages, newImage ) );
             appendedImages.splice( index, 1, {...newImage, uploadedUrl: result.url, loading: false} );
-            this.setState({ images: appendedImages });
-            onChangeHandler(appendedImages);
+            this.__updateImagesView(appendedImages);
           }
         });
         imagesChanged = true;
@@ -70,8 +70,7 @@ export default class DropZone extends Component {
     });
 
     if (imagesChanged) {
-      this.setState({ images: appendedImages });
-      onChangeHandler(appendedImages);
+      this.__updateImagesView(appendedImages);
     }
   }
 
@@ -80,15 +79,15 @@ export default class DropZone extends Component {
   }
 
   onRemove(image) {
-    const { onChangeHandler } = this.props;
-    const updatedFiles = underscore.remove( this.state.images, (currentFile) => {
+    this.__updateImagesView(underscore.remove( this.state.images, (currentFile) => {
       return currentFile.name !== image.name;
-    });
+    }));
+  }
 
-    this.setState( {
-      images: updatedFiles
-    });
-    onChangeHandler(updatedFiles);
+  updateImagesView(imagesList) {
+    const {onChangeHandler} = this.props;
+    this.setState({ images: imagesList });
+    onChangeHandler(imagesList);
   }
 
   render() {
