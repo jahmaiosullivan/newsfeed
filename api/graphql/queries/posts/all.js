@@ -1,4 +1,5 @@
-import {Post} from '../../../database/models';
+import {Post, Comment } from '../../../database/models';
+import util from 'util';
 import {
   GraphQLList as List
 } from 'graphql';
@@ -10,6 +11,12 @@ export default  {
     return await Post.findAll({
       order: [
         ['createdAt', 'DESC']
-    ]});
+    ],
+      include: [{
+        model: Comment,
+        as: 'comments'
+        // where: { name: { $like: '%ooth%' } }
+      }]
+    });
   }
 };

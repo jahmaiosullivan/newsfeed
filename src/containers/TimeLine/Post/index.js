@@ -21,6 +21,7 @@ export default class Post extends Component {
     title: PropTypes.string,
     body: PropTypes.string,
     images: PropTypes.string,
+    comments: PropTypes.any,
     createdAt: PropTypes.string,
     editing: PropTypes.bool,
     deletePost: PropTypes.func.isRequired,
@@ -31,7 +32,7 @@ export default class Post extends Component {
   };
 
   render() {
-    const {children, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment } = this.props;
+    const {children, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
     return (
       <li className={styles.post}>
         { editing &&
@@ -78,6 +79,9 @@ export default class Post extends Component {
             })}
           </div>
           <div>
+            { comments && comments.map( (comment) => {
+              return (<div>{comment.body}</div>);
+            })}
             <CommentForm createCommentHandler={createNewComment} postId={id} />
           </div>
         </div>

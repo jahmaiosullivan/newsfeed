@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Post from './Post';
+import util from 'util';
 import Sidebar from './Sidebar';
 import NewPostForm from '../../components/PostForm/NewPostForm';
 import {connect} from 'react-redux';
@@ -53,7 +54,7 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   { posts && posts.map( (post) => {
-                    console.log(`post id is ${post.id}`);
+                    console.log(`post is ${util.inspect(post)}`);
                     return (<Post {...post} editing={editing[post.id]} key={post.id} {...boundActionCreators}>{post.body}</Post>);
                   })}
                 </ul>

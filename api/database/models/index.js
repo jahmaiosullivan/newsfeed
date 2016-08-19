@@ -12,13 +12,14 @@ User.hasMany(UserClaim, {
   onDelete: 'cascade'
 });
 
-
+Comment.belongsTo(Post, {as: 'post'});
 Post.hasMany(Comment, {
   foreignKey: 'postId',
   as: 'comments',
   onUpdate: 'cascade',
   onDelete: 'cascade'
 });
+
 
 function sync(...args) {
   return sequelize.sync(...args);
