@@ -1,10 +1,21 @@
 import sequelize from '../sequelize';
 import User, { comparePassword } from './User';
 import UserClaim from './UserClaim';
+import Comment from './Comment';
+import Post from './Post';
+import City from './City';
 
 User.hasMany(UserClaim, {
   foreignKey: 'userId',
   as: 'claims',
+  onUpdate: 'cascade',
+  onDelete: 'cascade'
+});
+
+
+Post.hasMany(Comment, {
+  foreignKey: 'postId',
+  as: 'comments',
   onUpdate: 'cascade',
   onDelete: 'cascade'
 });
@@ -14,4 +25,4 @@ function sync(...args) {
 }
 
 export default { sync };
-export { User, UserClaim, comparePassword };
+export { User, UserClaim, Post, Comment, City, comparePassword };
