@@ -31,20 +31,21 @@ const ThumbnailBox = ({file, onRemoveHandler}) => {
 
 export default class DropZone extends Component {
   static propTypes = {
-    saveFileHandler: PropTypes.func.isRequired,
+    uploadImageHandler: PropTypes.func.isRequired,
+    onChangeHandler: PropTypes.func,
     images: PropTypes.any
   };
 
   constructor(props) {
     super( props );
-    this.state = {files: props.images, showOpenButton: false};
+    this.state = {files: props.images ? props.images : [], showOpenButton: false};
     this._onOpenClick = () => { this.onOpenClick(); };
     this._onDrop = (files) => { this.onDrop( files ); };
   }
 
   onDrop(files) {
     const appendedFiles = [...this.state.files];
-    const {saveFileHandler} = this.props;
+    const {uploadImageHandler, onChangeHandler} = this.props;
     let filesChanged = false;
     files.forEach( (file) => {
       const indexOfFile = underscore.findIndex( appendedFiles, (filename) => {
@@ -54,11 +55,12 @@ export default class DropZone extends Component {
       if (indexOfFile === -1) {
         appendedFiles.push( {...file, loading: true} );
 
-        saveFileHandler(file).then((result) => {
+        uploadImageHandler(file).then((result) => {
           if (result.response.isSuccessful && result.response.statusCode === 201) {
             const index = underscore.indexOf( appendedFiles, underscore.find( appendedFiles, file ) );
             appendedFiles.splice( index, 1, {...file, uploadedUrl: result.url, loading: false} );
             this.setState({ files: appendedFiles });
+            onChangeHandler(appendedFiles);
           }
         });
         filesChanged = true;
@@ -92,9 +94,9 @@ export default class DropZone extends Component {
         <div className="container-fluid">
           <div className="row">
             {files && files.map( (file) => {
-              return (<div className="col-md-2">
+              return (<div key={`img.${file.name}`} className="col-md-2">
                         <ThumbnailBox file={file} onRemoveHandler={() => { this.onRemove( file ); }} />
-                      </div>);
+                     </div>);
             })}
             <div className="col-md-2">
               <Dropzone ref="dropzone" onDrop={this._onDrop} style={dropZoneStyle}>

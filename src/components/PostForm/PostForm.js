@@ -1,39 +1,71 @@
 import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
 import DropZone from '../../components/ImageUpload/DropZone';
+import util from 'util';
 
-@reduxForm( {
-  form: 'post',
-  fields: ['id', 'title', 'body', 'images'],
-  initialValues: {
-    images: []
-  }
-})
 export default class PostForm extends Component {
   static propTypes = {
-    fields: PropTypes.object.isRequired,
-    resetForm: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    submitHandler: PropTypes.func.isRequired,
-    saveFileHandler: PropTypes.func.isRequired
+    postId: PropTypes.string,
+    images: PropTypes.any,
+    uploadFileHandler: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {postTitle: '', postBody: '', images: this.props.images ? this.props.images : [] };
+    this._handleSubmit = (event) => { this.handleSubmit(event); };
+    this._handleTitleChange = (event) => { this.handleTitleChange(event); };
+    this._handleBodyChange = (event) => { this.handleBodyChange(event); };
+    this._handleImagesChange = (event) => { this.handleImagesChange(event); };
+  }
+
+  handleTitleChange(event) {
+    this.setState({postTitle: event.target.value});
+  }
+
+  handleBodyChange(event) {
+    this.setState({postBody: event.target.value});
+  }
+
+  handleImagesChange(images) {
+    this.setState({images: images});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const title = this.state.postTitle.trim();
+    const body = this.state.postBody.trim();
+    const images = this.state.images;
+    if (!title || !body) {
+      console.warn('both post title and body are blank');
+      return;
+    }
+    console.log(`submit to handler ${title} ${body}`);
+    console.log(`images to handler ${util.inspect(images)}`);
+    // TODO: send request to the server
+    // this.setState({title: '', body: ''});
+  }
+
   render() {
-    const {fields: {id, title, body}, handleSubmit, resetForm, submitHandler, saveFileHandler } = this.props;
-    const formSubmit = (formValues) => {
-      submitHandler( formValues ).then( () => {
-        resetForm();
-      } );
-    };
+    const {postId, uploadFileHandler } = this.props;
     const styles = require('./PostForm.scss');
     return (
-      <form key={id} className={styles.postForm} onSubmit={handleSubmit(formSubmit)}>
+      <form key={postId} className={styles.postForm} onSubmit={this._handleSubmit}>
         <div>
-          <input type="text" placeholder="Title of your post ..." {...title} />
+          <input
+            type="text"
+            placeholder="Title of your post ..."
+            value={this.state.title}
+            onChange={this._handleTitleChange}
+          />
         </div>
         <div>
-          <input type="text" placeholder="Body of your post ..." {...body} />
-          <DropZone images={[]} saveFileHandler={saveFileHandler} />
+          <input
+            type="text"
+            placeholder="Body of your post ..."
+            value={this.state.postBody}
+            onChange={this._handleBodyChange}
+          />
+          <DropZone images={this.props.images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
         </div>
         <input type="submit" value="Post"/>
       </form>

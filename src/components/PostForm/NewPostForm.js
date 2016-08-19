@@ -32,8 +32,9 @@ export default class NewPost extends Component {
         {showStatus &&
         <div>
           <PostForm formKey="newPost"
+                    postId="-1"
                     submitHandler={(formValues) => { return createNewPost(formValues, newPost); }}
-                    saveFileHandler={saveFile} />
+                    uploadFileHandler={saveFile} />
         </div>
         }
       </div>
