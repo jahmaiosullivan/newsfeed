@@ -6,6 +6,7 @@ export default class PostForm extends Component {
   static propTypes = {
     postId: PropTypes.string,
     images: PropTypes.any,
+    submitHandler: PropTypes.func.isRequired,
     uploadFileHandler: PropTypes.func.isRequired
   };
 
@@ -34,13 +35,13 @@ export default class PostForm extends Component {
     event.preventDefault();
     const title = this.state.title.trim();
     const body = this.state.body.trim();
-    const images = this.state.images;
+    const images = this.state.images.map((image) => {return image.uploadedUrl;}).join(', ');
+    const {submitHandler} = this.props;
     if (!title || !body) {
       console.warn('both post title and body are blank');
       return;
     }
-    console.log(`submit to handler ${title} ${body}  ${util.inspect(images)}`);
-    // TODO: send request to the server
+    submitHandler({title, body, images});
     this.setState({title: '', body: '', images: []});
   }
 

@@ -18,14 +18,8 @@ function toggle() {
   return {type: actions.POST_NEW_TOGGLE};
 }
 
-function createNewPost(post, {images}) {
-  const newTitle = post.title.trim();
-  const newBody = post.body.trim();
-  if (!newTitle || !newBody) {
-    return {type: ''};
-  }
-  const newPostImages = images.join(', ');
-  const graphQlMutationQuery = `mutation CreatePost { createPost(title: \"${newTitle}\",body: \"${newBody}\",images: \"${newPostImages}\") {id, title,body, images, createdAt,updatedAt }}`;
+function createNewPost({title, body, images}) {
+  const graphQlMutationQuery = `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\") {id, title,body, images, createdAt,updatedAt }}`;
 
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
