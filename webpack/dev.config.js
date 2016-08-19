@@ -9,7 +9,6 @@ var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
 var AssetsPlugin = require('assets-webpack-plugin');
 
-// https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
