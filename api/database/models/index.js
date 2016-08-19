@@ -6,7 +6,7 @@ import Post from './Post';
 import City from './City';
 
 User.hasMany(UserClaim, {
-  foreignKey: 'userId',
+  foreignKey: 'userid',
   as: 'claims',
   onUpdate: 'cascade',
   onDelete: 'cascade'
