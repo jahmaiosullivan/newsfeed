@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 import underscore from 'lodash';
+// import util from 'util';
 
 const thumbwidthHeight = '100px';
 const dropZoneStyle = {
@@ -53,6 +54,13 @@ export default class DropZone extends Component {
     this._uploadImage = (image, cb) => {
       this.uploadImage(image, cb);
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {images} = nextProps;
+    if (images !== this.state.images) {
+      this.setState({images: images});
+    }
   }
 
   onDrop(newImages) {
