@@ -1,4 +1,4 @@
-import Post from '../../../database/models';
+import {Post} from '../../../database/models';
 import {
   GraphQLList as List
 } from 'graphql';

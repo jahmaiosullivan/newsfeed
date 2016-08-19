@@ -1,9 +1,9 @@
 import PostType from '../../types/PostType';
-import Post from '../../../database/models';
+import { Post } from '../../../database/models';
 import util from 'util';
 import {
   GraphQLString as StringType,
-  GraphQLNonNull as NonNull,
+  GraphQLNonNull as NonNull
 } from 'graphql';
 
 export default {
