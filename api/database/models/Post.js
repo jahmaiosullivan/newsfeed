@@ -9,7 +9,7 @@ const Post = Model.define( 'Post', {
   },
   title: DataType.STRING,
   body: DataType.STRING,
-  images: DataType.STRING
+  images: DataType.TEXT
 }, {tableName: 'posts'} );
 
 export {Post as default};
