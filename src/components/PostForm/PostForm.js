@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import DropZone from '../../components/ImageUpload/DropZone';
-import util from 'util';
+// import util from 'util';
 
 export default class PostForm extends Component {
   static propTypes = {
