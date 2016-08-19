@@ -154,6 +154,23 @@ export default (state = initialState, action = {}) => {
         loaded: false,
         error: action.error
       };
+    case actions.COMMENT_NEW:
+      return {
+        ...state,
+        saving: true
+      };
+    case actions.COMMENT_NEW_SUCCESS:
+      return {
+        ...state,
+        saving: false
+      };
+    case actions.COMMENT_NEW_FAIL:
+      console.log( `COMMENT_NEW_FAIL with error ${util.inspect( action.error )}` );
+      return {
+        ...state,
+        saving: false,
+        error: action.error
+      };
     default:
       return state;
   }

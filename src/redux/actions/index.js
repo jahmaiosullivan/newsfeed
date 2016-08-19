@@ -22,7 +22,10 @@ const postActions = {
   POST_EDIT_STOP: createActionName( 'posts', 'EDIT_STOP' ),
   SAVE_FILE: createActionName( 'files', 'SAVE_FILE' ),
   SAVE_FILE_SUCCESS: createActionName( 'files', 'SAVE_FILE_SUCCESS' ),
-  SAVE_FILE_FAIL: createActionName( 'files', 'SAVE_FILE_FAIL' )
+  SAVE_FILE_FAIL: createActionName( 'files', 'SAVE_FILE_FAIL' ),
+  COMMENT_NEW: createActionName( 'posts', 'NEW_COMMENT' ),
+  COMMENT_NEW_SUCCESS: createActionName( 'posts', 'NEW_COMMENT_SUCCESS' ),
+  COMMENT_NEW_FAIL: createActionName( 'posts', 'NEW_COMMENT_FAIL' )
 
 };
 

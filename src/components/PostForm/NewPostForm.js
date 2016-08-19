@@ -20,7 +20,7 @@ export default class NewPost extends Component {
 
   constructor(props) {
     super(props);
-    this._handleSubmit = (event) => { this.handleSubmit(event); };
+    this._handleSubmit = (formValues) => { this.handleSubmit(formValues); };
   }
 
   handleSubmit(formValues) {

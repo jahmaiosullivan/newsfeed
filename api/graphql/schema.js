@@ -14,6 +14,8 @@ import createPost from './mutations/posts/create';
 import deletePost from './mutations/posts/delete';
 import updatePost from './mutations/posts/update';
 
+import { Create as createComment, Update as updateComment, Delete as deleteComment } from './mutations/comments/crud';
+
 export default  new Schema({
   query: new ObjectType({
     name: 'Query',
@@ -32,7 +34,10 @@ export default  new Schema({
     fields: () => ({
       createPost,
       updatePost,
-      deletePost
+      deletePost,
+      createComment,
+      updateComment,
+      deleteComment
     })
   })
 });

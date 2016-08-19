@@ -25,7 +25,7 @@ import { bindActionCreators } from 'redux';
   }),
   {load} )
 
-export default class Events extends Component {
+export default class TimeLine extends Component {
   static propTypes = {
     posts: PropTypes.array,
     user: PropTypes.object,
@@ -53,6 +53,7 @@ export default class Events extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   { posts && posts.map( (post) => {
+                    console.log(`post id is ${post.id}`);
                     return (<Post {...post} editing={editing[post.id]} key={post.id} {...boundActionCreators}>{post.body}</Post>);
                   })}
                 </ul>

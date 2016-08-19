@@ -3,16 +3,17 @@ import {
   GraphQLID as ID,
   GraphQLString as StringType,
   GraphQLInt as IntType,
-  GraphQLNonNull as NonNull
+  GraphQLNonNull as NonNull,
+  GraphQLBoolean as BooleanType
 } from 'graphql';
 
 export default new ObjectType({
-  name: 'Post',
+  name: 'Comment',
   fields: {
-    id: { type: new NonNull(IntType) },
-    title: { type: StringType },
+    id: { type: new NonNull(ID) },
+    postId: { type: IntType },
     body: { type: StringType },
-    images: { type: StringType },
+    status: { type: BooleanType },
     createdAt: { type: StringType },
     updatedAt: { type: StringType }
   }
