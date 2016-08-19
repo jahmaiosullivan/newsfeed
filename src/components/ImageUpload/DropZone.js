@@ -9,8 +9,8 @@ const dropZoneStyle = {
   border: '2px dashed rgb(102, 102, 102)',
   borderRadius: '5px'
 };
-const thumbnailBoxStyle = {position: 'relative' };
-const spinner = require( './images/ajax_loader_blue_48.gif' );
+const thumbnailBoxStyle = {position: 'relative'};
+const spinner = require('./images/ajax_loader_blue_48.gif');
 const spinnerOverlay = {
   position: 'absolute',
   top: 0,
@@ -25,7 +25,7 @@ const ThumbnailBox = ({image, onRemoveHandler}) => {
     <div key={`img.${image.preview}`} style={thumbnailBoxStyle}>
       <img height={thumbwidthHeight} width={thumbwidthHeight} src={image.preview}/>
       <a onClick={onRemoveHandler}>Remove</a>
-      {image.loading && <div style={spinnerOverlay} />}
+      {image.loading && <div style={spinnerOverlay}/>}
     </div>
   );
 };
@@ -39,39 +39,34 @@ export default class DropZone extends Component {
   };
 
   constructor(props) {
-    super( props );
+    super(props);
     this.state = {images: props.images ? props.images : []};
-    this._onOpenClick = () => { this.onOpenClick(); };
-    this._onDrop = (images) => { this.onDrop( images ); };
-    this._updateImagesView = (images) => { this.updateImagesView( images ); };
-    this._uploadImage = (image, cb) => { this.uploadImage( image, cb ); };
+    this._onOpenClick = () => {
+      this.onOpenClick();
+    };
+    this._onDrop = (images) => {
+      this.onDrop(images);
+    };
+    this._updateImagesView = (images) => {
+      this.updateImagesView(images);
+    };
+    this._uploadImage = (image, cb) => {
+      this.uploadImage(image, cb);
+    };
   }
 
-  onDrop(images) {
-    const appendedImages = [...this.state.images];
+  onDrop(newImages) {
+    const allImages = [...this.state.images];
+    newImages.forEach((newImage) => {
+      allImages.push({...newImage, loading: true});
+      this._updateImagesView(allImages);
 
-    let anyImageChanged = false;
-    images.forEach( (newImage) => {
-      const indexOfFile = underscore.findIndex( appendedImages, (image) => {
-        return image.name === newImage.name && image.lastModified === newImage.lastModified;
+      this._uploadImage(newImage, (result) => {
+        const index = underscore.indexOf(allImages, underscore.find(allImages, newImage));
+        allImages.splice(index, 1, {...newImage, uploadedUrl: result.url, loading: false});
+        this._updateImagesView(allImages);
       });
-
-      if (indexOfFile === -1) {
-        appendedImages.push( {...newImage, loading: true} );
-
-        this._uploadImage(newImage, (result) => {
-          const index = underscore.indexOf( appendedImages, underscore.find( appendedImages, newImage ) );
-          appendedImages.splice( index, 1, {...newImage, uploadedUrl: result.url, loading: false} );
-          this._updateImagesView(appendedImages);
-        });
-
-        anyImageChanged = true;
-      }
     });
-
-    if (anyImageChanged) {
-      this._updateImagesView(appendedImages);
-    }
   }
 
   onOpenClick() {
@@ -79,24 +74,28 @@ export default class DropZone extends Component {
   }
 
   onRemove(image) {
-    this.__updateImagesView(underscore.remove( this.state.images, (currentFile) => {
+    this._updateImagesView(underscore.remove(this.state.images, (currentFile) => {
       return currentFile.name !== image.name;
     }));
   }
 
   updateImagesView(imagesList) {
     const {onChangeHandler} = this.props;
-    this.setState({ images: imagesList });
+    this.setState({images: imagesList});
     onChangeHandler(imagesList);
   }
 
   uploadImage(newImage, cb) {
     const {uploadImageHandler} = this.props;
-    uploadImageHandler(newImage).then((result) => {
-      if (result.response.isSuccessful && result.response.statusCode === 201) {
-        cb(result);
-      }
-    });
+    if (uploadImageHandler) {
+      uploadImageHandler(newImage).then((result) => {
+        if (result.response.isSuccessful && result.response.statusCode === 201) {
+          cb(result);
+        }
+      });
+    } else {
+      console.log(`image not uploaded because uploadHandler is not set`);
+    }
   }
 
   render() {
@@ -107,10 +106,10 @@ export default class DropZone extends Component {
         <input type="hidden" name="selectedImages" value={`${images.map( JSON.stringify )}`}/>
         <div className="container-fluid">
           <div className="row">
-            {images && images.map( (image) => {
-              return (<div key={`img.${image.uploadedUrl}`} className="col-md-2">
-                        <ThumbnailBox image={image} onRemoveHandler={() => { this.onRemove( image ); }} />
-                     </div>);
+            {images && images.map((image) => {
+              return (<div key={`img.${image.preview}`} className="col-md-2">
+                <ThumbnailBox image={image} onRemoveHandler={() => { this.onRemove( image ); }}/>
+              </div>);
             })}
             <div className="col-md-2">
               <Dropzone ref="dropzone" onDrop={this._onDrop} style={dropZoneStyle}>
