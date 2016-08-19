@@ -43,13 +43,14 @@ export default class DropZone extends Component {
     this.state = {images: props.images ? props.images : []};
     this._onOpenClick = () => { this.onOpenClick(); };
     this._onDrop = (images) => { this.onDrop( images ); };
-    this.__updateImagesView = (images) => { this.updateImagesView( images ); };
+    this._updateImagesView = (images) => { this.updateImagesView( images ); };
+    this._uploadImage = (image, cb) => { this.uploadImage( image, cb ); };
   }
 
   onDrop(images) {
     const appendedImages = [...this.state.images];
-    const {uploadImageHandler} = this.props;
-    let imagesChanged = false;
+
+    let anyImageChanged = false;
     images.forEach( (newImage) => {
       const indexOfFile = underscore.findIndex( appendedImages, (image) => {
         return image.name === newImage.name && image.lastModified === newImage.lastModified;
@@ -58,19 +59,18 @@ export default class DropZone extends Component {
       if (indexOfFile === -1) {
         appendedImages.push( {...newImage, loading: true} );
 
-        uploadImageHandler(newImage).then((result) => {
-          if (result.response.isSuccessful && result.response.statusCode === 201) {
-            const index = underscore.indexOf( appendedImages, underscore.find( appendedImages, newImage ) );
-            appendedImages.splice( index, 1, {...newImage, uploadedUrl: result.url, loading: false} );
-            this.__updateImagesView(appendedImages);
-          }
+        this._uploadImage(newImage, (result) => {
+          const index = underscore.indexOf( appendedImages, underscore.find( appendedImages, newImage ) );
+          appendedImages.splice( index, 1, {...newImage, uploadedUrl: result.url, loading: false} );
+          this._updateImagesView(appendedImages);
         });
-        imagesChanged = true;
+
+        anyImageChanged = true;
       }
     });
 
-    if (imagesChanged) {
-      this.__updateImagesView(appendedImages);
+    if (anyImageChanged) {
+      this._updateImagesView(appendedImages);
     }
   }
 
@@ -88,6 +88,15 @@ export default class DropZone extends Component {
     const {onChangeHandler} = this.props;
     this.setState({ images: imagesList });
     onChangeHandler(imagesList);
+  }
+
+  uploadImage(newImage, cb) {
+    const {uploadImageHandler} = this.props;
+    uploadImageHandler(newImage).then((result) => {
+      if (result.response.isSuccessful && result.response.statusCode === 201) {
+        cb(result);
+      }
+    });
   }
 
   render() {
