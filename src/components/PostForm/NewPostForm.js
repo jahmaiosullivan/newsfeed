@@ -18,8 +18,19 @@ export default class NewPost extends Component {
     saveFile: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this._handleSubmit = (event) => { this.handleSubmit(event); };
+  }
+
+  handleSubmit(formValues) {
+    const {createNewPost, toggle } = this.props;
+    createNewPost(formValues);
+    toggle();
+  }
+
   render() {
-    const {createNewPost, saveFile, showStatus, toggle } = this.props;
+    const { saveFile, showStatus, toggle } = this.props;
     return (
       <div>
         <div>
@@ -31,7 +42,7 @@ export default class NewPost extends Component {
         <div>
           <PostForm formKey="newPost"
                     postId="-1"
-                    submitHandler={(formValues) => { return createNewPost(formValues); }}
+                    submitHandler={(formValues) => { return this._handleSubmit(formValues); }}
                     uploadFileHandler={saveFile} />
         </div>
         }
