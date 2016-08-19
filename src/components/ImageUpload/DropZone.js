@@ -45,10 +45,6 @@ export default class DropZone extends Component {
     this._onDrop = (images) => { this.onDrop( images ); };
   }
 
-  componentWillMount() {
-    console.log(`component mount ${util.inspect(this.props.images)}`);
-  }
-
   onDrop(images) {
     const appendedImages = [...this.state.images];
     const {uploadImageHandler, onChangeHandler} = this.props;
