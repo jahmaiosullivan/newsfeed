@@ -1,5 +1,5 @@
 import CityType from '../../types/CityType';
-import City from '../../../database/models/City';
+import City from '../../../database/models';
 
 const event = {
   type: CityType,

@@ -1,5 +1,5 @@
 import PostType from '../../types/PostType';
-import Post from '../../../database/models/Post';
+import Post from '../../../database/models';
 import util from 'util';
 import {
   GraphQLInt as IntType,
