@@ -8,7 +8,6 @@ const Comment = Model.define('Comment', {
     autoIncrement: true
   },
   body: {type: DataType.TEXT},
-  passwordHash: DataType.STRING,
   status: DataType.INTEGER,
   statusReason: DataType.STRING,
   createdAt: {type: DataType.DATE},
