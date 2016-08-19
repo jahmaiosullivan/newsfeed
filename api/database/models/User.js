@@ -71,11 +71,11 @@ const User = Model.define('users', {
     }
   }
 }, {
-
   indexes: [
     {fields: ['email']}
-  ]
-}, {tableName: 'users'} );
+  ],
+  tableName: 'users'
+});
 
 export { comparePassword };
 export default User;
