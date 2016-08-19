@@ -20,12 +20,12 @@ const spinnerOverlay = {
 };
 
 
-const ThumbnailBox = ({file, onRemoveHandler}) => {
+const ThumbnailBox = ({image, onRemoveHandler}) => {
   return (
-    <div key={`img.${file.preview}`} style={{ position: 'relative' }}>
-      <img height={thumbwidthHeight} width={thumbwidthHeight} src={file.preview}/>
+    <div key={`img.${image.preview}`} style={{ position: 'relative' }}>
+      <img height={thumbwidthHeight} width={thumbwidthHeight} src={image.preview}/>
       <a onClick={onRemoveHandler}>Remove</a>
-      {file.loading && <div style={spinnerOverlay} />}
+      {image.loading && <div style={spinnerOverlay} />}
     </div>
   );
 };
@@ -40,39 +40,42 @@ export default class DropZone extends Component {
 
   constructor(props) {
     super( props );
+    this.state = {images: props.images ? props.images : []};
     this._onOpenClick = () => { this.onOpenClick(); };
-    this._onDrop = (files) => { this.onDrop( files ); };
+    this._onDrop = (images) => { this.onDrop( images ); };
   }
 
   componentWillMount() {
     console.log(`component mount ${util.inspect(this.props.images)}`);
   }
 
-  onDrop(files) {
-    const {uploadImageHandler, onChangeHandler, images} = this.props;
-    const appendedFiles = [...images];
-    let filesChanged = false;
-    files.forEach( (file) => {
-      const indexOfFile = underscore.findIndex( appendedFiles, (filename) => {
-        return filename.name === file.name && filename.lastModified === file.lastModified;
+  onDrop(images) {
+    const appendedImages = [...this.state.images];
+    const {uploadImageHandler, onChangeHandler} = this.props;
+    let imagesChanged = false;
+    images.forEach( (newImage) => {
+      const indexOfFile = underscore.findIndex( appendedImages, (image) => {
+        return image.name === newImage.name && image.lastModified === newImage.lastModified;
       });
 
       if (indexOfFile === -1) {
-        appendedFiles.push( {...file, loading: true} );
+        appendedImages.push( {...newImage, loading: true} );
 
-        uploadImageHandler(file).then((result) => {
+        uploadImageHandler(newImage).then((result) => {
           if (result.response.isSuccessful && result.response.statusCode === 201) {
-            const index = underscore.indexOf( appendedFiles, underscore.find( appendedFiles, file ) );
-            appendedFiles.splice( index, 1, {...file, uploadedUrl: result.url, loading: false} );
-            onChangeHandler(appendedFiles);
+            const index = underscore.indexOf( appendedImages, underscore.find( appendedImages, newImage ) );
+            appendedImages.splice( index, 1, {...newImage, uploadedUrl: result.url, loading: false} );
+            this.setState({ images: appendedImages });
+            onChangeHandler(appendedImages);
           }
         });
-        filesChanged = true;
+        imagesChanged = true;
       }
     });
 
-    if (filesChanged) {
-      onChangeHandler(appendedFiles);
+    if (imagesChanged) {
+      this.setState({ images: appendedImages });
+      onChangeHandler(appendedImages);
     }
   }
 
@@ -80,17 +83,21 @@ export default class DropZone extends Component {
     this.refs.dropzone.open();
   }
 
-  onRemove(file) {
-    const {onChangeHandler, images } = this.props;
-    const updatedFiles = underscore.remove( images, (currentFile) => {
-      return currentFile.name !== file.name;
+  onRemove(image) {
+    const { onChangeHandler } = this.props;
+    const updatedFiles = underscore.remove( this.state.images, (currentFile) => {
+      return currentFile.name !== image.name;
+    });
+
+    this.setState( {
+      images: updatedFiles
     });
     onChangeHandler(updatedFiles);
   }
 
   render() {
-    const { images, showOpenButton } = this.props;
-    console.log(`rendering DropZone again. Images are ${util.inspect(images)}`);
+    const { showOpenButton } = this.props;
+    const { images } = this.state;
     return (
       <div>
         <input type="hidden" name="selectedImages" value={`${images.map( JSON.stringify )}`}/>
@@ -98,7 +105,7 @@ export default class DropZone extends Component {
           <div className="row">
             {images && images.map( (image) => {
               return (<div key={`img.${image.uploadedUrl}`} className="col-md-2">
-                        <ThumbnailBox file={image} onRemoveHandler={() => { this.onRemove( image ); }} />
+                        <ThumbnailBox image={image} onRemoveHandler={() => { this.onRemove( image ); }} />
                      </div>);
             })}
             <div className="col-md-2">
