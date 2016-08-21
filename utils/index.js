@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const formatDatePart = (part) => {
   return ('0' + (part)).slice(-2);
 };
@@ -14,4 +16,8 @@ function dateString() {
   return `${year}${month}${day}_${hours}${minutes}${seconds}`;
 }
 
-export { dateString };
+const utcDate = () => {
+  return moment.utc().format();
+};
+
+export { dateString, utcDate };

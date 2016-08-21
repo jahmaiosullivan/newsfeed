@@ -12,6 +12,7 @@ export default {
     title: {type: new NonNull( StringType )},
     body: {type: new NonNull( StringType )},
     images: {type: StringType },
+    createdAt: {type: StringType },
     createdBy: {type: StringType }
   },
   async resolve(req, newValues) {
