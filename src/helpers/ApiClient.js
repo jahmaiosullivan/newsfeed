@@ -70,6 +70,9 @@ export default class ApiClient {
       }));
   }
 
+  graphQL(query) {
+    return this.post( config.graphQLEndpoint, {data: {query}} );
+  }
   /*
    * There's a V8 bug where, when using Babel, exporting classes with only
    * constructors sometimes fails. Until it's patched, this is a solution to

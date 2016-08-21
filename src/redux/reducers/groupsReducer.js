@@ -2,7 +2,6 @@ const LOAD = 'yoorcity/groups/LOAD';
 const LOAD_SUCCESS = 'yoorcity/groups/LOAD_SUCCESS';
 const LOAD_FAIL = 'yoorcity/groups/LOAD_FAIL';
 
-const graphQlGroupsQuery = `{groups{id,name,coverImage,created}}`;
 const initialState = {
   loaded: false
 };
@@ -42,7 +41,7 @@ function isLoaded(globalState) {
 function loadGroups() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.post('/graphql', {data: { query: graphQlGroupsQuery }})
+    promise: (client) => client.graphQL(`{groups{id,name,coverImage,created}}`)
   };
 }
 
