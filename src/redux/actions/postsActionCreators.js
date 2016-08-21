@@ -10,7 +10,7 @@ function isLoaded(globalState) {
 function loadPosts() {
   return {
     types: [actions.POST_LOAD, actions.POST_LOAD_SUCCESS, actions.POST_LOAD_FAIL],
-    promise: (client) => client.post( '/graphql', {data: {query: `{posts{id, title, body, images, comments {id, body, status }, createdAt,updatedAt }}`}} )
+    promise: (client) => client.post( config.graphQLEndpoint, {data: {query: `{posts{id, title, body, images, comments {id, body, status }, createdAt,updatedAt }}`}} )
   };
 }
 
@@ -23,14 +23,14 @@ function createNewPost({title, body, images}) {
 
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
-    promise: (client) => client.post( '/graphql', {data: {query: graphQlMutationQuery}} )
+    promise: (client) => client.post( config.graphQLEndpoint, {data: {query: graphQlMutationQuery}} )
   };
 }
 
 function deletePost(id) {
   return {
     types: [actions.POST_DELETE, actions.POST_DELETE_SUCCESS, actions.POST_DELETE_FAIL],
-    promise: (client) => client.post( '/graphql', {data: {query: `mutation DeletePost { deletePost(id: ${id}){ id }}`}} )
+    promise: (client) => client.post( config.graphQLEndpoint, {data: {query: `mutation DeletePost { deletePost(id: ${id}){ id }}`}} )
   };
 }
 
@@ -46,7 +46,7 @@ function editPost(post) {
   console.log(`post is ${util.inspect(post)}`);
   return {
     types: [actions.POST_UPDATE, actions.POST_UPDATE_SUCCESS, actions.POST_UPDATE_FAIL],
-    promise: (client) => client.post( '/graphql', {data: {query: `mutation UpdatePost { updatePost(id: ${post.id}, title: \"${post.title}\", body: \"${post.body}\" ){ id, title, body, createdAt, updatedAt }}`}} )
+    promise: (client) => client.post( config.graphQLEndpoint, {data: {query: `mutation UpdatePost { updatePost(id: ${post.id}, title: \"${post.title}\", body: \"${post.body}\" ){ id, title, body, createdAt, updatedAt }}`}} )
   };
 }
 
@@ -64,7 +64,7 @@ function createNewComment({postId, body, status}) {
 
   return {
     types: [actions.COMMENT_NEW, actions.COMMENT_NEW_SUCCESS, actions.COMMENT_NEW_FAIL],
-    promise: (client) => client.post( '/graphql', {data: {query: graphQlMutationQuery}} )
+    promise: (client) => client.post( config.graphQLEndpoint, {data: {query: graphQlMutationQuery}} )
   };
 }
 

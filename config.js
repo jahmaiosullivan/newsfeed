@@ -42,6 +42,7 @@ module.exports = Object.assign({
   port: process.env.PORT || 3000,
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT || 3030,
+  graphQLEndpoint: '/graphql',
   databaseUrl: process.env.DATABASE_URL || 'postgres://jahmaiosullivan:Star2016@localhost:5432/HobbyClue',
   uploadsDir: path.join( __dirname, 'static', 'uploads' ),
   tagLine,

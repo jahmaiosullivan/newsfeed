@@ -66,7 +66,7 @@ export default class ApiClient {
           request.send( formData );
         }
 
-        request.end( (err, {body} = {}) => err ? reject( body || err ) : resolve( body ) );
+        request.end( (err, {body} = {}) => err ? reject( err || body ) : resolve( body ) );
       }));
   }
 
