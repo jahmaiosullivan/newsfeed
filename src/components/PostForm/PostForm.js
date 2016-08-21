@@ -47,6 +47,7 @@ export default class PostForm extends Component {
 
   render() {
     const {postId, uploadFileHandler } = this.props;
+    const {title, body, images } = this.state;
     const styles = require('./PostForm.scss');
     return (
       <form id={`postForm_${postId}`} key={postId} className={styles.postForm} onSubmit={this._handleSubmit}>
@@ -54,7 +55,7 @@ export default class PostForm extends Component {
           <input
             type="text"
             placeholder="Title of your post ..."
-            value={this.state.title}
+            value={title}
             onChange={this._handleTitleChange}
           />
         </div>
@@ -62,10 +63,10 @@ export default class PostForm extends Component {
           <input
             type="text"
             placeholder="Body of your post ..."
-            value={this.state.body}
+            value={body}
             onChange={this._handleBodyChange}
           />
-          <DropZone images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
+          <DropZone images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
         </div>
         <input type="submit" value="Post"/>
       </form>
