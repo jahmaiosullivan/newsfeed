@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 import underscore from 'lodash';
-import ThumbnailBox from './Thumbnail/Thumbnail';
+import ThumbnailBox from '../Thumbnail/Thumbnail';
 // import util from 'util';
 
 const thumbwidthHeight = '100px';
