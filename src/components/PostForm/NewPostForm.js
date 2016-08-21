@@ -3,7 +3,6 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import PostForm from './PostForm';
 
-
 export default class NewPost extends Component {
   static propTypes = {
     showNewPostForm: PropTypes.bool,
@@ -13,19 +12,13 @@ export default class NewPost extends Component {
     saveFile: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this._handleSubmit = (formValues) => { this.handleSubmit(formValues); };
-  }
-
-  handleSubmit(formValues) {
-    const {createNewPost, toggleNewPostForm, user } = this.props;
+  handleSubmit(formValues, createNewPost, toggleNewPostForm, user) {
     createNewPost({...formValues, createdBy: user.id});
     toggleNewPostForm();
   }
 
   render() {
-    const { saveFile, showNewPostForm, toggleNewPostForm } = this.props;
+    const { createNewPost, saveFile, showNewPostForm, toggleNewPostForm, user } = this.props;
     return (
       <div>
         <div>
@@ -37,7 +30,7 @@ export default class NewPost extends Component {
         <div>
           <PostForm formKey="newPost"
                     postId="-1"
-                    submitHandler={(formValues) => { return this._handleSubmit(formValues); }}
+                    submitHandler={(formValues) => { this.handleSubmit(formValues, createNewPost, toggleNewPostForm, user); }}
                     uploadFileHandler={saveFile} />
         </div>
         }
