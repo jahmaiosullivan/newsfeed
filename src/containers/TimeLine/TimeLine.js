@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import Post from './Post';
-import Sidebar from './Sidebar';
+import Post from '../../components/Post/Post';
+import Sidebar from '../../components/Sidebar';
 import NewPostForm from '../../components/PostForm/NewPostForm';
 import {connect} from 'react-redux';
 import {isLoaded, loadPosts as load} from 'redux/actions/postsActionCreators';

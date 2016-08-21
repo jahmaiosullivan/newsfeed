@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import Avatar from '../Avatar';
-import PostForm from '../../../components/PostForm/PostForm';
+import PostForm from '../PostForm/PostForm';
 import * as newPostActions from 'redux/actions/postsActionCreators';
 import * as newCommentActions from 'redux/actions/commentActionCreators';
 import {connect} from 'react-redux';
-import CommentForm from '../../../components/Comment/CommentForm';
+import CommentForm from '../Comment/CommentForm';
 
 const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
