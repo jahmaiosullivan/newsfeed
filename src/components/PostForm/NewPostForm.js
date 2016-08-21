@@ -1,19 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import * as newPostActions from 'redux/actions/postsActionCreators';
-import {connect} from 'react-redux';
 import PostForm from './PostForm';
 
-@connect(
-  (state) => ({
-    showNewPostForm: state.posts.newPost.show
-  }), {...newPostActions} )
 
 export default class NewPost extends Component {
   static propTypes = {
-    showNewPostForm: PropTypes.bool.isRequired,
-    toggle: PropTypes.func.isRequired,
+    showNewPostForm: PropTypes.bool,
+    toggleNewPostForm: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     saveFile: PropTypes.func.isRequired
@@ -25,17 +19,17 @@ export default class NewPost extends Component {
   }
 
   handleSubmit(formValues) {
-    const {createNewPost, toggle, user } = this.props;
+    const {createNewPost, toggleNewPostForm, user } = this.props;
     createNewPost({...formValues, createdBy: user.id});
-    toggle();
+    toggleNewPostForm();
   }
 
   render() {
-    const { saveFile, showNewPostForm, toggle } = this.props;
+    const { saveFile, showNewPostForm, toggleNewPostForm } = this.props;
     return (
       <div>
         <div>
-          <Nav bsStyle="pills" activeKey={1} onSelect={toggle}>
+          <Nav bsStyle="pills" activeKey={1} onSelect={toggleNewPostForm}>
             <NavItem eventKey={1} href="#">New Post</NavItem>
           </Nav>
         </div>

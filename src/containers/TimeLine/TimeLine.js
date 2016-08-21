@@ -7,6 +7,7 @@ import {isLoaded, loadPosts as load} from 'redux/actions/postsActionCreators';
 import * as postsActionCreators from 'redux/actions/postsActionCreators';
 import {asyncConnect} from 'redux-async-connect';
 import { bindActionCreators } from 'redux';
+import { saveFile, createNewPost, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
 
 @asyncConnect( [{
   deferred: true,
@@ -21,22 +22,27 @@ import { bindActionCreators } from 'redux';
     user: state.auth.user,
     posts: state.posts.data,
     editing: state.posts.editing,
-    loading: state.posts.loading
+    loading: state.posts.loading,
+    showNewPostForm: state.posts.newPost.show
   }),
-  {load} )
+  {load, saveFile, createNewPost, toggleNewPostForm } )
 
 export default class TimeLine extends Component {
   static propTypes = {
     posts: PropTypes.array,
     user: PropTypes.object,
     loading: PropTypes.bool,
+    showNewPostForm: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
-    load: PropTypes.func.isRequired
+    load: PropTypes.func.isRequired,
+    saveFile: PropTypes.func.isRequired,
+    createNewPost: PropTypes.func.isRequired,
+    toggleNewPostForm: PropTypes.func.isRequired
   };
 
   render() {
-    const {posts, user, editing, dispatch} = this.props;
+    const {posts, user, editing, dispatch } = this.props;
     const styles = require( './Events.scss' );
     const boundActionCreators = bindActionCreators(postsActionCreators, dispatch);
 
@@ -48,7 +54,7 @@ export default class TimeLine extends Component {
               <div className="col-lg-8 col-md-8">
                 {user &&
                 <div className="row">
-                  <NewPostForm user={user} />
+                  <NewPostForm {...this.props} />
                 </div>
                 }
                 <ul className={styles.postsContainer}>
