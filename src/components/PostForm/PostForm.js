@@ -33,7 +33,7 @@ export default class PostForm extends Component {
     event.preventDefault();
     const title = this.state.title.trim();
     const body = this.state.body.trim();
-    const images = this.state.images.map((image) => {return image.uploadedUrl;}).join(', ');
+    const images = this.state.images.map((image) => {return image.preview;}).join(', ');
     const {submitHandler} = this.props;
     if (!title || !body) {
       console.warn('both post title and body are blank');

@@ -15,12 +15,12 @@ export default {
     body: {type: new NonNull( StringType )},
     images: {type: StringType }
   },
-  async resolve(value, {id, title, body}) {
-    console.log(`update a post: ${util.inspect({id, title, body})}`);
+  async resolve(value, values) {
+    console.log(`update a post: ${util.inspect(values)}`);
 
-    const existingPost = await Post.find({ where: {id} });
+    const existingPost = await Post.find({ where: {id: values.id} });
     if(existingPost) {
-      return await existingPost.updateAttributes({title, body});
+      return await existingPost.updateAttributes(values);
     }
 
     console.error(`Post to update with id ${id} not found in database`);

@@ -64,7 +64,7 @@ export default class DropZone extends Component {
 
   onRemove(image) {
     this._updateImagesView(underscore.remove(this.state.images, (currentFile) => {
-      return currentFile.name !== image.name;
+      return currentFile.preview !== image.preview;
     }));
   }
 
