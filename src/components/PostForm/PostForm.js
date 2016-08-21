@@ -13,14 +13,10 @@ export default class PostForm extends Component {
   constructor(props) {
     super(props);
     this.state = {title: '', body: '', images: this.props.images ? this.props.images : [] };
-    this._handleSubmit = (event) => { this.handleSubmit(event); };
-    this._handleTitleChange = (event) => { this.handleTitleChange(event); };
-    this._handleBodyChange = (event) => { this.handleBodyChange(event); };
-    this._handleImagesChange = (event) => { this.handleImagesChange(event); };
   }
 
   handleTitleChange(event) {
-    this.setState({title: event.target.value});
+    this.setState({'title': event.target.value});
   }
 
   handleBodyChange(event) {
@@ -50,13 +46,13 @@ export default class PostForm extends Component {
     const {title, body, images } = this.state;
     const styles = require('./PostForm.scss');
     return (
-      <form id={`postForm_${postId}`} key={postId} className={styles.postForm} onSubmit={this._handleSubmit}>
+      <form id={`postForm_${postId}`} key={postId} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
           <input
             type="text"
             placeholder="Title of your post ..."
             value={title}
-            onChange={this._handleTitleChange}
+            onChange={(event) => { this.handleTitleChange(event); } }
           />
         </div>
         <div>
@@ -64,9 +60,9 @@ export default class PostForm extends Component {
             type="text"
             placeholder="Body of your post ..."
             value={body}
-            onChange={this._handleBodyChange}
+            onChange={(event) => { this.handleBodyChange(event); }}
           />
-          <DropZone images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={this._handleImagesChange} />
+          <DropZone images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
         </div>
         <input type="submit" value="Post"/>
       </form>
