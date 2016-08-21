@@ -81,7 +81,7 @@ export default class Post extends Component {
           </div>
           <div>
             { comments && comments.map( (comment) => {
-              return (<div>{comment.body}</div>);
+              return (<div key={comment.id}>{comment.body}</div>);
             })}
             <CommentForm createCommentHandler={createNewComment} postId={id} />
           </div>
