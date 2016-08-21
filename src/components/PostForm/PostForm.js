@@ -12,7 +12,7 @@ export default class PostForm extends Component {
   constructor(props) {
     super(props);
     const initialValues = this.props.initialValues ? this.props.initialValues : { images: [] };
-    this.state = {id: initialValues.id, title: initialValues.title, body: initialValues.body, images: initialValues.images };
+    this.state = { title: initialValues.title, body: initialValues.body, images: initialValues.images };
   }
 
   handleTitleChange(event) {
@@ -32,12 +32,12 @@ export default class PostForm extends Component {
     const title = this.state.title.trim();
     const body = this.state.body.trim();
     const images = this.state.images.map((image) => {return image.uploadedUrl;}).join(', ');
-    const {submitHandler} = this.props;
+    const {submitHandler, initialValues} = this.props;
     if (!title || !body) {
       console.warn('both post title and body are blank');
       return;
     }
-    submitHandler({title, body, images});
+    submitHandler({id: initialValues.id, title, body, images});
     this.setState({title: '', body: '', images: []});
   }
 

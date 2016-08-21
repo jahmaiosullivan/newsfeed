@@ -40,10 +40,10 @@ function editPostStop(id) {
   return { type: actions.POST_EDIT_STOP, id };
 }
 
-function editPost(post) {
+function editPost({id, title, body, images}) {
   return {
     types: [actions.POST_UPDATE, actions.POST_UPDATE_SUCCESS, actions.POST_UPDATE_FAIL],
-    promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${post.id}, title: \"${post.title}\", body: \"${post.body}\" ){ id, title, body, createdAt, updatedAt }}`)
+    promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${id}, title: \"${title}\", body: \"${body}\",images: \"${images}\" ){ id, title, body, images, createdAt, updatedAt }}`)
   };
 }
 
