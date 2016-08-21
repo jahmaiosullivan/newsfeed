@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import Avatar from '../Avatar';
 import PostForm from '../../../components/PostForm/PostForm';
 import * as newPostActions from 'redux/actions/postsActionCreators';
+import * as newCommentActions from 'redux/actions/commentActionCreators';
 import {connect} from 'react-redux';
 import CommentForm from '../../../components/Comment/CommentForm';
 
@@ -12,7 +13,7 @@ const styles = require( './Post.scss' );
 @connect(
   (state) => ({
     showStatus: state.posts.showStatus
-  }), {...newPostActions} )
+  }), {...newPostActions, ...newCommentActions} )
 
 export default class Post extends Component {
   static propTypes = {
