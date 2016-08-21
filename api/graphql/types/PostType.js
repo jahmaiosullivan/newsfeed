@@ -17,7 +17,9 @@ export default new ObjectType({
     comments: { type: new List(CommentType) },
     images: { type: StringType },
     createdAt: { type: StringType },
-    updatedAt: { type: StringType }
+    createdBy: { type: StringType },
+    updatedAt: { type: StringType },
+    updatedBy: { type: StringType }
   }
 });
 

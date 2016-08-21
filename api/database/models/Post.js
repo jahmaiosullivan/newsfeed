@@ -9,7 +9,11 @@ const Post = Model.define( 'Post', {
   },
   title: DataType.STRING,
   body: DataType.STRING,
-  images: DataType.TEXT
+  images: DataType.TEXT,
+  createdBy: DataType.UUID,
+  createdAt: DataType.DATE,
+  updatedBy: DataType.UUID,
+  updatedAt: DataType.DATE
 }, {tableName: 'posts'} );
 
 export {Post as default};

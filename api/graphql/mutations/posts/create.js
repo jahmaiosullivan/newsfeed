@@ -11,9 +11,10 @@ export default {
   args: {
     title: {type: new NonNull( StringType )},
     body: {type: new NonNull( StringType )},
-    images: {type: StringType }
+    images: {type: StringType },
+    createdBy: {type: StringType }
   },
-  async resolve(value, newValues) {
+  async resolve(req, newValues) {
     console.log(`creating a post like ${util.inspect(newValues)}`);
     return await Post.create(newValues);
   }

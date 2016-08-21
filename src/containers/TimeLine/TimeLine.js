@@ -48,7 +48,7 @@ export default class TimeLine extends Component {
               <div className="col-lg-8 col-md-8">
                 {user &&
                 <div className="row">
-                  <NewPostForm />
+                  <NewPostForm user={user} />
                 </div>
                 }
                 <ul className={styles.postsContainer}>

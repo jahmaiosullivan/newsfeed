@@ -17,10 +17,11 @@ function toggle() {
   return {type: actions.POST_NEW_TOGGLE};
 }
 
-function createNewPost({title, body, images}) {
+function createNewPost({title, body, images, createdBy}) {
+  console.log(`currentuser is ${createdBy}`);
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
-    promise: (client) => client.graphQL( `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\") {id, title,body, images, createdAt,updatedAt }}`)
+    promise: (client) => client.graphQL( `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\",createdBy: \"${createdBy}\") {id, title,body, images, createdAt,updatedAt }}`)
   };
 }
 

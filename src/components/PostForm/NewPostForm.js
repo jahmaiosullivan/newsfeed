@@ -15,6 +15,7 @@ export default class NewPost extends Component {
     showNewPostForm: PropTypes.bool.isRequired,
     toggle: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
     saveFile: PropTypes.func.isRequired
   };
 
@@ -24,8 +25,8 @@ export default class NewPost extends Component {
   }
 
   handleSubmit(formValues) {
-    const {createNewPost, toggle } = this.props;
-    createNewPost(formValues);
+    const {createNewPost, toggle, user } = this.props;
+    createNewPost({...formValues, createdBy: user.id});
     toggle();
   }
 
