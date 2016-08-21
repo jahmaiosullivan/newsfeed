@@ -5,16 +5,14 @@ import DropZone from '../../components/ImageUpload/DropZone';
 export default class PostForm extends Component {
   static propTypes = {
     initialValues: PropTypes.object,
-    postId: PropTypes.string,
-    images: PropTypes.any,
     submitHandler: PropTypes.func.isRequired,
     uploadFileHandler: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
-    const initialValues = this.props.initialValues ? this.props.initialValues : { images: []};
-    this.state = {title: initialValues.title, body: initialValues.body, images: initialValues.images };
+    const initialValues = this.props.initialValues ? this.props.initialValues : { images: [] };
+    this.state = {id: initialValues.id, title: initialValues.title, body: initialValues.body, images: initialValues.images };
   }
 
   handleTitleChange(event) {
@@ -44,11 +42,11 @@ export default class PostForm extends Component {
   }
 
   render() {
-    const {postId, uploadFileHandler } = this.props;
-    const {title, body, images } = this.state;
+    const { uploadFileHandler } = this.props;
+    const {id, title, body, images } = this.state;
     const styles = require('./PostForm.scss');
     return (
-      <form id={`postForm_${postId}`} key={postId} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
+      <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
           <input
             type="text"

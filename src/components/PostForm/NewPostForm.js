@@ -29,7 +29,6 @@ export default class NewPost extends Component {
         {showNewPostForm &&
         <div>
           <PostForm formKey="newPost"
-                    postId="-1"
                     submitHandler={(formValues) => { this.handleSubmit(formValues, createNewPost, toggleNewPostForm, user); }}
                     uploadFileHandler={saveFile} />
         </div>

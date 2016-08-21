@@ -35,11 +35,10 @@ export default class Post extends Component {
   render() {
     const {children, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
     return (
-      <li className={styles.post}>
+      <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
         <div>
-          <PostForm formKey={String(id)} key={String(id)} initialValues={this.props}
-                    submitHandler={editPost}/>
+          <PostForm initialValues={this.props} submitHandler={editPost} />
           <a href="#" onClick={(event) => { event.preventDefault(); editPostStop(id); }}>Cancel</a>
         </div>
         }
