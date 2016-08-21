@@ -1,6 +1,7 @@
 import util from 'util';
 import lodash from 'lodash';
 import actions from '../actions';
+import images from './imagesReducer';
 
 const initialState = {
   loaded: false,
@@ -130,21 +131,12 @@ export default (state = initialState, action = {}) => {
         loading: true
       };
     case actions.SAVE_FILE_SUCCESS:
-      console.log( `SAVE_FILE: ${action.result.url}` ); // action.result.result and action.result.response
-      const appendedImages = [...state.newPost.images];
-      const indexOfFile = lodash.findIndex( appendedImages, (imageUrl) => {
-        return imageUrl === action.result.url;
-      });
-      if (indexOfFile === -1) {
-        appendedImages.push( action.result.url );
-      }
-
       return {
         ...state,
         loading: false,
         loaded: true,
         error: null,
-        newPost: {...state.newPost, images: appendedImages}
+        newPost: {...state.newPost, images: images(state.newPost.images, action)}
       };
     case actions.SAVE_FILE_FAIL:
       console.log( `SAVE_FILE_FAIL with error ${util.inspect( action.error )}` );
