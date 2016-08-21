@@ -7,6 +7,7 @@ import groups from './queries/groups/all';
 import group from './queries/groups/single';
 import events from './queries/events/all';
 import posts from './queries/posts/all';
+import users from './queries/users/all';
 import event from './queries/events/single';
 import city from './queries/cities/single';
 
@@ -25,7 +26,8 @@ export default  new Schema({
       events,
       event,
       posts,
-      city
+      city,
+      users
     }
   }),
   mutation: new ObjectType({
