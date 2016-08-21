@@ -8,18 +8,21 @@ import {
   GraphQLNonNull as NonNull
 } from 'graphql';
 
-export default new ObjectType({
+const PostFields = {
+  id: { type: new NonNull(IntType) },
+  title: { type: StringType },
+  body: { type: StringType },
+  comments: { type: new List(CommentType) },
+  images: { type: StringType },
+  createdAt: { type: StringType },
+  createdBy: { type: StringType },
+  updatedAt: { type: StringType },
+  updatedBy: { type: StringType }
+};
+
+const PostType = new ObjectType({
   name: 'Post',
-  fields: {
-    id: { type: new NonNull(IntType) },
-    title: { type: StringType },
-    body: { type: StringType },
-    comments: { type: new List(CommentType) },
-    images: { type: StringType },
-    createdAt: { type: StringType },
-    createdBy: { type: StringType },
-    updatedAt: { type: StringType },
-    updatedBy: { type: StringType }
-  }
+  fields: PostFields
 });
 
+export {PostType as default, PostFields };

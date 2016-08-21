@@ -1,6 +1,6 @@
-import PostType from '../../types/PostType';
+import PostType, { PostFields } from '../../types/PostType';
 import { Post } from '../../../database/models';
-import util from 'util';
+import underscore from 'lodash';
 import {
   GraphQLString as StringType,
   GraphQLNonNull as NonNull
@@ -8,15 +8,8 @@ import {
 
 export default {
   type: PostType,
-  args: {
-    title: {type: new NonNull( StringType )},
-    body: {type: new NonNull( StringType )},
-    images: {type: StringType },
-    createdAt: {type: StringType },
-    createdBy: {type: StringType }
-  },
+  args: underscore.omit(PostFields, ['id', 'comments']),
   async resolve(req, newValues) {
-    console.log(`creating a post like ${util.inspect(newValues)}`);
     return await Post.create(newValues);
   }
 };
