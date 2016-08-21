@@ -4,15 +4,17 @@ import DropZone from '../../components/ImageUpload/DropZone';
 
 export default class PostForm extends Component {
   static propTypes = {
-    initialValues: PropTypes.object,
+    id: PropTypes.number,
+    title: PropTypes.string,
+    body: PropTypes.string,
+    images: PropTypes.array,
     submitHandler: PropTypes.func.isRequired,
     uploadFileHandler: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
-    const initialValues = this.props.initialValues ? this.props.initialValues : { images: [] };
-    this.state = { title: initialValues.title, body: initialValues.body, images: initialValues.images };
+    this.state = { title: this.props.title, body: this.props.body, images: this.props.images ? this.props.images : [] };
   }
 
   handleTitleChange(event) {
@@ -32,12 +34,12 @@ export default class PostForm extends Component {
     const title = this.state.title.trim();
     const body = this.state.body.trim();
     const images = this.state.images.map((image) => {return image.uploadedUrl;}).join(', ');
-    const {submitHandler, initialValues} = this.props;
+    const {submitHandler} = this.props;
     if (!title || !body) {
       console.warn('both post title and body are blank');
       return;
     }
-    submitHandler({id: initialValues.id, title, body, images});
+    submitHandler({id: this.props.id, title, body, images});
     this.setState({title: '', body: '', images: []});
   }
 

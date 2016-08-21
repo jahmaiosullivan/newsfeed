@@ -55,7 +55,7 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   { posts && posts.map( (post) => {
-                    return (<Post {...post} editing={editing[post.id]} key={post.id}>{post.body}</Post>);
+                    return (<Post {...post} editing={editing[post.id]} key={post.id} />);
                   })}
                 </ul>
               </div>

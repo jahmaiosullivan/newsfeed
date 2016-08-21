@@ -19,13 +19,13 @@ const styles = require( './Post.scss' );
 
 export default class Post extends Component {
   static propTypes = {
-    children: PropTypes.string,
     id: PropTypes.number,
     title: PropTypes.string,
     body: PropTypes.string,
     images: PropTypes.array,
     comments: PropTypes.any,
     createdAt: PropTypes.string,
+    saveFile: PropTypes.func.isRequired,
     editing: PropTypes.bool,
     deletePost: PropTypes.func.isRequired,
     createNewComment: PropTypes.func.isRequired,
@@ -35,12 +35,12 @@ export default class Post extends Component {
   };
 
   render() {
-    const {children, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
+    const { saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
         <div>
-          <PostForm initialValues={this.props} submitHandler={editPost} />
+          <PostForm {...this.props} submitHandler={editPost} uploadFileHandler={saveFile} />
           <a href="#" onClick={(event) => { event.preventDefault(); editPostStop(id); }}>Cancel</a>
         </div>
         }
@@ -60,7 +60,7 @@ export default class Post extends Component {
             <div className={styles.posttext + ' pull-left'}>
               <h2>
                 <a href="$"> {title}</a></h2>
-              <p>{children}</p>
+              <p>{body}</p>
             </div>
             <div className="clearfix"></div>
           </div>

@@ -16,6 +16,13 @@ const initialState = {
   editing: {}
 };
 
+const changePostImagesToArray = (post) => {
+  if (post.images !== null) {
+    post.images = (post.images.trim() === '') ? null : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
+  }
+  return post;
+};
+
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.POST_LOAD:
@@ -25,12 +32,7 @@ export default (state = initialState, action = {}) => {
       };
     case actions.POST_LOAD_SUCCESS:
       // Change all images from url to an object of shape { preview: <url> }
-      lodash.each(action.result.data.posts, (post) => {
-        if (post.images !== null) {
-          post.images = (post.images.trim() === '') ? null
-            : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
-        }
-      });
+      lodash.each(action.result.data.posts, changePostImagesToArray);
 
       return {
         ...state,
@@ -114,13 +116,14 @@ export default (state = initialState, action = {}) => {
         saving: true
       };
     case actions.POST_UPDATE_SUCCESS:
-      const itemIndex = lodash.indexOf( state.data, lodash.find( state.data, {id: action.result.data.updatePost.id} ) );
-      state.data.splice( itemIndex, 1, action.result.data.updatePost );
+      const updatedPost = changePostImagesToArray(action.result.data.updatePost);
+      const itemIndex = lodash.indexOf( state.data, lodash.find( state.data, {id: updatedPost.id} ) );
+      state.data.splice( itemIndex, 1, updatedPost );
       return {
         ...state,
         editing: {
           ...state.editing,
-          [action.result.data.updatePost.id]: false
+          [updatedPost.id]: false
         },
         data: state.data,
         saving: false
