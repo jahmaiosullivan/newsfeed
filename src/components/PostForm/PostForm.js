@@ -49,7 +49,7 @@ export default class PostForm extends Component {
     const {postId, uploadFileHandler } = this.props;
     const styles = require('./PostForm.scss');
     return (
-      <form key={postId} className={styles.postForm} onSubmit={this._handleSubmit}>
+      <form id={`postForm_${postId}`} key={postId} className={styles.postForm} onSubmit={this._handleSubmit}>
         <div>
           <input
             type="text"
