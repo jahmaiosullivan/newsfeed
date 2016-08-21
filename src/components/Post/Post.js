@@ -11,8 +11,8 @@ const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
 
 @connect(
-  (state) => ({
-    showStatus: state.posts.showStatus
+  () => ({
+
   }), {...newPostActions, ...newCommentActions} )
 
 export default class Post extends Component {
