@@ -52,7 +52,7 @@ export default class DropZone extends Component {
 
       this._uploadImage(newImage, (result) => {
         const index = underscore.indexOf(allImages, underscore.find(allImages, newImage));
-        allImages.splice(index, 1, {...newImage, uploadedUrl: result.url, loading: false});
+        allImages.splice(index, 1, {...newImage, preview: result.url, loading: false});
         this._updateImagesView(allImages);
       });
     });
@@ -97,7 +97,8 @@ export default class DropZone extends Component {
           <div className="row">
             {images && images.map((image) => {
               return (<div key={`img.${image.preview}`} className="col-md-2">
-                <ThumbnailBox image={image} thumbwidthHeight={thumbwidthHeight} onRemoveHandler={() => { this.onRemove( image ); }}/>
+                <ThumbnailBox image={image} thumbwidthHeight={thumbwidthHeight} />
+                <a onClick={(event) => { event.preventDefault(); this.onRemove( image ); }}>Remove</a>
               </div>);
             })}
             <div className="col-md-2">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Thumbnail = ({image, thumbwidthHeight, onRemoveHandler}) => {
+const Thumbnail = ({image, thumbwidthHeight}) => {
   const thumbnailBoxStyle = {position: 'relative'};
   const spinner = require('./images/ajax_loader_blue_48.gif');
   const spinnerOverlay = {
@@ -14,7 +14,6 @@ const Thumbnail = ({image, thumbwidthHeight, onRemoveHandler}) => {
   return (
     <div key={`img.${image.preview}`} style={thumbnailBoxStyle}>
       <img height={thumbwidthHeight} width={thumbwidthHeight} src={image.preview}/>
-      <a onClick={onRemoveHandler}>Remove</a>
       {image.loading && <div style={spinnerOverlay}/>}
     </div>
   );

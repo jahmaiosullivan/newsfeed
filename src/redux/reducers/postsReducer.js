@@ -24,6 +24,12 @@ export default (state = initialState, action = {}) => {
         loading: true
       };
     case actions.POST_LOAD_SUCCESS:
+      lodash.each(action.result.data.posts, (post) => {
+        post.images = (post.images === null || post.images.trim() === '')
+              ? null
+              : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
+      });
+
       return {
         ...state,
         loading: false,

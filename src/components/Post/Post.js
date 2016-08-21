@@ -5,6 +5,8 @@ import * as newPostActions from 'redux/actions/postsActionCreators';
 import * as newCommentActions from 'redux/actions/commentActionCreators';
 import {connect} from 'react-redux';
 import CommentForm from '../Comment/CommentForm';
+import Thumbnail from '../Thumbnail/Thumbnail';
+// import util from 'util';
 
 const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
@@ -21,7 +23,7 @@ export default class Post extends Component {
     id: PropTypes.number,
     title: PropTypes.string,
     body: PropTypes.string,
-    images: PropTypes.string,
+    images: PropTypes.array,
     comments: PropTypes.any,
     createdAt: PropTypes.string,
     editing: PropTypes.bool,
@@ -74,8 +76,8 @@ export default class Post extends Component {
             <div className={styles.time}><i className="fa fa-clock-o"></i> {createdAt}</div>
           </div>
           <div>
-            { images && images.split(',').map((imgSrc) => {
-              return (<img key={imgSrc} src={imgSrc} height="100px" width="100px"/>);
+            { images && images.map((postImg) => {
+              return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px" />);
             })}
           </div>
           <div>
