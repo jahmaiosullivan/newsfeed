@@ -4,6 +4,7 @@ import DropZone from '../../components/ImageUpload/DropZone';
 
 export default class PostForm extends Component {
   static propTypes = {
+    initialValues: PropTypes.object,
     postId: PropTypes.string,
     images: PropTypes.any,
     submitHandler: PropTypes.func.isRequired,
@@ -12,7 +13,8 @@ export default class PostForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {title: '', body: '', images: this.props.images ? this.props.images : [] };
+    const initialValues = this.props.initialValues ? this.props.initialValues : { images: []};
+    this.state = {title: initialValues.title, body: initialValues.body, images: initialValues.images };
   }
 
   handleTitleChange(event) {
