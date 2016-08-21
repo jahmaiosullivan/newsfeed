@@ -2,12 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import Post from '../../components/Post/Post';
 import Sidebar from '../../components/Sidebar';
 import NewPostForm from '../../components/PostForm/NewPostForm';
-import {connect} from 'react-redux';
-import {isLoaded, loadPosts as load} from 'redux/actions/postsActionCreators';
-import * as postsActionCreators from 'redux/actions/postsActionCreators';
-import {asyncConnect} from 'redux-async-connect';
-import { bindActionCreators } from 'redux';
-import { saveFile, createNewPost, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
+import { asyncConnect } from 'redux-async-connect';
+import { connect } from 'react-redux';
+import { saveFile, createNewPost, isLoaded, loadPosts as load, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
 
 @asyncConnect( [{
   deferred: true,
@@ -42,9 +39,8 @@ export default class TimeLine extends Component {
   };
 
   render() {
-    const {posts, user, editing, dispatch } = this.props;
+    const { posts, user, editing } = this.props;
     const styles = require( './Events.scss' );
-    const boundActionCreators = bindActionCreators(postsActionCreators, dispatch);
 
     return (
       <div className="container-fluid">
@@ -59,7 +55,7 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   { posts && posts.map( (post) => {
-                    return (<Post {...post} editing={editing[post.id]} key={post.id} {...boundActionCreators}>{post.body}</Post>);
+                    return (<Post {...post} editing={editing[post.id]} key={post.id}>{post.body}</Post>);
                   })}
                 </ul>
               </div>
