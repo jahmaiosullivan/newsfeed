@@ -7,12 +7,12 @@ import PostForm from './PostForm';
 
 @connect(
   (state) => ({
-    showStatus: state.posts.newPost.showStatus
+    showNewPostForm: state.posts.newPost.show
   }), {...newPostActions} )
 
 export default class NewPost extends Component {
   static propTypes = {
-    showStatus: PropTypes.bool.isRequired,
+    showNewPostForm: PropTypes.bool.isRequired,
     toggle: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
     saveFile: PropTypes.func.isRequired
@@ -30,7 +30,7 @@ export default class NewPost extends Component {
   }
 
   render() {
-    const { saveFile, showStatus, toggle } = this.props;
+    const { saveFile, showNewPostForm, toggle } = this.props;
     return (
       <div>
         <div>
@@ -38,7 +38,7 @@ export default class NewPost extends Component {
             <NavItem eventKey={1} href="#">New Post</NavItem>
           </Nav>
         </div>
-        {showStatus &&
+        {showNewPostForm &&
         <div>
           <PostForm formKey="newPost"
                     postId="-1"

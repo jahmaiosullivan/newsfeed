@@ -8,7 +8,7 @@ const initialState = {
   newPost: {
     title: '',
     body: '',
-    showStatus: false,
+    show: false,
     images: []
   },
   saving: false,
@@ -43,7 +43,7 @@ export default (state = initialState, action = {}) => {
     case actions.POST_NEW_TOGGLE:
       return {
         ...state,
-        newPost: {...state.newPost, showStatus: !state.newPost.showStatus }
+        newPost: {...state.newPost, show: !state.newPost.show }
       };
     case actions.POST_NEW:
       return {
