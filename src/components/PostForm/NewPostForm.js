@@ -7,7 +7,7 @@ import PostForm from './PostForm';
 
 @connect(
   (state) => ({
-    showStatus: state.newPost.showStatus
+    showStatus: state.posts.newPost.showStatus
   }), {...newPostActions} )
 
 export default class NewPost extends Component {

@@ -12,7 +12,6 @@ import widgets from './widgetsReducer';
 import groups from './groupsReducer';
 import posts from './postsReducer';
 import city from './cityReducer';
-import newPost from './newPostReducer';
 
 export default combineReducers({
   routing: routerReducer,
@@ -22,7 +21,6 @@ export default combineReducers({
   groups,
   posts,
   city,
-  newPost,
   filters,
   multireducer: multireducer({
     counter1: counter,

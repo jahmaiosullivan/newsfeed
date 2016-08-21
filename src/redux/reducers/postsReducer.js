@@ -5,6 +5,13 @@ import actions from '../actions';
 const initialState = {
   loaded: false,
   data: [],
+  newPost: {
+    title: '',
+    body: '',
+    showStatus: false,
+    images: []
+  },
+  saving: false,
   deleting: false,
   editing: {}
 };
@@ -31,6 +38,29 @@ export default (state = initialState, action = {}) => {
         loading: false,
         loaded: false,
         data: null,
+        error: action.error
+      };
+    case actions.POST_NEW_TOGGLE:
+      return {
+        ...state,
+        newPost: {...state.newPost, showStatus: !state.newPost.showStatus }
+      };
+    case actions.POST_NEW:
+      return {
+        ...state,
+        saving: true
+      };
+    case actions.POST_NEW_SUCCESS:
+      return {
+        ...state,
+        data: [action.result.data.createPost, ...state.data],
+        saving: false
+      };
+    case actions.POST_NEW_FAIL:
+      console.log( `NEW_POST_FAIL with error ${util.inspect( action.error )}` );
+      return {
+        ...state,
+        saving: false,
         error: action.error
       };
     case actions.POST_DELETE:
@@ -92,6 +122,36 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         saving: false,
+        error: action.error
+      };
+    case actions.SAVE_FILE:
+      return {
+        ...state,
+        loading: true
+      };
+    case actions.SAVE_FILE_SUCCESS:
+      console.log( `SAVE_FILE: ${action.result.url}` ); // action.result.result and action.result.response
+      const appendedImages = [...state.newPost.images];
+      const indexOfFile = lodash.findIndex( appendedImages, (imageUrl) => {
+        return imageUrl === action.result.url;
+      });
+      if (indexOfFile === -1) {
+        appendedImages.push( action.result.url );
+      }
+
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        error: null,
+        newPost: {...state.newPost, images: appendedImages}
+      };
+    case actions.SAVE_FILE_FAIL:
+      console.log( `SAVE_FILE_FAIL with error ${util.inspect( action.error )}` );
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
         error: action.error
       };
     case actions.COMMENT_NEW:
