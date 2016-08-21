@@ -1,5 +1,4 @@
 import actions from './';
-import util from 'util';
 import config from '../../../config';
 import {dateString} from '../../../utils';
 
@@ -41,7 +40,6 @@ function editPostStop(id) {
 }
 
 function editPost(post) {
-  console.log(`post is ${util.inspect(post)}`);
   return {
     types: [actions.POST_UPDATE, actions.POST_UPDATE_SUCCESS, actions.POST_UPDATE_FAIL],
     promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${post.id}, title: \"${post.title}\", body: \"${post.body}\" ){ id, title, body, createdAt, updatedAt }}`)
