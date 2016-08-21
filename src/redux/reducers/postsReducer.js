@@ -26,9 +26,10 @@ export default (state = initialState, action = {}) => {
     case actions.POST_LOAD_SUCCESS:
       // Change all images from url to an object of shape { preview: <url> }
       lodash.each(action.result.data.posts, (post) => {
-        post.images = (post.images === null || post.images.trim() === '')
-              ? null
-              : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
+        if (post.images !== null) {
+          post.images = (post.images.trim() === '') ? null
+            : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
+        }
       });
 
       return {
