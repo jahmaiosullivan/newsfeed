@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Dropzone from 'react-dropzone';
 import underscore from 'lodash';
+import ThumbnailBox from './Thumbnail/Thumbnail';
 // import util from 'util';
 
 const thumbwidthHeight = '100px';
@@ -9,26 +10,6 @@ const dropZoneStyle = {
   height: thumbwidthHeight,
   border: '2px dashed rgb(102, 102, 102)',
   borderRadius: '5px'
-};
-const thumbnailBoxStyle = {position: 'relative'};
-const spinner = require('./images/ajax_loader_blue_48.gif');
-const spinnerOverlay = {
-  position: 'absolute',
-  top: 0,
-  width: thumbwidthHeight,
-  height: thumbwidthHeight,
-  background: `rgba(255,255,255, 0.3) url(${spinner}) center center no-repeat`
-};
-
-
-const ThumbnailBox = ({image, onRemoveHandler}) => {
-  return (
-    <div key={`img.${image.preview}`} style={thumbnailBoxStyle}>
-      <img height={thumbwidthHeight} width={thumbwidthHeight} src={image.preview}/>
-      <a onClick={onRemoveHandler}>Remove</a>
-      {image.loading && <div style={spinnerOverlay}/>}
-    </div>
-  );
 };
 
 export default class DropZone extends Component {
@@ -116,7 +97,7 @@ export default class DropZone extends Component {
           <div className="row">
             {images && images.map((image) => {
               return (<div key={`img.${image.preview}`} className="col-md-2">
-                <ThumbnailBox image={image} onRemoveHandler={() => { this.onRemove( image ); }}/>
+                <ThumbnailBox image={image} thumbwidthHeight={thumbwidthHeight} onRemoveHandler={() => { this.onRemove( image ); }}/>
               </div>);
             })}
             <div className="col-md-2">
