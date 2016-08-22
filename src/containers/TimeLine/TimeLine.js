@@ -8,6 +8,7 @@ import { saveFile, createNewPost, isLoaded, loadPosts, toggle as toggleNewPostFo
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
+// import {randomNum} from '../../../utils';
 
 @asyncConnect( [{
   deferred: false,
@@ -30,6 +31,7 @@ import InfiniteScroll from 'react-infinite-scroller';
     user: state.auth.user,
     users: state.users,
     posts: state.posts.data,
+    hasMore: state.posts.hasMore,
     editing: state.posts.editing,
     loading: state.posts.loading,
     showNewPostForm: state.posts.newPost.show
@@ -40,6 +42,7 @@ export default class TimeLine extends Component {
     users: PropTypes.object,
     posts: PropTypes.array,
     user: PropTypes.object,
+    hasMore: PropTypes.bool,
     loading: PropTypes.bool,
     showNewPostForm: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
@@ -52,31 +55,24 @@ export default class TimeLine extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {hasMore: true, posts: this.props.posts};
     this._loadMorePosts = (page) => { this.loadMorePosts(page); };
   }
 
-  loadMorePosts(page) {
-    console.log(`loading ${page}`);
-    this.props.dispatch(loadPosts(page)).then(({data: {posts}}) => {
-      const postCreatorIds = lodash(posts)
-        .filter(post => post.createdBy !== null)
-        .map(post => post.createdBy)
-        .uniqBy(post => post.createdBy)
-        .value();
 
-      this.props.dispatch(loadUsers(postCreatorIds)).then(() => {
-        this.setState({
-          posts: this.state.posts.concat(posts),
-          hasMore: posts.length > 0
-        });
-      });
-    });
+  async loadMorePosts(page) {
+    console.log(`loading ${page}`);
+    await this.props.dispatch(loadPosts(page));
+
+   /* this.setState({
+      posts: this.props.posts.concat([{ id: randomNum(100, 500), title: `I was infinitely added for page ${page}`, body: 'I am the infinitely added body' }]),
+      hasMore: (page > 20)
+    }); */
+
+    console.log(`done loadMore for page ${page}`);
   }
 
   render() {
-    const { users, user, editing } = this.props;
-    const { posts } = this.state;
+    const { users, user, posts, editing, hasMore } = this.props;
     const styles = require( './Events.scss' );
 
     return (
@@ -92,9 +88,9 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   <InfiniteScroll
-                    pageStart={2}
+                    pageStart={1}
                     loadMore={this._loadMorePosts}
-                    hasMore={this.state.hasMore}
+                    hasMore={hasMore}
                     loader={<div className="loader">Loading ...</div>}
                   >
                     { posts && posts.map( (post) => {

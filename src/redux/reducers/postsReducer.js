@@ -4,6 +4,7 @@ import actions from '../actions';
 
 const initialState = {
   loaded: false,
+  hasMore: true,
   data: [],
   newPost: {
     title: '',
@@ -38,7 +39,8 @@ export default (state = initialState, action = {}) => {
         ...state,
         loading: false,
         loaded: true,
-        data: action.result.data.posts,
+        hasMore: action.result.data.posts.length > 0,
+        data: state.data.concat(action.result.data.posts),
         error: null
       };
     case actions.POST_LOAD_FAIL:
