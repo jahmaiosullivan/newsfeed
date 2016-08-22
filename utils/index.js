@@ -12,12 +12,17 @@ function dateString() {
   const hours = formatDatePart(rDate.getHours());
   const minutes = formatDatePart(rDate.getMinutes());
   const seconds = formatDatePart(rDate.getSeconds());
+  const milliSeconds = formatDatePart(rDate.getMilliseconds());
 
-  return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+  return `${year}${month}${day}_${hours}_${minutes}_${seconds}_${milliSeconds}`;
 }
+
+const randomNum = (start = 0, end = 1000) => {
+  return Math.floor(Math.random() * end) + start;
+};
 
 const utcDate = () => {
   return moment.utc().format();
 };
 
-export { dateString, utcDate };
+export { dateString, utcDate, randomNum };

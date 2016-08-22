@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { saveFile, createNewPost, isLoaded, loadPosts as load, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
+import InfiniteScroll from 'react-infinite-scroller';
+import {randomNum} from '../../../utils';
 
 @asyncConnect( [{
   deferred: false,
@@ -34,7 +36,6 @@ import lodash from 'lodash';
     showNewPostForm: state.posts.newPost.show
   }),
   {load, saveFile, createNewPost, toggleNewPostForm } )
-
 export default class TimeLine extends Component {
   static propTypes = {
     users: PropTypes.object,
@@ -50,8 +51,24 @@ export default class TimeLine extends Component {
     toggleNewPostForm: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {hasMore: true, posts: this.props.posts};
+    this._loadMorePosts = (page) => { this.loadMorePosts(page); };
+  }
+
+
+  loadMorePosts(page) {
+    console.log(`loading ${page}`);
+    this.setState({
+      posts: this.state.posts.concat([{ id: randomNum(100, 500), title: `I was infinitely added for page ${page}`, body: 'I am the infinitely added body' }]),
+      hasMore: (page < 15)
+    });
+  }
+
   render() {
-    const { users, posts, user, editing } = this.props;
+    const { users, user, editing } = this.props;
+    const { posts } = this.state;
     const styles = require( './Events.scss' );
 
     return (
@@ -66,9 +83,16 @@ export default class TimeLine extends Component {
                 </div>
                 }
                 <ul className={styles.postsContainer}>
-                  { posts && posts.map( (post) => {
-                    return (<Post postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
-                  })}
+                  <InfiniteScroll
+                    pageStart={0}
+                    loadMore={this._loadMorePosts}
+                    hasMore={this.state.hasMore}
+                    loader={<div className="loader">Loading ...</div>}
+                  >
+                    { posts && posts.map( (post) => {
+                      return (<Post postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
+                    })}
+                  </InfiniteScroll>
                 </ul>
               </div>
               <div className="col-lg-4 col-md-4">
