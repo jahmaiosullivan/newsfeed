@@ -6,25 +6,23 @@ import * as newCommentActions from 'redux/actions/commentActionCreators';
 import {connect} from 'react-redux';
 import CommentForm from '../Comment/CommentForm';
 import Thumbnail from '../Thumbnail/Thumbnail';
-// import util from 'util';
 
 const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
 
 @connect(
-  state => ({
-    users: state.users
-  }), {...newPostActions, ...newCommentActions} )
+  () => ({ }), {...newPostActions, ...newCommentActions} )
 
 export default class Post extends Component {
   static propTypes = {
     id: PropTypes.number,
-    users: PropTypes.object,
+    postCreator: PropTypes.object,
     title: PropTypes.string,
     body: PropTypes.string,
     images: PropTypes.array,
     comments: PropTypes.any,
+    createdBy: PropTypes.string,
     createdAt: PropTypes.string,
     saveFile: PropTypes.func.isRequired,
     editing: PropTypes.bool,
@@ -36,7 +34,7 @@ export default class Post extends Component {
   };
 
   render() {
-    const { users, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
+    const { postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
@@ -51,7 +49,7 @@ export default class Post extends Component {
             <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
             <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
             <div className={styles.userinfo + ' pull-left'}>
-              <Avatar src={users.avatarimg } />
+              {postCreator && <Avatar src={postCreator.picture } />}
 
               <div className={styles.icons}>
                 <img src={icon1} alt=""/>

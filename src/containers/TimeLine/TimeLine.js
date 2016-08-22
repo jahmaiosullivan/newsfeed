@@ -10,7 +10,7 @@ import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 
 @asyncConnect( [{
-  deferred: true,
+  deferred: false,
   promise: ({store}) => {
     if (!isLoaded( store.getState() )) {
       return store.dispatch( load() ).then(({data: {posts}}) => {
@@ -20,7 +20,7 @@ import lodash from 'lodash';
           .uniqBy(post => post.createdBy)
           .value();
 
-        store.dispatch(loadUsers(postCreatorIds));
+        return store.dispatch(loadUsers(postCreatorIds));
       });
     }
   }
@@ -28,6 +28,7 @@ import lodash from 'lodash';
 @connect(
   state => ({
     user: state.auth.user,
+    users: state.users,
     posts: state.posts.data,
     editing: state.posts.editing,
     loading: state.posts.loading,
@@ -37,6 +38,7 @@ import lodash from 'lodash';
 
 export default class TimeLine extends Component {
   static propTypes = {
+    users: PropTypes.object,
     posts: PropTypes.array,
     user: PropTypes.object,
     loading: PropTypes.bool,
@@ -50,7 +52,7 @@ export default class TimeLine extends Component {
   };
 
   render() {
-    const { posts, user, editing } = this.props;
+    const { users, posts, user, editing } = this.props;
     const styles = require( './Events.scss' );
 
     return (
@@ -66,7 +68,7 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   { posts && posts.map( (post) => {
-                    return (<Post {...post} editing={editing[post.id]} key={post.id} />);
+                    return (<Post postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
                   })}
                 </ul>
               </div>
