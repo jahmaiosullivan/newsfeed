@@ -8,7 +8,6 @@ import { saveFile, createNewPost, isLoaded, loadPosts, toggle as toggleNewPostFo
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
-// import {randomNum} from '../../../utils';
 
 @asyncConnect( [{
   deferred: false,
@@ -59,16 +58,8 @@ export default class TimeLine extends Component {
   }
 
 
-  async loadMorePosts(page) {
-    console.log(`loading ${page}`);
-    await this.props.dispatch(loadPosts(page));
-
-   /* this.setState({
-      posts: this.props.posts.concat([{ id: randomNum(100, 500), title: `I was infinitely added for page ${page}`, body: 'I am the infinitely added body' }]),
-      hasMore: (page > 20)
-    }); */
-
-    console.log(`done loadMore for page ${page}`);
+  loadMorePosts(page) {
+    this.props.dispatch(loadPosts(page));
   }
 
   render() {

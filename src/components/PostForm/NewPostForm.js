@@ -22,7 +22,7 @@ export default class NewPost extends Component {
     return (
       <div>
         <div>
-          <Nav bsStyle="pills" activeKey={1} onSelect={toggleNewPostForm}>
+          <Nav bsStyle="pills" activeKey={1} onSelect={() => { toggleNewPostForm(); }}>
             <NavItem eventKey={1} href="#">New Post</NavItem>
           </Nav>
         </div>

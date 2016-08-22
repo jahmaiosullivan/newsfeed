@@ -9,13 +9,21 @@ import ApiClient from './helpers/ApiClient';
 import io from 'socket.io-client';
 import {Provider} from 'react-redux';
 import { Router, browserHistory } from 'react-router';
+import { getScrollToTop, setScrollToTop } from './helpers/scrollHelper';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect } from 'redux-async-connect';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import getRoutes from './routes';
 
 const client = new ApiClient();
-const _browserHistory = useScroll(() => browserHistory)();
+const _browserHistory = useScroll(() => browserHistory)({
+  shouldUpdateScroll: () => {
+    const scrollToTop = getScrollToTop();
+    console.log(`scrolltoTop is ${scrollToTop}`);
+    setScrollToTop(false);
+    return scrollToTop;
+  }
+});
 const dest = document.getElementById('content');
 const store = createStore(_browserHistory, client, window.__data);
 const history = syncHistoryWithStore(_browserHistory, store);
