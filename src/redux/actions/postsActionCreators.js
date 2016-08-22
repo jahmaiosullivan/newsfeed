@@ -1,7 +1,7 @@
 import actions from './';
 import config from '../../../config';
 import {dateString} from '../../../utils';
-import util from 'util';
+// import util from 'util';
 
 function isLoaded(globalState) {
   return globalState.posts && globalState.posts.loaded;
@@ -10,14 +10,7 @@ function isLoaded(globalState) {
 function loadPosts() {
   return {
     types: [actions.POST_LOAD, actions.POST_LOAD_SUCCESS, actions.POST_LOAD_FAIL],
-    promise: (client) => client.graphQL( `{posts{id, title, body, images, comments {id, body, status }, createdAt,updatedAt }}`)
-  };
-}
-function loadUsers(posts) {
-  console.log(`load users: ${util.inspect(posts)}`);
-  return {
-    types: [actions.POST_LOAD, actions.POST_LOAD_SUCCESS, actions.POST_LOAD_FAIL],
-    promise: (client) => client.graphQL( `{posts{id, title, body, images, comments {id, body, status }, createdAt,updatedAt }}`)
+    promise: (client) => client.graphQL( `{posts{id, title, body, images, comments {id, body, status }, createdBy, createdAt, updatedBy, updatedAt }}`)
   };
 }
 
@@ -64,5 +57,5 @@ function saveFile(file) {
   };
 }
 
-export {isLoaded, loadPosts, loadUsers, toggle, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile };
+export {isLoaded, loadPosts, toggle, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile };
 

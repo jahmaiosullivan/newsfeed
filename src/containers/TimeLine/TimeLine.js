@@ -5,12 +5,23 @@ import NewPostForm from '../../components/PostForm/NewPostForm';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import { saveFile, createNewPost, isLoaded, loadPosts as load, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
+import { loadUsers } from 'redux/actions/usersActionCreators';
+// import util from 'util';
+import lodash from 'lodash';
 
 @asyncConnect( [{
   deferred: true,
   promise: ({store}) => {
     if (!isLoaded( store.getState() )) {
-      return store.dispatch( load() );
+      return store.dispatch( load() ).then(({data: {posts}}) => {
+        const postCreatorIds = lodash(posts)
+          .filter(post => post.createdBy !== null)
+          .map(post => post.createdBy)
+          .uniqBy(post => post.createdBy)
+          .value();
+
+        store.dispatch(loadUsers(postCreatorIds));
+      });
     }
   }
 }] )
