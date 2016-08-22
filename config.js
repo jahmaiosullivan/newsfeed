@@ -36,6 +36,9 @@ const tagLine = 'Resources for local business owners';
 const azure = {
   postImagesContainer: 'postimages'
 };
+const paging = {
+  rows: 10
+};
 
 module.exports = Object.assign({
   host: process.env.HOST || 'localhost',
@@ -46,6 +49,7 @@ module.exports = Object.assign({
   databaseUrl: process.env.DATABASE_URL || 'postgres://jahmaiosullivan:Star2016@localhost:5432/HobbyClue',
   uploadsDir: path.join( __dirname, 'static', 'uploads' ),
   tagLine,
+  paging,
   auth,
   azure,
   app: {

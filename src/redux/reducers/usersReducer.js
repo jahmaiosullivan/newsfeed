@@ -16,12 +16,11 @@ function reducer(state = initialState, action = {}) {
         loading: true
       };
     case actions.USER_LOAD_SUCCESS:
-      console.log(`USER_LOAD_SUCCESS from user reducer ${util.inspect(action.result.data.users)}`);
       return {
         ...state,
         loading: false,
         loaded: true,
-        data: action.result.data.users,
+        data: state.data.concat(action.result.data.users),
         error: null
       };
     case actions.USER_LOAD_FAIL:

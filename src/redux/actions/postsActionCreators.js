@@ -9,10 +9,10 @@ function isLoaded(globalState) {
   return globalState.posts && globalState.posts.loaded;
 }
 
-function loadPosts() {
+function loadPosts(page = 1) {
   return {
     types: [actions.POST_LOAD, actions.POST_LOAD_SUCCESS, actions.POST_LOAD_FAIL],
-    promise: (client) => client.graphQL( `{posts{ ${postReturnFields} }}`)
+    promise: (client) => client.graphQL( `{posts(page: ${page}){ ${postReturnFields} }}`)
   };
 }
 

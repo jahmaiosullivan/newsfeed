@@ -4,17 +4,16 @@ import Sidebar from '../../components/Sidebar';
 import NewPostForm from '../../components/PostForm/NewPostForm';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
-import { saveFile, createNewPost, isLoaded, loadPosts as load, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
+import { saveFile, createNewPost, isLoaded, loadPosts, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
-import {randomNum} from '../../../utils';
 
 @asyncConnect( [{
   deferred: false,
   promise: ({store}) => {
     if (!isLoaded( store.getState() )) {
-      return store.dispatch( load() ).then(({data: {posts}}) => {
+      return store.dispatch( loadPosts() ).then(({data: {posts}}) => {
         const postCreatorIds = lodash(posts)
           .filter(post => post.createdBy !== null)
           .map(post => post.createdBy)
@@ -35,7 +34,7 @@ import {randomNum} from '../../../utils';
     loading: state.posts.loading,
     showNewPostForm: state.posts.newPost.show
   }),
-  {load, saveFile, createNewPost, toggleNewPostForm } )
+  {loadPosts, saveFile, createNewPost, toggleNewPostForm } )
 export default class TimeLine extends Component {
   static propTypes = {
     users: PropTypes.object,
@@ -45,7 +44,7 @@ export default class TimeLine extends Component {
     showNewPostForm: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
-    load: PropTypes.func.isRequired,
+    loadPosts: PropTypes.func.isRequired,
     saveFile: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
     toggleNewPostForm: PropTypes.func.isRequired
@@ -57,12 +56,21 @@ export default class TimeLine extends Component {
     this._loadMorePosts = (page) => { this.loadMorePosts(page); };
   }
 
-
   loadMorePosts(page) {
     console.log(`loading ${page}`);
-    this.setState({
-      posts: this.state.posts.concat([{ id: randomNum(100, 500), title: `I was infinitely added for page ${page}`, body: 'I am the infinitely added body' }]),
-      hasMore: (page < 15)
+    this.props.dispatch(loadPosts(page)).then(({data: {posts}}) => {
+      const postCreatorIds = lodash(posts)
+        .filter(post => post.createdBy !== null)
+        .map(post => post.createdBy)
+        .uniqBy(post => post.createdBy)
+        .value();
+
+      this.props.dispatch(loadUsers(postCreatorIds)).then(() => {
+        this.setState({
+          posts: this.state.posts.concat(posts),
+          hasMore: posts.length > 0
+        });
+      });
     });
   }
 
@@ -84,7 +92,7 @@ export default class TimeLine extends Component {
                 }
                 <ul className={styles.postsContainer}>
                   <InfiniteScroll
-                    pageStart={0}
+                    pageStart={2}
                     loadMore={this._loadMorePosts}
                     hasMore={this.state.hasMore}
                     loader={<div className="loader">Loading ...</div>}
