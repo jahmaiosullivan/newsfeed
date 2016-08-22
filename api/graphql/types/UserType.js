@@ -21,9 +21,9 @@ export default new ObjectType({
     website: { type: StringType },
     passwordHash: { type: StringType },
     createdAt: { type: StringType },
-    createdBy: { type: new NonNull(ID) },
+    createdBy: { type: ID },
     updateAt: { type: StringType },
-    updateBy: { type: new NonNull(ID) }
+    updateBy: { type: ID }
   }
 });
 
