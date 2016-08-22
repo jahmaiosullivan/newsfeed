@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 
-const Avatar = () => {
-  const avatar = require( './images/avatar.jpg' );
+const Avatar = ({src}) => {
+  const avatar = require( src );
   const styles = require( './Avatar.scss' );
 
   return (<div className={styles.avatar}>

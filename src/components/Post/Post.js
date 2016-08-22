@@ -13,13 +13,14 @@ const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
 
 @connect(
-  () => ({
-
+  state => ({
+    users: state.users
   }), {...newPostActions, ...newCommentActions} )
 
 export default class Post extends Component {
   static propTypes = {
     id: PropTypes.number,
+    users: PropTypes.object,
     title: PropTypes.string,
     body: PropTypes.string,
     images: PropTypes.array,
@@ -35,7 +36,7 @@ export default class Post extends Component {
   };
 
   render() {
-    const { saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
+    const { users, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
@@ -50,7 +51,7 @@ export default class Post extends Component {
             <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
             <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
             <div className={styles.userinfo + ' pull-left'}>
-              <Avatar />
+              <Avatar src={users.avatarimg } />
 
               <div className={styles.icons}>
                 <img src={icon1} alt=""/>

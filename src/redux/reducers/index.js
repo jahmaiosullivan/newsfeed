@@ -11,6 +11,7 @@ import info from './infoReducer';
 import widgets from './widgetsReducer';
 import groups from './groupsReducer';
 import posts from './postsReducer';
+import users from './usersReducer';
 import city from './cityReducer';
 
 export default combineReducers({
@@ -20,6 +21,7 @@ export default combineReducers({
   form,
   groups,
   posts,
+  users,
   city,
   filters,
   multireducer: multireducer({
