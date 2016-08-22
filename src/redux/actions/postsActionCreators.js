@@ -3,6 +3,8 @@ import config from '../../../config';
 import {dateString} from '../../../utils';
 // import util from 'util';
 
+const postReturnFields = `id, title, body, images, comments {id, body, status }, createdBy, createdAt, updatedBy, updatedAt`;
+
 function isLoaded(globalState) {
   return globalState.posts && globalState.posts.loaded;
 }
@@ -10,7 +12,7 @@ function isLoaded(globalState) {
 function loadPosts() {
   return {
     types: [actions.POST_LOAD, actions.POST_LOAD_SUCCESS, actions.POST_LOAD_FAIL],
-    promise: (client) => client.graphQL( `{posts{id, title, body, images, comments {id, body, status }, createdBy, createdAt, updatedBy, updatedAt }}`)
+    promise: (client) => client.graphQL( `{posts{ ${postReturnFields} }}`)
   };
 }
 
@@ -22,7 +24,7 @@ function createNewPost({title, body, images, createdBy}) {
   console.log(`currentuser is ${createdBy}`);
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
-    promise: (client) => client.graphQL( `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\",createdBy: \"${createdBy}\") {id, title,body, images, createdAt,updatedAt }}`)
+    promise: (client) => client.graphQL( `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\",createdBy: \"${createdBy}\") {${postReturnFields} }}`)
   };
 }
 
@@ -44,7 +46,7 @@ function editPostStop(id) {
 function editPost({id, title, body, images}) {
   return {
     types: [actions.POST_UPDATE, actions.POST_UPDATE_SUCCESS, actions.POST_UPDATE_FAIL],
-    promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${id}, title: \"${title}\", body: \"${body}\",images: \"${images}\" ){ id, title, body, images, createdAt, updatedAt }}`)
+    promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${id}, title: \"${title}\", body: \"${body}\",images: \"${images}\" ){ ${postReturnFields}  }}`)
   };
 }
 

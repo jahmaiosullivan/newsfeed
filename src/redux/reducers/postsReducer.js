@@ -61,9 +61,10 @@ export default (state = initialState, action = {}) => {
         saving: true
       };
     case actions.POST_NEW_SUCCESS:
+      const post = changePostImagesToArray(action.result.data.createPost);
       return {
         ...state,
-        data: [action.result.data.createPost, ...state.data],
+        data: [post, ...state.data],
         saving: false
       };
     case actions.POST_NEW_FAIL:

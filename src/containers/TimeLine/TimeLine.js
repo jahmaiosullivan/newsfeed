@@ -6,7 +6,6 @@ import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import { saveFile, createNewPost, isLoaded, loadPosts as load, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
-// import util from 'util';
 import lodash from 'lodash';
 
 @asyncConnect( [{
