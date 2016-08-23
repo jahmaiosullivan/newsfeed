@@ -3,6 +3,7 @@ import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
 import CommentForm from '../Comment/CommentForm';
 import Thumbnail from '../Thumbnail/Thumbnail';
+// import util from 'util';
 
 const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
@@ -17,6 +18,7 @@ export default class Post extends Component {
     body: PropTypes.string,
     images: PropTypes.array,
     comments: PropTypes.any,
+    showComments: PropTypes.bool,
     createdBy: PropTypes.string,
     createdAt: PropTypes.string,
     saveFile: PropTypes.func.isRequired,
@@ -28,12 +30,23 @@ export default class Post extends Component {
     editPostStop: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {showComments: props.showComments};
+  }
+
   handleCommentAdded(comment) {
     this.props.createNewComment(comment).then(() => { this.forceUpdate(); });
   }
 
+  handleCommentsToggled() {
+    this.setState({showComments: !this.state.showComments});
+  }
+
   render() {
     const { comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { showComments } = this.state;
+
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
@@ -78,12 +91,14 @@ export default class Post extends Component {
               return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px" />);
             })}
           </div>
-          <div>
-            { comments && comments.map( (comment) => {
-              return (<div key={comment.id}>{comment.body}</div>);
-            })}
-            <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} />
-          </div>
+          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} comments`}</a></div>
+          { showComments && <div>
+              { comments && comments.map((comment) => {
+                return (<div key={comment.id}>{comment.body}</div>);
+              })}
+              <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}/>
+            </div>
+          }
         </div>
         }
         <div className="clearfix"></div>
