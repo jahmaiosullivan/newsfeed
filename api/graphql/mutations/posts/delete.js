@@ -1,18 +1,15 @@
 import PostType from '../../types/PostType';
 import { Post } from '../../../database/models';
-import util from 'util';
+import { createMutation } from '../mutationHelper';
 import {
   GraphQLInt as IntType,
   GraphQLNonNull as NonNull,
 } from 'graphql';
 
-export default {
-  type: PostType,
-  args: {
-    id: {type: new NonNull( IntType )}
-  },
-  async resolve(value, { id }) {
-    await Post.destroy({ where: { id } });
-    return { id };
-  }
+const args = { id: {type: new NonNull( IntType )} };
+const mutationFunction = ({ id }) => {
+  Post.destroy({ where: { id } });
+  return { id };
 };
+
+export default createMutation(PostType, args, mutationFunction);

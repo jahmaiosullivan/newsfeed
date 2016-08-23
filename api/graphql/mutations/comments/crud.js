@@ -1,5 +1,6 @@
 import CommentType from '../../types/CommentType';
 import { Comment } from '../../../database/models';
+import { createMutation } from '../mutationHelper';
 import util from 'util';
 import {
   GraphQLString as StringType,
@@ -7,44 +8,33 @@ import {
   GraphQLNonNull as NonNull
 } from 'graphql';
 
-const Create = {
-  type: CommentType,
-  args: {
-    body: {type: new NonNull( StringType )},
-    postId: {type: IntType },
-    status: {type: IntType }
-  },
-  async resolve(value, newValues) {
-    console.log(`creating a comment like ${util.inspect(newValues)}`);
-    return await Comment.create(newValues);
-  }
+
+const createArgs = {
+  body: {type: new NonNull( StringType )},
+  postId: {type: IntType },
+  status: {type: IntType }
 };
-
-const Update = {
-  type: CommentType,
-  args: {
-    body: {type: new NonNull( StringType )},
-    status: {type: IntType }
-  },
-  async resolve(value, {body, status}) {
-    console.log(`update a comment: ${util.inspect({body, status})}`);
-
-    const existingComment = await Comment.find({ where: {id} });
-    if(existingComment) {
-      return await existingComment.updateAttributes({status, body});
-    }
-  }
+const udpdateArgs = {
+  body: {type: new NonNull( StringType )},
+  status: {type: IntType }
 };
+const deleteCommentArgs = { id: {type: new NonNull( IntType )} };
 
-const Delete = {
-  type: CommentType,
-  args: {
-    id: {type: new NonNull( IntType )}
-  },
-  async resolve(value, { id }) {
-    await Comment.destroy({ where: { id } });
+const createCommentFunc = (values) => { return Comment.create(values); };
+const updateCommentFunc = ({body, status}) => {
+  console.log(`update a comment: ${util.inspect({body, status})}`);
+  return Comment.find({ where: {id} }).then((comment) => {
+    return comment.updateAttributes({status, body});
+  });
+};
+const deleteCommentFunc = ({ id }) => {
+  return Comment.destroy({ where: { id } }).then(() => {
     return { id };
-  }
+  });
 };
+
+const Create = createMutation(CommentType, createArgs, createCommentFunc);
+const Update = createMutation(CommentType, udpdateArgs, updateCommentFunc);
+const Delete = createMutation(CommentType, deleteCommentArgs, deleteCommentFunc);
 
 export { Create, Update, Delete };
