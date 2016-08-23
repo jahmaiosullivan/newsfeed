@@ -20,7 +20,7 @@ const pretty = new PrettyError();
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIo(server);
-const jwtAuth = expressJWT({ secret: config.auth.jwt.secret});
+const jwtAuth = expressJWT({ secret: config.auth.jwt.secret, credentialsRequired: false});
 io.path('/ws');
 
 app.use(session({
@@ -41,11 +41,10 @@ app.use(session(Object.assign({}, {
 
 configureAuth(app, config);
 
-const handleGraphql = (req, res) => {
- /* if (!req.user) {
-     return res.sendStatus(401);
-  } */
-
+const handleGraphql = (req) => {
+  if (!req.user) {
+    console.log(`are you authorized for graphql?`);
+  }
   return {
     schema,
     graphiql: true,

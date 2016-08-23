@@ -8,7 +8,7 @@ export default class NewPost extends Component {
     showNewPostForm: PropTypes.bool,
     toggleNewPostForm: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired,
     saveFile: PropTypes.func.isRequired
   };
 
@@ -18,7 +18,7 @@ export default class NewPost extends Component {
   }
 
   render() {
-    const { createNewPost, saveFile, showNewPostForm, toggleNewPostForm, user } = this.props;
+    const { createNewPost, saveFile, showNewPostForm, toggleNewPostForm, currentUser } = this.props;
     return (
       <div>
         <div>
@@ -26,10 +26,10 @@ export default class NewPost extends Component {
             <NavItem eventKey={1} href="#">New Post</NavItem>
           </Nav>
         </div>
-        {showNewPostForm &&
+        {showNewPostForm && currentUser &&
         <div>
           <PostForm formKey="newPost"
-                    submitHandler={(formValues) => { this.handleSubmit(formValues, createNewPost, toggleNewPostForm, user); }}
+                    submitHandler={(formValues) => { this.handleSubmit(formValues, createNewPost, toggleNewPostForm, currentUser); }}
                     uploadFileHandler={saveFile} />
         </div>
         }

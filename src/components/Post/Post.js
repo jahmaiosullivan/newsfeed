@@ -47,7 +47,7 @@ export default class Post extends Component {
   render() {
     const { currentUser, comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
-    const isOwner = postCreator.id === currentUser.id;
+    const isOwner = currentUser && postCreator.id === currentUser.id;
 
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
