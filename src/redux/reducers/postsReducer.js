@@ -27,12 +27,14 @@ const changePostImagesToArray = (post) => {
   return post;
 };
 
-const addCommentToPost = (post, comment) => {
-  if (post.comments !== null) {
-    post.title = 'I spliced it';
-    post.comments.push(comment);
+const addCommentToPost = (existingPosts, comment) => {
+  const postIndex = lodash.indexOf(existingPosts, lodash.find(existingPosts, {id: comment.postId}));
+  if (existingPosts[postIndex].comments === null) {
+    existingPosts[postIndex].comments = [];
   }
-  return post;
+  existingPosts[postIndex].comments.push(comment);
+
+  return existingPosts;
 };
 
 export default (state = initialState, action = {}) => {
@@ -132,6 +134,7 @@ export default (state = initialState, action = {}) => {
     case actions.POST_UPDATE_SUCCESS:
       const updatedPost = changePostImagesToArray(action.result.data.updatePost);
       const itemIndex = lodash.indexOf( state.data, lodash.find( state.data, {id: updatedPost.id} ) );
+      updatedPost.comments = state.data[itemIndex].comments; // dont lose the comments
       state.data.splice( itemIndex, 1, updatedPost );
       return {
         ...state,
@@ -185,13 +188,9 @@ export default (state = initialState, action = {}) => {
         saving: true
       };
     case actions.ADD_COMMENT_SUCCESS:
-      const postIndex = lodash.indexOf(state.data, lodash.find(state.data, {id: action.result.data.createComment.postId}));
-      const postWithNewComment = addCommentToPost(state.data[postIndex], action.result.data.createComment);
-      state.data.splice(postIndex, 1, postWithNewComment);
-
       return {
         ...state,
-        data: state.data,
+        data: addCommentToPost(state.data, action.result.data.createComment),
         saving: false
       };
     case actions.ADD_COMMENT_FAIL:
