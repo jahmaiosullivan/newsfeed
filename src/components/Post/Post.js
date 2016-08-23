@@ -28,18 +28,12 @@ export default class Post extends Component {
     editPostStop: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {comments: this.props.comments};
-  }
-
   handleCommentAdded(comment) {
     this.props.createNewComment(comment).then(() => { this.forceUpdate(); });
   }
 
   render() {
-    const { postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
-    const {comments } = this.state;
+    const { comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&

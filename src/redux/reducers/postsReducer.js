@@ -185,12 +185,9 @@ export default (state = initialState, action = {}) => {
         saving: true
       };
     case actions.ADD_COMMENT_SUCCESS:
-      // Find item index using indexOf+find
       const postIndex = lodash.indexOf(state.data, lodash.find(state.data, {id: action.result.data.createComment.postId}));
       const postWithNewComment = addCommentToPost(state.data[postIndex], action.result.data.createComment);
-      // Replace item at index using native splice
       state.data.splice(postIndex, 1, postWithNewComment);
-      console.log( `ADD_COMMENT_SUCCESS ${util.inspect(state.data[postIndex])}`);
 
       return {
         ...state,
