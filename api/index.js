@@ -48,7 +48,7 @@ app.use('/graphql', jwtAuth, expressGraphQL((req) => {
   return {
     schema,
     graphiql: true,
-    rootValue : {request: req},
+    rootValue : req,
     context: req.session,
     pretty: true
   };
