@@ -100,7 +100,7 @@ export default class Post extends Component {
               { comments && comments.map((comment) => {
                 return (<div key={comment.id}>{comment.body}</div>);
               })}
-              <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}/>
+              { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}/> }
             </div>
           }
         </div>

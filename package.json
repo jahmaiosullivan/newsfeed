@@ -112,6 +112,7 @@
     "fs": "0.0.2",
     "graphql": "^0.6.2",
     "graphql-custom-datetype": "^0.3.0",
+    "graphql-errors": "^2.1.0",
     "graphql-relay": "^0.4.2",
     "hoist-non-react-statics": "^1.0.3",
     "http-proxy": "^1.12.0",

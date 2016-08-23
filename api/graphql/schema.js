@@ -3,6 +3,7 @@ import {
   GraphQLObjectType as ObjectType,
 } from 'graphql';
 
+import {maskErrors} from 'graphql-errors';
 import groups from './queries/groups/all';
 import group from './queries/groups/single';
 import events from './queries/events/all';
@@ -17,7 +18,7 @@ import updatePost from './mutations/posts/update';
 
 import { Create as createComment, Update as updateComment, Delete as deleteComment } from './mutations/comments/crud';
 
-export default  new Schema({
+const schema =  new Schema({
   query: new ObjectType({
     name: 'Query',
     fields: {
@@ -43,3 +44,5 @@ export default  new Schema({
     })
   })
 });
+// maskErrors(schema);
+export default schema;
