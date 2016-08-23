@@ -27,7 +27,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 }] )
 @connect(
   state => ({
-    user: state.auth.user,
+    currentUser: state.auth.user,
     users: state.users,
     posts: state.posts.data,
     hasMore: state.posts.hasMore,
@@ -40,7 +40,7 @@ export default class TimeLine extends Component {
   static propTypes = {
     users: PropTypes.object,
     posts: PropTypes.array,
-    user: PropTypes.object,
+    currentUser: PropTypes.object,
     hasMore: PropTypes.bool,
     loading: PropTypes.bool,
     showNewPostForm: PropTypes.bool,
@@ -63,7 +63,7 @@ export default class TimeLine extends Component {
   }
 
   render() {
-    const { users, user, posts, editing, hasMore } = this.props;
+    const { users, currentUser, posts, editing, hasMore } = this.props;
     const styles = require( './Events.scss' );
     console.log(`render timeline`);
     return (
@@ -72,7 +72,7 @@ export default class TimeLine extends Component {
           <div className="container">
             <div className="row">
               <div className="col-lg-8 col-md-8">
-                {user &&
+                {currentUser &&
                 <div className="row">
                   <NewPostForm {...this.props} />
                 </div>

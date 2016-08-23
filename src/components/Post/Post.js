@@ -17,6 +17,7 @@ export default class Post extends Component {
     title: PropTypes.string,
     body: PropTypes.string,
     images: PropTypes.array,
+    currentUser: PropTypes.object,
     comments: PropTypes.any,
     showComments: PropTypes.bool,
     createdBy: PropTypes.string,
@@ -44,8 +45,9 @@ export default class Post extends Component {
   }
 
   render() {
-    const { comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { currentUser, comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
+    const isOwner = postCreator.id === currentUser.id;
 
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
@@ -58,8 +60,10 @@ export default class Post extends Component {
         { !editing &&
         <div className="post">
           <div>
-            <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
-            <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
+            {isOwner && <div>
+                <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
+                <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
+            </div>}
             <div className={styles.userinfo + ' pull-left'}>
               {postCreator && <Avatar src={postCreator.picture } />}
 
