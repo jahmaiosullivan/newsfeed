@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar';
 import NewPostForm from '../../components/PostForm/NewPostForm';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
-import { saveFile, createNewPost, isLoaded, loadPosts, toggle as toggleNewPostForm } from 'redux/actions/postsActionCreators';
+import * as newPostActions from 'redux/actions/postsActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -12,8 +12,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 @asyncConnect( [{
   deferred: false,
   promise: ({store}) => {
-    if (!isLoaded( store.getState() )) {
-      return store.dispatch( loadPosts() ).then(({data: {posts}}) => {
+    if (!newPostActions.isLoaded( store.getState() )) {
+      return store.dispatch( newPostActions.loadPosts() ).then(({data: {posts}}) => {
         const postCreatorIds = lodash(posts)
           .filter(post => post.createdBy !== null)
           .map(post => post.createdBy)
@@ -35,7 +35,7 @@ import InfiniteScroll from 'react-infinite-scroller';
     loading: state.posts.loading,
     showNewPostForm: state.posts.newPost.show
   }),
-  {loadPosts, saveFile, createNewPost, toggleNewPostForm } )
+  { ...newPostActions } )
 export default class TimeLine extends Component {
   static propTypes = {
     users: PropTypes.object,
@@ -59,13 +59,13 @@ export default class TimeLine extends Component {
 
 
   loadMorePosts(page) {
-    this.props.dispatch(loadPosts(page));
+    this.props.dispatch(this.props.loadPosts(page));
   }
 
   render() {
     const { users, user, posts, editing, hasMore } = this.props;
     const styles = require( './Events.scss' );
-
+    console.log(`render timeline`);
     return (
       <div className="container-fluid">
         <section className="pageContent">
@@ -85,7 +85,7 @@ export default class TimeLine extends Component {
                     loader={<div className="loader">Loading ...</div>}
                   >
                     { posts && posts.map( (post) => {
-                      return (<Post postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
+                      return (<Post {...this.props} postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
                     })}
                   </InfiniteScroll>
                 </ul>

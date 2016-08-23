@@ -12,6 +12,9 @@ const initialState = {
     show: false,
     images: []
   },
+  newComment: {
+    body: ''
+  },
   saving: false,
   deleting: false,
   editing: {}
@@ -20,6 +23,14 @@ const initialState = {
 const changePostImagesToArray = (post) => {
   if (post.images !== null) {
     post.images = (post.images.trim() === '') ? null : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
+  }
+  return post;
+};
+
+const addCommentToPost = (post, comment) => {
+  if (post.comments !== null) {
+    post.title = 'I spliced it';
+    post.comments.push(comment);
   }
   return post;
 };
@@ -168,18 +179,26 @@ export default (state = initialState, action = {}) => {
         loaded: false,
         error: action.error
       };
-    case actions.COMMENT_NEW:
+    case actions.ADD_COMMENT:
       return {
         ...state,
         saving: true
       };
-    case actions.COMMENT_NEW_SUCCESS:
+    case actions.ADD_COMMENT_SUCCESS:
+      // Find item index using indexOf+find
+      const postIndex = lodash.indexOf(state.data, lodash.find(state.data, {id: action.result.data.createComment.postId}));
+      const postWithNewComment = addCommentToPost(state.data[postIndex], action.result.data.createComment);
+      // Replace item at index using native splice
+      state.data.splice(postIndex, 1, postWithNewComment);
+      console.log( `ADD_COMMENT_SUCCESS ${util.inspect(state.data[postIndex])}`);
+
       return {
         ...state,
+        data: state.data,
         saving: false
       };
-    case actions.COMMENT_NEW_FAIL:
-      console.log( `COMMENT_NEW_FAIL with error ${util.inspect( action.error )}` );
+    case actions.ADD_COMMENT_FAIL:
+      console.log( `ADD_COMMENT_FAIL with error ${util.inspect( action.error )}` );
       return {
         ...state,
         saving: false,

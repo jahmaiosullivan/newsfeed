@@ -16,7 +16,7 @@ function loadPosts(page = 1) {
   };
 }
 
-function toggle() {
+function toggleNewPostForm() {
   return {type: actions.POST_NEW_TOGGLE};
 }
 
@@ -59,5 +59,14 @@ function saveFile(file) {
   };
 }
 
-export {isLoaded, loadPosts, toggle, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile };
+function createNewComment({postId, body, status}) {
+  const graphQlCreateCommentQuery = `mutation CreateComment { createComment(body: \"${body}\",postId: ${postId},status: ${status}) {id, body, status, createdAt, postId, updatedAt }}`;
+
+  return {
+    types: [actions.ADD_COMMENT, actions.ADD_COMMENT_SUCCESS, actions.ADD_COMMENT_FAIL],
+    promise: (client) => client.graphQL(graphQlCreateCommentQuery)
+  };
+}
+
+export {isLoaded, loadPosts, toggleNewPostForm, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile, createNewComment };
 

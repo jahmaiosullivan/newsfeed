@@ -1,9 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
-import * as newPostActions from 'redux/actions/postsActionCreators';
-import * as newCommentActions from 'redux/actions/commentActionCreators';
-import {connect} from 'react-redux';
 import CommentForm from '../Comment/CommentForm';
 import Thumbnail from '../Thumbnail/Thumbnail';
 
@@ -11,8 +8,6 @@ const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
 
-@connect(
-  () => ({ }), {...newPostActions, ...newCommentActions} )
 
 export default class Post extends Component {
   static propTypes = {
@@ -33,8 +28,18 @@ export default class Post extends Component {
     editPostStop: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {comments: this.props.comments};
+  }
+
+  handleCommentAdded(comment) {
+    this.props.createNewComment(comment).then(() => { this.forceUpdate(); });
+  }
+
   render() {
-    const { postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost, createNewComment, comments } = this.props;
+    const { postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const {comments } = this.state;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
@@ -83,7 +88,7 @@ export default class Post extends Component {
             { comments && comments.map( (comment) => {
               return (<div key={comment.id}>{comment.body}</div>);
             })}
-            <CommentForm createCommentHandler={createNewComment} postId={id} />
+            <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} />
           </div>
         </div>
         }
