@@ -13,17 +13,16 @@ export default  {
     page: {type: IntType}
   },
   async resolve(rootValue, { page }) {
+    console.log(`finding posts now`);
+    const commentsAlias = {model: Comment, as: 'comments' }; // where: { name: { $like: '%ooth%' }};
     return await Post.findAll({
       offset:page * config.paging.rows - config.paging.rows,
       limit :config.paging.rows,
+      include: [commentsAlias],
       order: [
-        ['createdAt', 'DESC']
-    ],
-      include: [{
-        model: Comment,
-        as: 'comments'
-        // where: { name: { $like: '%ooth%' } }
-      }]
+        [ 'createdAt', 'DESC' ],
+        [commentsAlias, 'createdAt', 'ASC']
+      ]
     });
   }
 };
