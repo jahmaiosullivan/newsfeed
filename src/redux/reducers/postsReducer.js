@@ -20,6 +20,10 @@ const initialState = {
   editing: {}
 };
 
+const findPostIndex = (allposts, postId) => {
+  return lodash.indexOf(allposts, lodash.find(allposts, {id: postId}));
+};
+
 const changePostImagesToArray = (post) => {
   if (post.images !== null) {
     post.images = (post.images.trim() === '') ? null : lodash.map(post.images.split(','), (image) => { return {preview: image, loading: false}; });
@@ -28,13 +32,19 @@ const changePostImagesToArray = (post) => {
 };
 
 const addCommentToPost = (existingPosts, comment) => {
-  const postIndex = lodash.indexOf(existingPosts, lodash.find(existingPosts, {id: comment.postId}));
+  const postIndex = findPostIndex(existingPosts, comment.postId);
   if (existingPosts[postIndex].comments === null) {
     existingPosts[postIndex].comments = [];
   }
   existingPosts[postIndex].comments.push(comment);
 
   return existingPosts;
+};
+
+const addCommentsVisiblePropertyToEachPost = (posts) => {
+  return lodash.map(posts, (post) => {
+    return Object.assign({}, post, {commentsVisible: false});
+  });
 };
 
 export default (state = initialState, action = {}) => {
@@ -47,13 +57,14 @@ export default (state = initialState, action = {}) => {
     case actions.POST_LOAD_SUCCESS:
       // Change all images from url to an object of shape { preview: <url> }
       lodash.each(action.result.data.posts, changePostImagesToArray);
+      const allposts = addCommentsVisiblePropertyToEachPost(action.result.data.posts);
 
       return {
         ...state,
         loading: false,
         loaded: true,
-        hasMore: action.result.data.posts.length > 0,
-        data: state.data.concat(action.result.data.posts),
+        hasMore: allposts.length > 0,
+        data: state.data.concat(allposts),
         error: null
       };
     case actions.POST_LOAD_FAIL:
