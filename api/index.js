@@ -14,11 +14,13 @@ import schema from './graphql/schema';
 import expressGraphQL from 'express-graphql';
 import busboy from 'connect-busboy';
 import fs from 'fs';
+import util from 'util';
 
 const pretty = new PrettyError();
 const app = express();
 const server = new http.Server(app);
 const io = new SocketIo(server);
+const jwtAuth = expressJWT({ secret: config.auth.jwt.secret});
 io.path('/ws');
 
 app.use(session({
@@ -27,33 +29,37 @@ app.use(session({
   saveUninitialized: false,
   cookie: {maxAge: 60000}
 }));
-app.use(bodyParser({limit: '50mb'}));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(busboy());
-app.use(expressJWT({ secret: config.auth.jwt.secret}).unless({path: [/\/auth/i,  /\/graphql/i, /\/facebook/i ] }));
-app.use(session({
-  secret: config.auth.jwt.secret,
+app.use(jwtAuth.unless({path: [/\/auth/i,  /\/graphql/i, /\/facebook/i ] }));
+app.use(session(Object.assign({}, {
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 86400 }
-}));
+}, jwtAuth)));
 
 configureAuth(app, config);
 
-app.use('/graphql', expressGraphQL(req => ({
-  schema,
-  graphiql: true,
-  rootValue : {request: req},
-  context: req.session,
-  pretty: true
-})));
+const handleGraphql = (req, res) => {
+ /* if (!req.user) {
+     return res.sendStatus(401);
+  } */
+
+  return {
+    schema,
+    graphiql: true,
+    rootValue : {request: req},
+    context: req.session,
+    pretty: true
+  };
+};
+
+app.use('/graphql', jwtAuth, expressGraphQL(handleGraphql));
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
-
   const {action, params} = mapUrl(actions, splittedUrlPath);
-
   if (action) {
     action(req, params)
       .then((result) => {
@@ -74,7 +80,6 @@ app.use((req, res) => {
     res.status(404).end('NOT FOUND');
   }
 });
-
 
 /***** Create a uploads directory if none exists. This is for uploading files to Azure and other services. ****/
 if (!fs.existsSync(config.uploadsDir)){

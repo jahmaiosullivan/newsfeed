@@ -13,8 +13,7 @@ const getBearerAuthToken = () => {
     cookieVal = window.reactCookie.load( userCookieName );
   }
 
-  const authToken = cookieVal ? 'Bearer ' + cookieVal.token : '';
-  return authToken;
+  return cookieVal ? 'Bearer ' + cookieVal.token : '';
 };
 
 const methods = ['get', 'post', 'put', 'patch', 'del'];
