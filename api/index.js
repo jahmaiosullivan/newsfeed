@@ -41,7 +41,7 @@ app.use(session(Object.assign({}, {
 
 configureAuth(app, config);
 
-const handleGraphql = (req) => {
+app.use('/graphql', jwtAuth, expressGraphQL((req) => {
   if (!req.user) {
     console.log(`are you authorized for graphql?`);
   }
@@ -52,9 +52,7 @@ const handleGraphql = (req) => {
     context: req.session,
     pretty: true
   };
-};
-
-app.use('/graphql', jwtAuth, expressGraphQL(handleGraphql));
+}));
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
