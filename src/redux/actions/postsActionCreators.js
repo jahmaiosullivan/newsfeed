@@ -3,7 +3,7 @@ import config from '../../../config';
 import {dateString} from '../../../utils';
 // import util from 'util';
 
-const postReturnFields = `id, title, body, images, comments {id, body, status, createdBy }, createdBy, createdAt, updatedBy, updatedAt`;
+const postReturnFields = `id, title, body, images, commentCount, createdBy, createdAt, updatedBy, updatedAt`;
 
 function isLoaded(globalState) {
   return globalState.posts && globalState.posts.loaded;

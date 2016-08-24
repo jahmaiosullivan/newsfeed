@@ -1,6 +1,7 @@
 import DataType from 'sequelize';
 import Model from '../sequelize';
 
+const tablename = 'posts';
 const Post = Model.define( 'Post', {
   id: {
     type: DataType.BIGINT,
@@ -11,9 +12,10 @@ const Post = Model.define( 'Post', {
   body: DataType.STRING,
   images: DataType.TEXT,
   createdBy: DataType.UUID,
+  commentCount: DataType.INTEGER,
   createdAt: DataType.DATE,
   updatedBy: DataType.UUID,
   updatedAt: DataType.DATE
-}, {tableName: 'posts'} );
+}, {tableName: tablename} );
 
-export {Post as default};
+export {Post as default, tablename};

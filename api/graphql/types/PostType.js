@@ -12,7 +12,7 @@ const PostFields = {
   id: { type: new NonNull(IntType) },
   title: { type: StringType },
   body: { type: StringType },
-  comments: { type: new List(CommentType) },
+  commentCount: { type: IntType },
   images: { type: StringType },
   createdAt: { type: StringType },
   createdBy: { type: StringType },

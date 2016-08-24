@@ -17,7 +17,9 @@ const udpdateArgs = {
 };
 const deleteCommentArgs = { id: {type: new NonNull( IntType )} };
 
-const createCommentFunc = (values) => { return Comment.create(values); };
+const createCommentFunc = (values) => {
+  return Comment.create(values);
+};
 const updateCommentFunc = ({body, status}) => {
   console.log(`update a comment: ${util.inspect({body, status})}`);
   return Comment.find({ where: {id} }).then((comment) => {

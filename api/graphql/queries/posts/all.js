@@ -1,4 +1,5 @@
 import {Post, Comment } from '../../../database/models';
+import sequelize from '../../../database/sequelize';
 import config from '../../../../config';
 import util from 'util';
 import {
@@ -12,16 +13,20 @@ export default  {
   args: {
     page: {type: IntType}
   },
-  async resolve({user}, { page }) {
+  resolve({user}, { page }) {
     console.log(`finding posts now for user ${util.inspect(user)}`);
-    return await Post.findAll({
-      offset:page * config.paging.rows - config.paging.rows,
-      limit :config.paging.rows,
-      include: [Comment],
-      order: [
-        [ 'createdAt', 'DESC' ],
-        [Comment, 'createdAt', 'ASC']
-      ]
+    const offset = page * config.paging.rows - config.paging.rows;
+    const postsQuery = `Select "Posts".*, count(*) as "commentCount" from Posts as "Posts"
+                        LEFT OUTER JOIN Comments as "Comments" ON "Comments"."postId" = "Posts"."id"
+                        group by "Posts"."id"
+                        order by "Posts"."createdAt" DESC
+                        LIMIT :limit OFFSET :offset`;
+    const variables = { offset, limit: config.paging.rows };
+
+    return new Promise((resolve) => {
+      resolve(sequelize.query(postsQuery, { replacements: variables, model: Post, type: sequelize.QueryTypes.SELECT }).then((posts) => {
+          return posts;
+        }));
     });
   }
 };

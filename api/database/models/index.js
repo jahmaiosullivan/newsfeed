@@ -13,10 +13,11 @@ User.hasMany(UserClaim, {
 });
 
 Post.hasMany(Comment, {
+  foreignKey: 'postId',
   onUpdate: 'cascade',
   onDelete: 'cascade'
 });
-Comment.belongsTo(Post);
+Comment.belongsTo(Post, {as: 'post'});
 
 
 function sync(...args) {

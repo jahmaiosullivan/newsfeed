@@ -22,6 +22,7 @@ export default class Post extends Component {
     images: PropTypes.array,
     currentUser: PropTypes.object,
     comments: PropTypes.any,
+    commentCount: PropTypes.number,
     showComments: PropTypes.bool,
     createdBy: PropTypes.string,
     createdAt: PropTypes.string,
@@ -48,7 +49,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { loadUsers, users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { commentCount, loadUsers, users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
     const postCreator = lodash.find(users, (postUser) => { return postUser.id === createdBy; });
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
@@ -99,7 +100,7 @@ export default class Post extends Component {
               return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px" />);
             })}
           </div>
-          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} comments`}</a></div>
+          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} comments`}</a></div>
           { showComments && <div>
               { comments && comments.map((comment) => {
                 const commentCreator = lodash.find(users, (cUser) => { return cUser.id === comment.createdBy; });
