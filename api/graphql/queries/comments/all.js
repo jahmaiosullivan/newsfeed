@@ -15,7 +15,7 @@ export default  {
     return await Comment.findAll({
       where: { postId },
       order: [
-        ['createdAt', 'DESC']
+        ['createdAt', 'ASC']
     ]});
   }
 };
