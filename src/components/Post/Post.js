@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
 import CommentForm from '../Comment/CommentForm';
+import Comment from './Comment';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
 // import util from 'util';
@@ -9,29 +10,6 @@ import lodash from 'lodash';
 const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
-
-class Comment extends Component {
-  static propTypes = {
-    comment: PropTypes.object,
-    creator: PropTypes.object,
-    loadUsers: PropTypes.func.isRequired
-  };
-
-  componentWillMount() {
-    const {loadUsers, comment, creator} = this.props;
-    if (!creator && comment.createdBy) {
-      loadUsers([comment.createdBy]);
-    }
-  }
-
-  render() {
-    const { comment, creator} = this.props;
-    return (<div key={comment.id}>
-              <span>{comment.body}</span>
-              {creator && <span>{creator.name} {creator.picture}</span>}
-            </div>);
-  }
-}
 
 export default class Post extends Component {
   static propTypes = {
