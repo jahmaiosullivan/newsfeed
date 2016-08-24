@@ -8,9 +8,60 @@ import lodash from 'lodash';
 import pluralize from 'pluralize';
 // import util from 'util';
 
-const icon1 = require( './images/icon1.jpg' );
-const icon4 = require( './images/icon4.jpg' );
-const styles = require( './Post.scss' );
+const icon1 = require('./images/icon1.jpg');
+const icon4 = require('./images/icon4.jpg');
+const styles = require('./Post.scss');
+
+class CommentsList extends Component {
+  static propTypes = {
+    id: PropTypes.number,
+    currentUser: PropTypes.object,
+    comments: PropTypes.any,
+    commentCount: PropTypes.number,
+    users: PropTypes.array,
+    showComments: PropTypes.bool,
+    loadUsers: PropTypes.func.isRequired,
+    createNewComment: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {showComments: props.showComments};
+  }
+
+  handleCommentsToggled() {
+    this.setState({showComments: !this.state.showComments});
+  }
+
+  handleCommentAdded(comment) {
+    this.props.createNewComment(comment).then(() => {
+      this.forceUpdate();
+    });
+  }
+
+  render() {
+    const { users, loadUsers, commentCount, currentUser, comments, id } = this.props;
+    const { showComments } = this.state;
+    return (<div>
+      <div><a href="#"
+              onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</a>
+      </div>
+      { showComments && <div>
+        { comments && comments.map((comment) => {
+          const commentCreator = lodash.find(users, (cUser) => {
+            return cUser.id === comment.createdBy;
+          });
+          return (<Comment loadUsers={loadUsers} creator={commentCreator} key={comment.id} comment={comment}/>);
+        })}
+        { currentUser &&
+        <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}
+                     currentUser={currentUser}/> }
+      </div>
+      }
+    </div>);
+  }
+}
+
 
 export default class Post extends Component {
   static propTypes = {
@@ -36,30 +87,18 @@ export default class Post extends Component {
     editPostStop: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {showComments: props.showComments};
-  }
-
-  handleCommentAdded(comment) {
-    this.props.createNewComment(comment).then(() => { this.forceUpdate(); });
-  }
-
-  handleCommentsToggled() {
-    this.setState({showComments: !this.state.showComments});
-  }
-
   render() {
-    const { commentCount, loadUsers, users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
-    const { showComments } = this.state;
-    const postCreator = lodash.find(users, (postUser) => { return postUser.id === createdBy; });
+    const { users, currentUser, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const postCreator = lodash.find(users, (postUser) => {
+      return postUser.id === createdBy;
+    });
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
 
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
         <div>
-          <PostForm {...this.props} submitHandler={editPost} uploadFileHandler={saveFile} />
+          <PostForm {...this.props} submitHandler={editPost} uploadFileHandler={saveFile}/>
           <a href="#" onClick={(event) => { event.preventDefault(); editPostStop(id); }}>Cancel</a>
         </div>
         }
@@ -67,11 +106,11 @@ export default class Post extends Component {
         <div className="post">
           <div>
             {isOwner && <div>
-                <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
-                <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
+              <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
+              <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
             </div>}
             <div className={styles.userinfo + ' pull-left'}>
-              {postCreator && <Avatar src={postCreator.picture } />}
+              {postCreator && <Avatar src={postCreator.picture }/>}
 
               <div className={styles.icons}>
                 <img src={icon1} alt=""/>
@@ -98,18 +137,10 @@ export default class Post extends Component {
           </div>
           <div>
             { images && images.map((postImg) => {
-              return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px" />);
+              return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
             })}
           </div>
-          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</a></div>
-          { showComments && <div>
-              { comments && comments.map((comment) => {
-                const commentCreator = lodash.find(users, (cUser) => { return cUser.id === comment.createdBy; });
-                return (<Comment loadUsers={loadUsers} creator={commentCreator} key={comment.id} comment={comment} />);
-              })}
-              { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser} /> }
-            </div>
-          }
+          <CommentsList {...this.props} />
         </div>
         }
         <div className="clearfix"></div>
