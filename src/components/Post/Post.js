@@ -1,67 +1,14 @@
 import React, {Component, PropTypes} from 'react';
 import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
-import CommentForm from '../Comment/CommentForm';
-import Comment from './Comment';
+import CommentList from './CommentList';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
-import pluralize from 'pluralize';
 // import util from 'util';
 
 const icon1 = require('./images/icon1.jpg');
 const icon4 = require('./images/icon4.jpg');
 const styles = require('./Post.scss');
-
-class CommentsList extends Component {
-  static propTypes = {
-    id: PropTypes.number,
-    currentUser: PropTypes.object,
-    comments: PropTypes.any,
-    commentCount: PropTypes.number,
-    users: PropTypes.array,
-    showComments: PropTypes.bool,
-    loadUsers: PropTypes.func.isRequired,
-    createNewComment: PropTypes.func.isRequired
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {showComments: props.showComments};
-  }
-
-  handleCommentsToggled() {
-    this.setState({showComments: !this.state.showComments});
-  }
-
-  handleCommentAdded(comment) {
-    this.props.createNewComment(comment).then(() => {
-      this.forceUpdate();
-    });
-  }
-
-  render() {
-    const { users, loadUsers, commentCount, currentUser, comments, id } = this.props;
-    const { showComments } = this.state;
-    return (<div>
-      <div><a href="#"
-              onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</a>
-      </div>
-      { showComments && <div>
-        { comments && comments.map((comment) => {
-          const commentCreator = lodash.find(users, (cUser) => {
-            return cUser.id === comment.createdBy;
-          });
-          return (<Comment loadUsers={loadUsers} creator={commentCreator} key={comment.id} comment={comment}/>);
-        })}
-        { currentUser &&
-        <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}
-                     currentUser={currentUser}/> }
-      </div>
-      }
-    </div>);
-  }
-}
-
 
 export default class Post extends Component {
   static propTypes = {
@@ -140,7 +87,7 @@ export default class Post extends Component {
               return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
             })}
           </div>
-          <CommentsList {...this.props} />
+          <CommentList {...this.props} />
         </div>
         }
         <div className="clearfix"></div>
