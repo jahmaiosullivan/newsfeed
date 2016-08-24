@@ -5,6 +5,7 @@ import CommentForm from '../Comment/CommentForm';
 import Comment from './Comment';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
+import pluralize from 'pluralize';
 // import util from 'util';
 
 const icon1 = require( './images/icon1.jpg' );
@@ -100,7 +101,7 @@ export default class Post extends Component {
               return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px" />);
             })}
           </div>
-          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} comments`}</a></div>
+          <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</a></div>
           { showComments && <div>
               { comments && comments.map((comment) => {
                 const commentCreator = lodash.find(users, (cUser) => { return cUser.id === comment.createdBy; });

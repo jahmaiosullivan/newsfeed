@@ -130,6 +130,7 @@
     "passport-local": "^1.0.0",
     "pg": "^4.3.0",
     "piping": "^0.3.0",
+    "pluralize": "^3.0.0",
     "pretty-error": "^1.2.0",
     "ramda": "^0.21.0",
     "react": "^15.3.0",
