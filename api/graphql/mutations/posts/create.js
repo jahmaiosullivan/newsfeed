@@ -1,6 +1,6 @@
 import PostType, { PostFields } from '../../types/PostType';
 import { Post } from '../../../database/models';
-import { createMutation } from '../mutationHelper';
+import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';
 import underscore from 'lodash';
 import {
   GraphQLString as StringType,
@@ -11,6 +11,5 @@ const mutationFunction = (values) => {
   return Post.create(values);
 };
 
-const create = createMutation(PostType, underscore.omit(PostFields, ['id', 'comments']), mutationFunction);
-export default create;
+export default createAuthorizedGraphQLQuery(PostType, underscore.omit(PostFields, ['id', 'comments']), mutationFunction);
 

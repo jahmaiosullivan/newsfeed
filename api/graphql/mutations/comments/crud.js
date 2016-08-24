@@ -1,6 +1,6 @@
 import CommentType from '../../types/CommentType';
 import { Comment } from '../../../database/models';
-import { createMutation } from '../mutationHelper';
+import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';
 import util from 'util';
 import {
   GraphQLString as StringType,
@@ -33,8 +33,8 @@ const deleteCommentFunc = ({ id }) => {
   });
 };
 
-const Create = createMutation(CommentType, createArgs, createCommentFunc);
-const Update = createMutation(CommentType, udpdateArgs, updateCommentFunc);
-const Delete = createMutation(CommentType, deleteCommentArgs, deleteCommentFunc);
+const Create = createAuthorizedGraphQLQuery(CommentType, createArgs, createCommentFunc);
+const Update = createAuthorizedGraphQLQuery(CommentType, udpdateArgs, updateCommentFunc);
+const Delete = createAuthorizedGraphQLQuery(CommentType, deleteCommentArgs, deleteCommentFunc);
 
 export { Create, Update, Delete };

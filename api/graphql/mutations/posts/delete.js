@@ -1,6 +1,6 @@
 import PostType from '../../types/PostType';
 import { Post } from '../../../database/models';
-import { createMutation } from '../mutationHelper';
+import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';
 import {
   GraphQLInt as IntType,
   GraphQLNonNull as NonNull,
@@ -12,4 +12,4 @@ const mutationFunction = ({ id }) => {
   return { id };
 };
 
-export default createMutation(PostType, args, mutationFunction);
+export default createAuthorizedGraphQLQuery(PostType, args, mutationFunction);
