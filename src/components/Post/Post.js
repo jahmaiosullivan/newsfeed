@@ -98,9 +98,9 @@ export default class Post extends Component {
           <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} comments`}</a></div>
           { showComments && <div>
               { comments && comments.map((comment) => {
-                return (<div key={comment.id}>{comment.body}</div>);
+                return (<div key={comment.id}>{comment.body} {comment.createdBy}</div>);
               })}
-              { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}/> }
+              { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser} /> }
             </div>
           }
         </div>

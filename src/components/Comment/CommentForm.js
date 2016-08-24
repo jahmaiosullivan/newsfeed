@@ -12,6 +12,7 @@ export default class CommentForm extends Component {
     id: PropTypes.number,
     postId: PropTypes.number,
     body: PropTypes.string,
+    currentUser: PropTypes.object,
     createCommentHandler: PropTypes.func.isRequired
   };
 
@@ -27,14 +28,14 @@ export default class CommentForm extends Component {
   }
 
   handleSubmit(event) {
-    const { createCommentHandler, postId } = this.props;
+    const { createCommentHandler, postId, currentUser } = this.props;
     event.preventDefault();
     const body = this.state.commentBody.trim();
     if (!body) {
       console.warn('body of comment is blank');
       return;
     }
-    createCommentHandler({body, status: 0, postId: postId});
+    createCommentHandler({body, status: 0, postId: postId, createdBy: currentUser.id });
     this.setState({commentBody: ''});
   }
 

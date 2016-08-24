@@ -1,6 +1,7 @@
-import CommentType from '../../types/CommentType';
+import CommentType,  { CommentFields } from '../../types/CommentType';
 import { Comment } from '../../../database/models';
 import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';
+import underscore from 'lodash';
 import util from 'util';
 import {
   GraphQLString as StringType,
@@ -9,11 +10,7 @@ import {
 } from 'graphql';
 
 
-const createArgs = {
-  body: {type: new NonNull( StringType )},
-  postId: {type: IntType },
-  status: {type: IntType }
-};
+const createArgs = underscore.omit(CommentFields, ['id']);
 const udpdateArgs = {
   body: {type: new NonNull( StringType )},
   status: {type: IntType }

@@ -3,7 +3,7 @@ import config from '../../../config';
 import {dateString} from '../../../utils';
 // import util from 'util';
 
-const postReturnFields = `id, title, body, images, comments {id, body, status }, createdBy, createdAt, updatedBy, updatedAt`;
+const postReturnFields = `id, title, body, images, comments {id, body, status, createdBy }, createdBy, createdAt, updatedBy, updatedAt`;
 
 function isLoaded(globalState) {
   return globalState.posts && globalState.posts.loaded;
@@ -58,8 +58,8 @@ function saveFile(file) {
   };
 }
 
-function createNewComment({postId, body, status}) {
-  const graphQlCreateCommentQuery = `mutation CreateComment { createComment(body: \"${body}\",postId: ${postId},status: ${status}) {id, body, status, createdAt, postId, updatedAt }}`;
+function createNewComment({postId, body, status, createdBy}) {
+  const graphQlCreateCommentQuery = `mutation CreateComment { createComment(body: \"${body}\",postId: ${postId},status: ${status},createdBy: \"${createdBy}\") {id, body, status, createdAt, postId, updatedAt }}`;
 
   return {
     types: [actions.ADD_COMMENT, actions.ADD_COMMENT_SUCCESS, actions.ADD_COMMENT_FAIL],

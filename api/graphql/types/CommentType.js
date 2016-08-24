@@ -7,15 +7,19 @@ import {
   GraphQLBoolean as BooleanType
 } from 'graphql';
 
-export default new ObjectType({
+const CommentFields = {
+  id: { type: new NonNull(ID) },
+  postId: { type: IntType },
+  createdBy: { type: StringType },
+  body: { type: StringType },
+  status: { type: IntType },
+  createdAt: { type: StringType },
+  updatedAt: { type: StringType }
+};
+
+const CommentType = new ObjectType({
   name: 'Comment',
-  fields: {
-    id: { type: new NonNull(ID) },
-    postId: { type: IntType },
-    body: { type: StringType },
-    status: { type: BooleanType },
-    createdAt: { type: StringType },
-    updatedAt: { type: StringType }
-  }
+  fields: CommentFields
 });
 
+export { CommentType as default, CommentFields };
