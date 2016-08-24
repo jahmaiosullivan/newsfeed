@@ -13,11 +13,15 @@ const styles = require( './Post.scss' );
 class Comment extends Component {
   static propTypes = {
     comment: PropTypes.object,
-    creator: PropTypes.object
+    creator: PropTypes.object,
+    loadUsers: PropTypes.func.isRequired
   };
 
   componentWillMount() {
-
+    const {loadUsers, comment, creator} = this.props;
+    if (!creator && comment.createdBy) {
+      loadUsers([comment.createdBy]);
+    }
   }
 
   render() {
@@ -35,6 +39,7 @@ export default class Post extends Component {
     postCreator: PropTypes.object,
     title: PropTypes.string,
     body: PropTypes.string,
+    loadUsers: PropTypes.func.isRequired,
     users: PropTypes.array,
     images: PropTypes.array,
     currentUser: PropTypes.object,
@@ -65,7 +70,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { loadUsers, users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
     const postCreator = lodash.find(users, (postUser) => { return postUser.id === createdBy; });
     const isOwner = currentUser && postCreator.id === currentUser.id;
@@ -120,7 +125,7 @@ export default class Post extends Component {
           { showComments && <div>
               { comments && comments.map((comment) => {
                 const commentCreator = lodash.find(users, (cUser) => { return cUser.id === comment.createdBy; });
-                return (<Comment creator={commentCreator} key={comment.id} comment={comment} />);
+                return (<Comment loadUsers={loadUsers} creator={commentCreator} key={comment.id} comment={comment} />);
               })}
               { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser} /> }
             </div>
