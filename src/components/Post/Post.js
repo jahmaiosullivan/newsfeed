@@ -12,13 +12,20 @@ const styles = require( './Post.scss' );
 
 class Comment extends Component {
   static propTypes = {
-    comment: PropTypes.object
+    comment: PropTypes.object,
+    creator: PropTypes.object
   };
 
-  render() {
-    const { comment} = this.props;
+  componentWillMount() {
 
-    return (<div key={comment.id}>{comment.body} {comment.createdBy}</div>);
+  }
+
+  render() {
+    const { comment, creator} = this.props;
+    return (<div key={comment.id}>
+              <div>{comment.body}</div>
+              {creator && `${JSON.stringify(creator)}`}
+            </div>);
   }
 }
 
@@ -112,7 +119,8 @@ export default class Post extends Component {
           <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} comments`}</a></div>
           { showComments && <div>
               { comments && comments.map((comment) => {
-                return (<Comment key={comment.id} comment={comment} />);
+                const commentCreator = lodash.find(users, (cUser) => { return cUser.id === comment.createdBy; });
+                return (<Comment creator={commentCreator} key={comment.id} comment={comment} />);
               })}
               { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser} /> }
             </div>
