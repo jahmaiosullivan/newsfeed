@@ -59,7 +59,7 @@ function saveFile(file) {
 }
 
 function createNewComment({postId, body, status, createdBy}) {
-  const graphQlCreateCommentQuery = `mutation CreateComment { createComment(body: \"${body}\",postId: ${postId},status: ${status},createdBy: \"${createdBy}\") {id, body, status, createdAt, postId, updatedAt }}`;
+  const graphQlCreateCommentQuery = `mutation CreateComment { createComment(body: \"${body}\",postId: ${postId},status: ${status},createdBy: \"${createdBy}\") {id, body, status, createdAt,createdBy postId, updatedAt }}`;
 
   return {
     types: [actions.ADD_COMMENT, actions.ADD_COMMENT_SUCCESS, actions.ADD_COMMENT_FAIL],
