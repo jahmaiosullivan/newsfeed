@@ -11,7 +11,6 @@ import UserType from '../../types/UserType';
 const type = new List(UserType);
 const args = {ids: {type: new List( StringType )}};
 const userFunc = ({ ids }) => {
-  console.log(`values are ${util.inspect(ids)}`);
   return User.findAll({
     where: {'id': {in: ids}},
     order: [

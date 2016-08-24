@@ -17,7 +17,7 @@ import InfiniteScroll from 'react-infinite-scroller';
         const postCreatorIds = lodash(posts)
           .filter(post => post.createdBy !== null)
           .map(post => post.createdBy)
-          .uniqBy(post => post.createdBy)
+          .uniqBy(creatorId => creatorId)
           .value();
 
         return store.dispatch(loadUsers(postCreatorIds));
@@ -28,17 +28,17 @@ import InfiniteScroll from 'react-infinite-scroller';
 @connect(
   state => ({
     currentUser: state.auth.user,
-    users: state.users,
+    users: state.users.data,
     posts: state.posts.data,
     hasMore: state.posts.hasMore,
     editing: state.posts.editing,
     loading: state.posts.loading,
     showNewPostForm: state.posts.newPost.show
   }),
-  { ...newPostActions } )
+  { ...newPostActions, loadUsers } )
 export default class TimeLine extends Component {
   static propTypes = {
-    users: PropTypes.object,
+    users: PropTypes.array,
     posts: PropTypes.array,
     currentUser: PropTypes.object,
     hasMore: PropTypes.bool,
@@ -46,6 +46,7 @@ export default class TimeLine extends Component {
     showNewPostForm: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
+    loadUsers: PropTypes.func.isRequired,
     loadPosts: PropTypes.func.isRequired,
     saveFile: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
@@ -63,7 +64,7 @@ export default class TimeLine extends Component {
   }
 
   render() {
-    const { users, currentUser, posts, editing, hasMore } = this.props;
+    const { currentUser, posts, editing, hasMore } = this.props;
     const styles = require( './Events.scss' );
     console.log(`render timeline`);
     return (
@@ -85,7 +86,7 @@ export default class TimeLine extends Component {
                     loader={<div className="loader">Loading ...</div>}
                   >
                     { posts && posts.map( (post) => {
-                      return (<Post {...this.props} postCreator={lodash.find(users.data, (postUser) => { return postUser.id === post.createdBy; })} {...post} editing={editing[post.id]} key={post.id} />);
+                      return (<Post {...this.props} {...post} editing={editing[post.id]} key={post.id} />);
                     })}
                   </InfiniteScroll>
                 </ul>
