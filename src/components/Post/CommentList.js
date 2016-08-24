@@ -19,11 +19,17 @@ export default class CommentList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {showComments: props.showComments};
+    this.state = {showComments: props.showComments, loaded: false };
   }
 
   handleCommentsToggled() {
-    this.setState({showComments: !this.state.showComments});
+    let newState = {showComments: !this.state.showComments};
+    if (!this.state.loaded) {
+      console.log(`load comments for ${this.props.id}`);
+      newState = Object.assign({}, newState, {loaded: true});
+    }
+
+    this.setState(newState);
   }
 
   handleCommentAdded(comment) {
@@ -36,8 +42,10 @@ export default class CommentList extends Component {
     const { users, loadUsers, commentCount, currentUser, comments, id } = this.props;
     const { showComments } = this.state;
     return (<div>
-      <div><a href="#"
-              onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</a>
+      <div>
+        <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>
+          {`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}
+        </a>
       </div>
       { showComments && <div>
         { comments && comments.map((comment) => {
