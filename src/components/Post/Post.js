@@ -3,6 +3,7 @@ import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
 import CommentForm from '../Comment/CommentForm';
 import Thumbnail from '../Thumbnail/Thumbnail';
+import lodash from 'lodash';
 // import util from 'util';
 
 const icon1 = require( './images/icon1.jpg' );
@@ -16,6 +17,7 @@ export default class Post extends Component {
     postCreator: PropTypes.object,
     title: PropTypes.string,
     body: PropTypes.string,
+    users: PropTypes.array,
     images: PropTypes.array,
     currentUser: PropTypes.object,
     comments: PropTypes.any,
@@ -45,8 +47,9 @@ export default class Post extends Component {
   }
 
   render() {
-    const { currentUser, comments, postCreator, saveFile, body, editing, id, title, createdAt, images, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
+    const postCreator = lodash.find(users, (postUser) => { return postUser.id === createdBy; });
     const isOwner = currentUser && postCreator.id === currentUser.id;
 
     return (
