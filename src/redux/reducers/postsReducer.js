@@ -33,7 +33,7 @@ const changePostImagesToArray = (post) => {
 
 const addCommentToPost = (existingPosts, comment) => {
   const postIndex = findPostIndex(existingPosts, comment.postId);
-  if (existingPosts[postIndex].comments === null) {
+  if (!existingPosts[postIndex].comments || existingPosts[postIndex].comments === null) {
     existingPosts[postIndex].comments = [];
   }
   existingPosts[postIndex].comments.push(comment);
@@ -211,6 +211,15 @@ export default (state = initialState, action = {}) => {
         saving: false,
         error: action.error
       };
+    case actions.POST_COMMENT_LOAD:
+      return state;
+    case actions.POST_COMMENT_LOAD_SUCCESS:
+      lodash.each(action.result.data.comments, (comment) => {
+        state.data = addCommentToPost(state.data, comment);
+      });
+      return state;
+    case actions.POST_COMMENT_LOAD_FAIL:
+      return state;
     default:
       return state;
   }

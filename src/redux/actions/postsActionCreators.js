@@ -67,5 +67,12 @@ function createNewComment({postId, body, status, createdBy}) {
   };
 }
 
-export {isLoaded, loadPosts, toggleNewPostForm, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile, createNewComment };
+function loadComments(postId) {
+  return {
+    types: [actions.POST_COMMENT_LOAD, actions.POST_COMMENT_LOAD_SUCCESS, actions.POST_COMMENT_LOAD_FAIL],
+    promise: (client) => client.graphQL( `{comments (postId: ${postId}){ id, body, status, createdAt,createdBy postId, updatedAt  }}`)
+  };
+}
+
+export {isLoaded, loadPosts, toggleNewPostForm, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile, createNewComment, loadComments };
 

@@ -4,7 +4,7 @@ import PostForm from '../PostForm/PostForm';
 import CommentList from './CommentList';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
-// import util from 'util';
+import util from 'util';
 
 const icon1 = require('./images/icon1.jpg');
 const icon4 = require('./images/icon4.jpg');
@@ -19,6 +19,8 @@ export default class Post extends Component {
     loadUsers: PropTypes.func.isRequired,
     users: PropTypes.array,
     images: PropTypes.array,
+    loadComments: PropTypes.func.isRequired,
+    onPostChanged: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     comments: PropTypes.any,
     commentCount: PropTypes.number,
@@ -34,13 +36,17 @@ export default class Post extends Component {
     editPostStop: PropTypes.func.isRequired
   };
 
+  handleCommentListChanged() {
+    this.props.onPostChanged();
+  }
+
   render() {
     const { users, currentUser, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
-
+    console.log(`rerender post with id ${id} ${util.inspect(this.props.comments)}`);
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&
@@ -87,7 +93,7 @@ export default class Post extends Component {
               return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
             })}
           </div>
-          <CommentList {...this.props} />
+          <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
         </div>
         }
         <div className="clearfix"></div>

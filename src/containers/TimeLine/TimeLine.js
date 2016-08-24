@@ -47,6 +47,7 @@ export default class TimeLine extends Component {
     dispatch: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
     loadUsers: PropTypes.func.isRequired,
+    loadComments: PropTypes.func.isRequired,
     loadPosts: PropTypes.func.isRequired,
     saveFile: PropTypes.func.isRequired,
     createNewPost: PropTypes.func.isRequired,
@@ -58,6 +59,9 @@ export default class TimeLine extends Component {
     this._loadMorePosts = (page) => { this.loadMorePosts(page); };
   }
 
+  handlePostChanged() {
+    this.forceUpdate();
+  }
 
   loadMorePosts(page) {
     this.props.loadPosts(page);
@@ -86,7 +90,7 @@ export default class TimeLine extends Component {
                     loader={<div className="loader">Loading ...</div>}
                   >
                     { posts && posts.map( (post) => {
-                      return (<Post {...this.props} {...post} editing={editing[post.id]} key={post.id} />);
+                      return (<Post {...this.props} {...post} editing={editing[post.id]} key={post.id} onPostChanged={() => { this.handlePostChanged(); }} />);
                     })}
                   </InfiniteScroll>
                 </ul>

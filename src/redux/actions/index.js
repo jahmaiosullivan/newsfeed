@@ -32,7 +32,10 @@ const postActions = {
   SAVE_FILE_FAIL: createActionName( 'files', 'SAVE_FILE_FAIL' ),
   ADD_COMMENT: createActionName( 'posts', 'ADD_COMMENT' ),
   ADD_COMMENT_SUCCESS: createActionName( 'posts', 'ADD_COMMENT_SUCCESS' ),
-  ADD_COMMENT_FAIL: createActionName( 'posts', 'ADD_COMMENT_FAIL' )
+  ADD_COMMENT_FAIL: createActionName( 'posts', 'ADD_COMMENT_FAIL' ),
+  POST_COMMENT_LOAD_SUCCESS: createActionName( 'posts', 'COMMENT_LOAD_SUCCESS' ),
+  POST_COMMENT_LOAD_FAIL: createActionName( 'posts', 'COMMENT_LOAD_FAIL' ),
+  POST_COMMENT_LOAD: createActionName( 'posts', 'COMMENT_LOAD' )
 };
 
 const cityActions = {

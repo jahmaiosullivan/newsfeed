@@ -11,6 +11,8 @@ export default class CommentList extends Component {
     currentUser: PropTypes.object,
     comments: PropTypes.any,
     commentCount: PropTypes.number,
+    loadComments: PropTypes.func.isRequired,
+    onChanged: PropTypes.func.isRequired,
     users: PropTypes.array,
     showComments: PropTypes.bool,
     loadUsers: PropTypes.func.isRequired,
@@ -25,7 +27,10 @@ export default class CommentList extends Component {
   handleCommentsToggled() {
     let newState = {showComments: !this.state.showComments};
     if (!this.state.loaded) {
-      console.log(`load comments for ${this.props.id}`);
+      this.props.loadComments(this.props.id).then(() => {
+        console.log(`load comments for ${this.props.id}`);
+        this.props.onChanged();
+      });
       newState = Object.assign({}, newState, {loaded: true});
     }
 
@@ -34,7 +39,7 @@ export default class CommentList extends Component {
 
   handleCommentAdded(comment) {
     this.props.createNewComment(comment).then(() => {
-      this.forceUpdate();
+      this.props.onChanged();
     });
   }
 
