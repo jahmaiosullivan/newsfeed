@@ -10,6 +10,17 @@ const icon1 = require( './images/icon1.jpg' );
 const icon4 = require( './images/icon4.jpg' );
 const styles = require( './Post.scss' );
 
+class Comment extends Component {
+  static propTypes = {
+    comment: PropTypes.object
+  };
+
+  render() {
+    const { comment} = this.props;
+
+    return (<div key={comment.id}>{comment.body} {comment.createdBy}</div>);
+  }
+}
 
 export default class Post extends Component {
   static propTypes = {
@@ -101,7 +112,7 @@ export default class Post extends Component {
           <div><a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>{`${showComments ? 'Hide' : 'Show'} comments`}</a></div>
           { showComments && <div>
               { comments && comments.map((comment) => {
-                return (<div key={comment.id}>{comment.body} {comment.createdBy}</div>);
+                return (<Comment key={comment.id} comment={comment} />);
               })}
               { currentUser && <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser} /> }
             </div>
