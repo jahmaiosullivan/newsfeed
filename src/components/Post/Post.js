@@ -73,7 +73,7 @@ export default class Post extends Component {
     const { loadUsers, users, currentUser, comments, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
     const { showComments } = this.state;
     const postCreator = lodash.find(users, (postUser) => { return postUser.id === createdBy; });
-    const isOwner = currentUser && postCreator.id === currentUser.id;
+    const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
 
     return (
       <li id={`post_${String(id)}`} className={styles.post}>

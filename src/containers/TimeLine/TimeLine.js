@@ -60,7 +60,7 @@ export default class TimeLine extends Component {
 
 
   loadMorePosts(page) {
-    this.props.dispatch(this.props.loadPosts(page));
+    this.props.loadPosts(page);
   }
 
   render() {
