@@ -27,8 +27,8 @@ class Comment extends Component {
   render() {
     const { comment, creator} = this.props;
     return (<div key={comment.id}>
-              <div>{comment.body}</div>
-              {creator && `${JSON.stringify(creator)}`}
+              <span>{comment.body}</span>
+              {creator && <span>{creator.name} {creator.picture}</span>}
             </div>);
   }
 }
