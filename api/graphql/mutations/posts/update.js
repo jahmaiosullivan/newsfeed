@@ -1,5 +1,6 @@
 import PostType from '../../types/PostType';
 import { Post } from '../../../database/models';
+import util from 'util';
 import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';
 import {
   GraphQLInt as IntType,
@@ -13,9 +14,13 @@ const args = {
   body: {type: new NonNull( StringType )},
   images: {type: StringType }
 };
-const mutationFunction = (values) => {
+const mutationFunction = (values, currentUser) => {
   return Post.find({ where: {id: values.id} }).then((post) => {
     if(post) {
+      if (post.createdBy !== currentUser.id) {
+        return new Error(`Only creator of posts can update them!`);
+      }
+
       return post.updateAttributes(values);
     }
     return new Error(`Post to update with id ${id} not found in database`);

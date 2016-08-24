@@ -9,7 +9,7 @@ import config from '../config';
 const configure = (app, config) => {
 
   function addJWT(user){
-    const token = jwt.sign({ email: user.email }, config.auth.jwt.secret, {
+    const token = jwt.sign({ id: user.id, email: user.email }, config.auth.jwt.secret, {
       expiresIn: 60000
     });
     return Object.assign({}, user.toJSON(), {token});

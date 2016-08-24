@@ -1,3 +1,5 @@
+import util from 'util';
+
 const createAnonymousGraphQLQuery = (type, args, cb) => {
   return createGraphQLQuery(type, args, cb, true);
 };
@@ -15,7 +17,7 @@ const createGraphQLQuery = (type, args, cb, isAnonymous = false) => {
           reject(new Error("Not authorized to perform this action."));
         }
 
-        resolve(cb(newValues));
+        resolve(cb(newValues, user));
       });
     }
   };
