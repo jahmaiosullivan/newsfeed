@@ -16,7 +16,7 @@ export default  {
   resolve({user}, { page }) {
     console.log(`finding posts now for user ${util.inspect(user)}`);
     const offset = page * config.paging.rows - config.paging.rows;
-    const postsQuery = `Select "Posts".*, count(*) as "commentCount" from Posts as "Posts"
+    const postsQuery = `Select "Posts".*, count("Comments"."id") as "commentCount" from Posts as "Posts"
                         LEFT OUTER JOIN Comments as "Comments" ON "Comments"."postId" = "Posts"."id"
                         group by "Posts"."id"
                         order by "Posts"."createdAt" DESC

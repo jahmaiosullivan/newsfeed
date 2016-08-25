@@ -1,16 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import * as newPostActions from 'redux/actions/postsActionCreators';
-import {connect} from 'react-redux';
+import { createForm } from 'rc-form';
 
-@connect(
-  (state) => ({
-    showStatus: state.posts.showStatus
-  }), {...newPostActions} )
-
+@createForm()
 export default class CommentForm extends Component {
   static propTypes = {
     id: PropTypes.number,
     postId: PropTypes.number,
+    form: PropTypes.object,
     body: PropTypes.string,
     currentUser: PropTypes.object,
     createCommentHandler: PropTypes.func.isRequired
@@ -18,38 +14,32 @@ export default class CommentForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {commentBody: this.props.body ? this.props.body : ''};
     this._handleSubmit = (event) => { this.handleSubmit(event); };
-    this._handleCommentChange = (event) => { this.handleCommentChange(event); };
-  }
-
-  handleCommentChange(event) {
-    this.setState({commentBody: event.target.value});
   }
 
   handleSubmit(event) {
-    const { createCommentHandler, postId, currentUser } = this.props;
     event.preventDefault();
-    const body = this.state.commentBody.trim();
-    if (!body) {
-      console.warn('body of comment is blank');
-      return;
-    }
-    createCommentHandler({body, status: 0, postId: postId, createdBy: currentUser.id });
-    this.setState({commentBody: ''});
+    const {createCommentHandler, postId, currentUser, form} = this.props;
+    form.validateFields((error, values) => {
+      console.log(error, values);
+
+      if (!error) {
+        createCommentHandler({body: values.comment, status: 0, postId: postId, createdBy: currentUser.id});
+        form.setFieldsValue({comment: ''});
+      }
+    });
   }
 
   render() {
-    const {commentBody } = this.state;
+    const {body, form: {getFieldProps, getFieldError} } = this.props;
     return (
       <form onSubmit={this._handleSubmit}>
         <div>
-          <input
+          <input {...getFieldProps('comment', { initialValue: body || '', rules: [{required: true, min: 3, whitespace: true}] })}
             type="text"
-            placeholder="Enter a comment ..."
-            value={commentBody}
-            onChange={this._handleCommentChange}
+            placeholder="Enter a comment..."
           />
+          {getFieldError('comment') && getFieldError('comment').join(',')}
         </div>
         <input type="submit" value="Comment"/>
       </form>

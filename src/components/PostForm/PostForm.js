@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import DropZone from '../../components/ImageUpload/DropZone';
-// import util from 'util';
+import { createForm } from 'rc-form';
 
+@createForm()
 export default class PostForm extends Component {
   static propTypes = {
     id: PropTypes.number,
     title: PropTypes.string,
+    form: PropTypes.object,
     body: PropTypes.string,
     images: PropTypes.array,
     submitHandler: PropTypes.func.isRequired,
@@ -14,15 +16,7 @@ export default class PostForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { title: this.props.title, body: this.props.body, images: this.props.images ? this.props.images : [] };
-  }
-
-  handleTitleChange(event) {
-    this.setState({'title': event.target.value});
-  }
-
-  handleBodyChange(event) {
-    this.setState({body: event.target.value});
+    this.state = { images: this.props.images ? this.props.images : [] };
   }
 
   handleImagesChange(images) {
@@ -31,39 +25,45 @@ export default class PostForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const title = this.state.title.trim();
-    const body = this.state.body.trim();
-    const images = this.state.images.map((image) => {return image.preview;}).join(', ');
-    const {submitHandler} = this.props;
-    if (!title || !body) {
-      console.warn('both post title and body are blank');
-      return;
-    }
-    submitHandler({id: this.props.id, title, body, images});
-    this.setState({title: '', body: '', images: []});
+    const {id, submitHandler, form} = this.props;
+
+    form.validateFields((error, values) => {
+      console.log(error, values);
+
+      if (!error) {
+        const title = values.title.trim();
+        const body = values.body.trim();
+        const images = this.state.images.map((image) => {
+          return image.preview;
+        }).join(', ');
+
+        submitHandler({id, title, body, images}).then(() => {
+          this.setState({images: []});
+        });
+      }
+    });
   }
 
   render() {
-    const { uploadFileHandler } = this.props;
-    const {id, title, body, images } = this.state;
+    const { id, title, body, uploadFileHandler, form: {getFieldProps, getFieldError} } = this.props;
+    const { images } = this.state;
     const styles = require('./PostForm.scss');
+
     return (
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
-          <input
+          <input {...getFieldProps('title', { initialValue: title || '', rules: [{required: true, min: 3, whitespace: true}] })}
             type="text"
             placeholder="Title of your post ..."
-            value={title}
-            onChange={(event) => { this.handleTitleChange(event); } }
           />
+          {getFieldError('title') && getFieldError('title').join(',')}
         </div>
         <div>
-          <input
+          <input {...getFieldProps('body', { initialValue: body || '', rules: [{required: true, min: 3, whitespace: true}] })}
             type="text"
             placeholder="Body of your post ..."
-            value={body}
-            onChange={(event) => { this.handleBodyChange(event); }}
           />
+          {getFieldError('body') && getFieldError('body').join(',')}
           <DropZone images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
         </div>
         <input type="submit" value="Post"/>

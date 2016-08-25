@@ -45,13 +45,14 @@ export default class CommentList extends Component {
 
   render() {
     const { users, loadUsers, commentCount, currentUser, comments, id } = this.props;
-    const { showComments } = this.state;
+    const { showComments, loaded } = this.state;
     return (<div>
-      <div>
+      {!loaded && <div>
         <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>
-          {`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}
+          {!commentCount && <span>Be the first to comment!</span>}
+          {commentCount && <span>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</span>}
         </a>
-      </div>
+      </div>}
       { showComments && <div>
         { comments && comments.map((comment) => {
           const commentCreator = lodash.find(users, (cUser) => {
