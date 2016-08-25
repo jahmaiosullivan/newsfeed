@@ -6,14 +6,14 @@ import jwt from 'jsonwebtoken';
 import util from 'util';
 import config from '../config';
 
-const configure = (app, config) => {
+function generateJWTToken(req, res, next){
+  req.token =  jwt.sign({ id: req.user.id }, config.auth.jwt.secret, {
+    expiresIn: 120
+  });
+  next();
+}
 
-  function addJWT(user){
-    const token = jwt.sign({ id: user.id, email: user.email }, config.auth.jwt.secret, {
-      expiresIn: 60000
-    });
-    return Object.assign({}, user.toJSON(), {token});
-  }
+const configure = (app, config) => {
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -21,11 +21,26 @@ const configure = (app, config) => {
   app.get('/login/facebook', passport.authenticate('facebook'));
 
   app.get('/login/facebook/return',
-    passport.authenticate('facebook', {failureRedirect: '/login'}),
+    passport.authenticate('facebook', {failureRedirect: '/login'}), generateJWTToken,
     function (req, res) {
-      res.redirect(`http://${config.host}:${config.port}`);
+      req.user.token = req.token;
+      console.log(`token is ${req.token}`);
+      res.redirect(`http://${config.host}:${config.port}/timeline`);
     }
   );
+
+  app.post('/login', passport.authenticate('local', { session: false }), generateJWTToken, (req, res) => {
+    req.user.token = req.token;
+    res.status(200).json(req.user);
+  });
+
+  app.use('/logout', (req, res) => {
+    req.session.destroy(() => {
+      req.session = null;
+      req.user = null;
+      res.status(200).json({message: "Successfully logged out"});
+    });
+  });
 
   // Authentication
   passport.use(new FacebookStrategy({
@@ -38,67 +53,56 @@ const configure = (app, config) => {
     function (req, accessToken, refreshToken, profile, done) {
       const claimType = 'urn:facebook:access_token';
 
-      const findOrCreateFBUser = async() => {
-        if (profile) {
-          // Look up user by profile id
-          let user = await User.findOne({
-            where: {profileType: profile.provider, profileId: profile.id}
-          });
+      if (profile) {
+        // Look up user by profile id
+        User.findOne({
+          where: {profileType: profile.provider, profileId: profile.id}
+        }).then((user) => {
 
-          // Create a new user in the user table if not found
-          if (!user) {
-            var newUser = {
-              name: profile.displayName,
-              email: profile.emails[0].value,
-              profileId: profile.id,
-              profileType: profile.provider,
-              gender: profile.gender,
-              picture: `https://graph.facebook.com/${profile.id}/picture?type=large`,
-              claims: [
-                {type: claimType, value: profile.id}
-              ]
-            };
-            console.log(`New user based on FB profile is ${util.inspect(newUser)}`);
-            user = await User.create(newUser, {
-              include: [
-                {model: UserClaim, as: 'claims'}
-              ]
-            });
-          }
+          if (user) {
+            // Return the user
+            done(null, user.toJSON());
+          } else { // Create a new user in the user table if not found
+             var newUser = {
+               name: profile.displayName,
+               email: profile.emails[0].value,
+               profileId: profile.id,
+               profileType: profile.provider,
+               gender: profile.gender,
+               picture: `https://graph.facebook.com/${profile.id}/picture?type=large`,
+               claims: [
+                 {type: claimType, value: profile.id}
+               ]
+             };
+             console.log(`New user based on FB profile is ${util.inspect(newUser)}`);
 
-          // Return the user
-          const userWithToken = addJWT(user);
-          done(null, userWithToken);
-        }
-      };
-
-      findOrCreateFBUser().catch(done);
+             User.create(newUser, {
+               include: [
+                 {model: UserClaim, as: 'claims'}
+               ]
+             }).then((user) => {
+               // Return the user
+               done(null, user.toJSON());
+             });
+         }
+       });
+      }
     }
   ));
 
-  passport.use(new LocalStrategy({
-      usernameField: 'email'
-    },
-    function (username, password, done) {
-      const findUser = async() => {
-        // Look up user by email
-        let user = await User.findOne({
-          where: {email: username}
-        });
+  passport.use(new LocalStrategy({ usernameField: 'email' }, function (username, password, done) {
+    console.log(`execute local strategy`);
+    User.findOne({ where: {email: username} }).then((user) => {
+      if (!user) return done(new Error('Authentication failed. User not found.'));
 
-        if (!user) return done(new Error('Authentication failed. User not found.'));
-
-        if (comparePassword(password, user.passwordHash)) {
-          done(null, addJWT(user));
-        }
-        else {
-          done(new Error(`passwords do not match for user ${username}.`));
-        }
-      };
-
-      findUser().catch(done);
-    }
-  ));
+      if (comparePassword(password, user.passwordHash)) {
+        done(null, user);
+      }
+      else {
+        done(new Error(`passwords do not match for user ${username}.`), false);
+      }
+    });
+  }));
 
   passport.serializeUser(function (user, cb) {
     cb(null, user);
@@ -109,4 +113,4 @@ const configure = (app, config) => {
   });
 };
 
-export default configure;
+export {configure as default, generateJWTToken};

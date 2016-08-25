@@ -133,7 +133,7 @@ export function register(email, password) {
 export function login(email, password) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: (client) => client.post( '/auth/login', {
+    promise: (client) => client.post( '/login', {
       data: {
         email,
         password
@@ -145,7 +145,7 @@ export function login(email, password) {
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: (client) => client.get( '/auth/logout' )
+    promise: (client) => client.get( '/logout' )
   };
 }
 
