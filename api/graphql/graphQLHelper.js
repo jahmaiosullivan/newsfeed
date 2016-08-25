@@ -16,8 +16,9 @@ const createGraphQLQuery = (type, args, cb, isAnonymous = false) => {
         if (!isAnonymous && !user) {
           reject(new Error("Not authorized to perform this action."));
         }
-
-        resolve(cb(newValues, user));
+        else {
+          resolve(cb(newValues, user));
+        }
       });
     }
   };
