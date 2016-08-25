@@ -48,9 +48,8 @@ export default class CommentList extends Component {
     const { showComments, loaded } = this.state;
     return (<div>
       {!loaded && <div>
-        <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled(id);}}>
-          {!commentCount && <span>Be the first to comment!</span>}
-          {commentCount && <span>{`${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}`}</span>}
+        <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled();}}>
+          {commentCount ? `${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}` : <span>Be the first to comment</span>}
         </a>
       </div>}
       { showComments && <div>
@@ -61,8 +60,7 @@ export default class CommentList extends Component {
           return (<Comment loadUsers={loadUsers} creator={commentCreator} key={comment.id} comment={comment}/>);
         })}
         { currentUser &&
-        <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id}
-                     currentUser={currentUser}/> }
+        <CommentForm createCommentHandler={(comment) => { this.handleCommentAdded(comment); }} postId={id} currentUser={currentUser}/> }
       </div>
       }
     </div>);
