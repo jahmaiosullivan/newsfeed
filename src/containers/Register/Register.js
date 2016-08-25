@@ -29,7 +29,7 @@ export default class Register extends Component {
           <form className="login-form form-inline" onSubmit={this.handleSubmit}>
             <div className="form-group">
               <input type="text" ref="email" placeholder="Enter your email" className="form-control"/>
-              <input type="text" ref="password" placeholder="Enter password" className="form-control"/>
+              <input type="password" ref="password" placeholder="Enter password" className="form-control"/>
             </div>
             <button className="btn btn-success" onClick={this.handleSubmit}><i className="fa fa-sign-in"/>{' '}Register
             </button>
