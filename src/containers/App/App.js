@@ -12,6 +12,7 @@ import {isLoaded as isCityLoaded, load as loadCity} from 'redux/actions/cityActi
 import {push} from 'react-router-redux';
 import config from '../../../config';
 import {asyncConnect} from 'redux-async-connect';
+import util from 'util';
 
 @asyncConnect( [{
   promise: ({store: {dispatch, getState}}) => {
@@ -70,7 +71,7 @@ export default class App extends Component {
   render() {
     const {user, city} = this.props;
     const styles = require( './App.scss' );
-
+    console.log(`user is ${util.inspect(user)}`);
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
@@ -84,20 +85,17 @@ export default class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle/>
           </Navbar.Header>
-          <Navbar.Collapse>
-            {user &&
+          <Navbar.Collapse eventKey={0}>
             <Nav navbar pullRight>
-              <LinkContainer to="/">
-                <NavItem title={`Logged in as ${user.name}`} href="/">
-                  <p className={styles.loggedInMessage}>{user.name}</p>
-                </NavItem>
-              </LinkContainer>
+              {(!user || user === null) && <a className="change" href="/login">Login</a>}
+              {user && user !== null &&
               <LinkContainer to="/logout">
                 <NavItem eventKey={6} className="logout-link" onClick={this.handleLogout}>
                   Logout
                 </NavItem>
-              </LinkContainer>
-            </Nav>}
+              </LinkContainer>}
+              {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
+            </Nav>
           </Navbar.Collapse>
           {city && <div className={styles.cityHeader}>
             <h1>{city.name}, {city.state}</h1>
