@@ -1,6 +1,3 @@
-const LOAD = 'redux-example/auth/LOAD';
-const LOAD_SUCCESS = 'redux-example/auth/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/auth/LOAD_FAIL';
 const LOGIN = 'redux-example/auth/LOGIN';
 const LOGIN_SUCCESS = 'redux-example/auth/LOGIN_SUCCESS';
 const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
@@ -10,60 +7,42 @@ const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
 const REGISTER = 'redux-example/auth/REGISTER';
 const REGISTER_SUCCESS = 'redux-example/auth/REGISTER_SUCCESS';
 const REGISTER_FAIL = 'redux-example/auth/REGISTER_FAIL';
-const userCookieName = 'loginResult';
 
-import cookie from 'react-cookie';
+import {removeBearerAuthToken, saveBearerAuthToken} from '../../helpers/authHelper';
 import util from 'util';
 
 const initialState = {
-  loaded: false
+  loaded: false,
+  loading: false,
+  loggingIn: false
 };
-
-function saveAuthCookie(user) {
-  if (user) {
-    cookie.save( userCookieName, JSON.stringify( user ) );
-  }
-}
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case LOAD:
-      return {
-        ...state,
-        loading: true
-      };
-    case LOAD_SUCCESS:
-      saveAuthCookie( action.result );
-      return {
-        ...state,
-        loading: false,
-        loaded: true,
-        user: cookie.load( userCookieName ) ? cookie.load( userCookieName ) : action.result
-      };
-    case LOAD_FAIL:
-      console.log(`auth LOAD_FAIL with error ${util.inspect(action.error)}`);
-      return {
-        ...state,
-        loading: false,
-        loaded: false,
-        error: action.error
-      };
     case LOGIN:
       return {
         ...state,
+        loading: true,
         loggingIn: true
       };
     case LOGIN_SUCCESS:
-      saveAuthCookie(action.result);
+      console.log(`LOGIN use success ${util.inspect(action.result)}`);
+      saveBearerAuthToken( action.result.token );
+
       return {
         ...state,
         loggingIn: false,
-        user: action.result
+        loading: false,
+        loaded: true,
+        user: action.result.user
       };
     case LOGIN_FAIL:
+      console.log(`auth LOGIN_FAIL with error ${util.inspect(action.error)}`);
       return {
         ...state,
         loggingIn: false,
+        loading: false,
+        loaded: false,
         user: null,
         loginError: action.error
       };
@@ -73,7 +52,8 @@ export default function reducer(state = initialState, action = {}) {
         loggingOut: true
       };
     case LOGOUT_SUCCESS:
-      cookie.remove( userCookieName );
+      removeBearerAuthToken();
+
       return {
         ...state,
         loggingOut: false,
@@ -113,8 +93,8 @@ export function isLoaded(globalState) {
 
 export function load() {
   return {
-    types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get( '/auth/loadAuth' )
+    types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
+    promise: (client) => client.get('/auth/loadAuth')
   };
 }
 

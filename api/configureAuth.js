@@ -8,10 +8,19 @@ import config from '../config';
 
 function generateJWTToken(req, res, next){
   req.token =  jwt.sign({ id: req.user.id }, config.auth.jwt.secret, {
-    expiresIn: 120
+    expiresIn: 31536000
   });
   next();
 }
+
+function verifyToken(req, res, next) {
+  console.log(`req.headers.authorization is ${req.headers.authorization}`);
+  jwt.verify(req.headers.authorization, config.auth.jwt.secret, function (err, decoded) {
+    console.log(`decoded is ${util.inspect(decoded)}`);
+  });
+  return next();
+}
+
 
 const configure = (app, config) => {
 
@@ -23,15 +32,13 @@ const configure = (app, config) => {
   app.get('/login/facebook/return',
     passport.authenticate('facebook', {failureRedirect: '/login'}), generateJWTToken,
     function (req, res) {
-      req.user.token = req.token;
-      console.log(`token is ${req.token}`);
+      req.session['token'] = req.token;
       res.redirect(`http://${config.host}:${config.port}/timeline`);
     }
   );
 
   app.post('/login', passport.authenticate('local', { session: false }), generateJWTToken, (req, res) => {
-    req.user.token = req.token;
-    res.status(200).json(req.user);
+    res.status(200).json({user: req.user, token: req.token});
   });
 
   app.use('/logout', (req, res) => {
@@ -113,4 +120,4 @@ const configure = (app, config) => {
   });
 };
 
-export {configure as default, generateJWTToken};
+export {configure as default, generateJWTToken, verifyToken};

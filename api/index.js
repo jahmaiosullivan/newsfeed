@@ -8,7 +8,7 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
 import sequelizeTables from './database/models';
-import configureAuth from './configureAuth';
+import configureAuth,{verifyToken} from './configureAuth';
 import expressJWT from 'express-jwt';
 import schema from './graphql/schema';
 import expressGraphQL from 'express-graphql';
@@ -41,7 +41,7 @@ app.use(session(Object.assign({}, {
 
 configureAuth(app, config);
 
-app.use('/graphql', jwtAuth, expressGraphQL((req) => {
+app.use('/graphql', verifyToken, jwtAuth, expressGraphQL((req) => {
   if (!req.user) {
     console.log(`are you authorized for graphql?`);
   }
