@@ -42,12 +42,12 @@ export default class Register extends Component {
                 type="text"
                 placeholder="Enter your email"
               />
-              {getFieldError('password') && getFieldError('password').join(',')}
+              {getFieldError('email') && getFieldError('email').join(',')}
               <input {...getFieldProps('password', { initialValue: '', rules: [{required: true, min: 3, whitespace: true}] })}
                 type="password"
                 placeholder="Enter your password"
               />
-              {getFieldError('email') && getFieldError('email').join(',')}
+              {getFieldError('password') && getFieldError('password').join(',')}
             </div>
             <button className="btn btn-success" onClick={this.handleSubmit}><i className="fa fa-sign-in"/>{' '}Register
             </button>
