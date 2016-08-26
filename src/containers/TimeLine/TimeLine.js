@@ -76,6 +76,9 @@ export default class TimeLine extends Component {
         <section className="pageContent">
           <div className="container">
             <div className="row">
+              <div className="col-lg-4 col-md-4">
+                <Sidebar />
+              </div>
               <div className="col-lg-8 col-md-8">
                 {currentUser &&
                 <div className="row">
@@ -94,9 +97,6 @@ export default class TimeLine extends Component {
                     })}
                   </InfiniteScroll>
                 </ul>
-              </div>
-              <div className="col-lg-4 col-md-4">
-                <Sidebar />
               </div>
             </div>
           </div>
