@@ -1,7 +1,8 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
+import {removeBearerAuthToken} from './helpers/authHelper';
 // import util from 'util';
-import {isLoaded as isAuthLoaded, load as loadAuth} from 'redux/reducers/authReducer';
+import {isLoaded as isAuthLoaded, load as loadAuth, tokenInfo, logout} from 'redux/reducers/authReducer';
 import {
   App,
   Chat,
@@ -37,14 +38,17 @@ export default (store) => {
   };
 
   const authenticateUserByCookie = async (nextState, replace, cb) => {
-    if (!isAuthLoaded( state )) {
-      await store.dispatch(loadAuth());
+    const tokenExpire = await store.dispatch( tokenInfo() );
+    if (tokenExpire.expired) {
+      console.log(`tokenInfo expired`);
+      store.dispatch(logout());
+      // replace('/login');
+      removeBearerAuthToken();
+    }
 
-      /* const tokenExpire = await store.dispatch( tokenInfo() );
-      if (tokenExpire.expired) {
-        console.log(`tokenInfo authenticateUserByCookie ${util.inspect(tokenExpire.expired)}`);
-       // replace('/login');
-      } */
+    if (!isAuthLoaded( state )) {
+      console.log(`loading auth`);
+      await store.dispatch(loadAuth());
     }
     cb();
   };
