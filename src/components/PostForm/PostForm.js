@@ -38,6 +38,7 @@ export default class PostForm extends Component {
         }).join(', ');
 
         submitHandler({id, title, body, images}).then(() => {
+          form.setFieldsValue({title: '', body: ''});
           this.setState({images: []});
         });
       }

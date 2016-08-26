@@ -16,10 +16,6 @@ function loadPosts(page = 1) {
   };
 }
 
-function toggleNewPostForm() {
-  return {type: actions.POST_NEW_TOGGLE};
-}
-
 function createNewPost({title, body, images, createdBy}) {
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
@@ -74,5 +70,5 @@ function loadComments(postId) {
   };
 }
 
-export {isLoaded, loadPosts, toggleNewPostForm, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile, createNewComment, loadComments };
+export {isLoaded, loadPosts, createNewPost, deletePost, editPost, editPostStart, editPostStop, saveFile, createNewComment, loadComments };
 

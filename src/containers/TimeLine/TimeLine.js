@@ -32,8 +32,7 @@ import InfiniteScroll from 'react-infinite-scroller';
     posts: state.posts.data,
     hasMore: state.posts.hasMore,
     editing: state.posts.editing,
-    loading: state.posts.loading,
-    showNewPostForm: state.posts.newPost.show
+    loading: state.posts.loading
   }),
   { ...newPostActions, loadUsers } )
 export default class TimeLine extends Component {
@@ -43,15 +42,13 @@ export default class TimeLine extends Component {
     currentUser: PropTypes.object,
     hasMore: PropTypes.bool,
     loading: PropTypes.bool,
-    showNewPostForm: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
     loadUsers: PropTypes.func.isRequired,
     loadComments: PropTypes.func.isRequired,
     loadPosts: PropTypes.func.isRequired,
     saveFile: PropTypes.func.isRequired,
-    createNewPost: PropTypes.func.isRequired,
-    toggleNewPostForm: PropTypes.func.isRequired
+    createNewPost: PropTypes.func.isRequired
   };
 
   constructor(props) {

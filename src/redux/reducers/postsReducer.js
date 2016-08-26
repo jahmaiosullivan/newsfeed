@@ -76,11 +76,6 @@ export default (state = initialState, action = {}) => {
         data: null,
         error: action.error
       };
-    case actions.POST_NEW_TOGGLE:
-      return {
-        ...state,
-        newPost: {...state.newPost, show: !state.newPost.show }
-      };
     case actions.POST_NEW:
       return {
         ...state,
