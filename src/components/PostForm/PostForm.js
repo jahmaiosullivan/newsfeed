@@ -47,18 +47,22 @@ export default class PostForm extends Component {
   }
 
   render() {
-    const { id, title, body, uploadFileHandler, form} = this.props;
+    const { id, title, body, uploadFileHandler, form: {getFieldProps, getFieldError}} = this.props;
     const styles = require('./PostForm.scss');
     const basicRules = [{required: true, min: 3, whitespace: true}];
 
     return (
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
-          <ValidatedTextInput form={form} name="title" rules={basicRules} placeHolderText="Title of your post ..." value={title} />
+          <ValidatedTextInput getFieldProps={getFieldProps} name="title" rules={basicRules} placeHolderText="Location of property ..." value={title} />
         </div>
         <div>
-          <ValidatedTextInput form={form} name="body" rules={basicRules} placeHolderText="Body of your post ..." value={body} />
+          <ValidatedTextInput getFieldProps={getFieldProps} name="body" rules={basicRules} placeHolderText="Details about property ..." value={body} />
           <DropZone images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
+        </div>
+        <div>
+          <div>{getFieldError('title') && getFieldError('title').join(',')}</div>
+          <div>{getFieldError('body') && getFieldError('body').join(',')}</div>
         </div>
         <input type="submit" value="Post"/>
       </form>

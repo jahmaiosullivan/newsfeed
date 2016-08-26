@@ -1,13 +1,12 @@
 import React, {PropTypes} from 'react';
 
-const ValidatedTextInput = ({ placeHolderText, name, value, form: {getFieldProps, getFieldError} }) => {
+const ValidatedTextInput = ({ placeHolderText, name, value, getFieldProps }) => {
   return (
     <div>
       <input {...getFieldProps(`${name}`, { initialValue: value || '', rules: [{required: true, min: 3, whitespace: true}] })}
         type="text"
         placeholder={placeHolderText}
       />
-      {getFieldError(name) && getFieldError(name).join(',')}
     </div>
   );
 };
@@ -15,7 +14,7 @@ const ValidatedTextInput = ({ placeHolderText, name, value, form: {getFieldProps
 ValidatedTextInput.propTypes = {
   value: PropTypes.string,
   placeHolderText: PropTypes.string,
-  form: PropTypes.object.isRequired,
+  getFieldProps: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   rules: PropTypes.array.isRequired
 };
