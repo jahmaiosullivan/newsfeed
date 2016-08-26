@@ -81,17 +81,17 @@ export default class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle/>
           </Navbar.Header>
-          <Navbar.Collapse eventKey={0}>
+          <Navbar.Collapse>
             <Nav navbar pullRight>
               {user && user !== null &&
               <LinkContainer to="/logout">
-                <NavItem eventKey={6} className="logout-link" onClick={this.handleLogout}>
+                <NavItem className="logout-link" onClick={this.handleLogout}>
                   Logout
                 </NavItem>
               </LinkContainer>}
-              {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
             </Nav>
           </Navbar.Collapse>
+          {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
           {(!user || user === null) && <a className="change" href="/login">Login</a>}
           {city && <div className={styles.cityHeader}>
             <h1>{city.name}, {city.state}</h1>
