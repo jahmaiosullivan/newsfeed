@@ -93,15 +93,15 @@ export default class DropZone extends Component {
     return (
       <div>
         <input type="hidden" name="selectedImages" value={`${images.map( JSON.stringify )}`}/>
-        <div className="container-fluid">
+        <div>
           <div className="row">
             {images && images.map((image) => {
-              return (<div key={`img.${image.preview}`} className="col-md-2">
+              return (<div key={`img.${image.preview}`} className="col-md-2" style={{padding: 0}}>
                 <ThumbnailBox image={image} thumbwidthHeight={thumbwidthHeight} />
                 <a onClick={(event) => { event.preventDefault(); this.onRemove( image ); }}>Remove</a>
               </div>);
             })}
-            <div className="col-md-2">
+            <div className="col-md-2" style={{padding: 0}}>
               <Dropzone ref="dropzone" onDrop={this._onDrop} style={dropZoneStyle}>
                 <div>
                   <div>Add photo</div>

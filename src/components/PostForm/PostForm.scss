@@ -1,7 +1,28 @@
 .postForm {
   border: solid 1px #eee;
+}
 
-  input {
-    border: none;
-  }
+input, textarea {
+  border: none;
+  outline: none;
+  margin: 0;
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+}
+
+.imagesContainer {
+  padding: 10px;
+}
+
+.postButton {
+  width: 100px;
+  float: right;
+}
+
+.postButtonContainer {
+  display: inline-block;
+  width: 100%;
 }
