@@ -36,15 +36,18 @@ export default (store) => {
     }
   };
 
-  const authenticateUserByCookie = async (nextState, replace, cb) => {
-    const tokenInfoResult = await store.dispatch( tokenInfo() );
-    if (tokenInfoResult.expired) {
-      console.log(`tokenInfo expired`);
-      await store.dispatch(logout());
-    } else if (!isAuthLoaded( state )) {
-      console.log(`loading auth`);
-      await store.dispatch(loadAuth());
+  const authenticateUserByCookie = async(nextState, replace, cb) => {
+    if (__SERVER__) {
+      const tokenInfoResult = await store.dispatch( tokenInfo() );
+      if (tokenInfoResult.expired) {
+        await store.dispatch( logout() );
+      }
     }
+
+    if (!isAuthLoaded( state )) {
+      await store.dispatch( loadAuth() );
+    }
+
     cb();
   };
 
