@@ -30,9 +30,7 @@ export default function reducer(state = initialState, action = {}) {
         loggingIn: true
       };
     case LOGIN_SUCCESS:
-      console.log(`LOGIN use success ${util.inspect(action.result)}`);
       saveBearerAuthToken( action.result.token );
-
       return {
         ...state,
         loggingIn: false,
