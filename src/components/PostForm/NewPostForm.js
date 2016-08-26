@@ -10,8 +10,9 @@ export default class NewPost extends Component {
 
   render() {
     const { createNewPost, saveFile, currentUser } = this.props;
+    const styles = require('./NewPostForm.scss');
     return (
-      <div>
+      <div className={styles.newPostForm}>
         {currentUser &&
         <div>
           <PostForm formKey="newPost"
