@@ -4,7 +4,6 @@ import PostForm from '../PostForm/PostForm';
 import CommentList from './CommentList';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
-import util from 'util';
 
 const icon1 = require('./images/icon1.jpg');
 const icon4 = require('./images/icon4.jpg');
@@ -46,7 +45,6 @@ export default class Post extends Component {
       return postUser.id === createdBy;
     });
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
-    console.log(`rerender post with id ${id} ${util.inspect(this.props.comments)}`);
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
         { editing &&

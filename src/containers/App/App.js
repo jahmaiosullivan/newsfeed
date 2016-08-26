@@ -7,12 +7,12 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import {isLoaded as isInfoLoaded, load as loadInfo} from 'redux/reducers/infoReducer';
-import {isLoaded as isAuthLoaded, load as loadAuth, logout} from 'redux/reducers/authReducer';
+import {logout} from 'redux/reducers/authReducer';
 import {isLoaded as isCityLoaded, load as loadCity} from 'redux/actions/cityActionCreators';
 import {push} from 'react-router-redux';
 import config from '../../../config';
 import {asyncConnect} from 'redux-async-connect';
-import util from 'util';
+// import util from 'util';
 
 @asyncConnect( [{
   promise: ({store: {dispatch, getState}}) => {
@@ -20,9 +20,6 @@ import util from 'util';
 
     if (!isInfoLoaded( getState() )) {
       promises.push( dispatch( loadInfo() ) );
-    }
-    if (!isAuthLoaded( getState() )) {
-      promises.push( dispatch( loadAuth() ) );
     }
     if (!isCityLoaded( getState() )) {
       promises.push( dispatch( loadCity() ) );
@@ -71,7 +68,6 @@ export default class App extends Component {
   render() {
     const {user, city} = this.props;
     const styles = require( './App.scss' );
-    console.log(`user is ${util.inspect(user)}`);
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
@@ -87,7 +83,6 @@ export default class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse eventKey={0}>
             <Nav navbar pullRight>
-              {(!user || user === null) && <a className="change" href="/login">Login</a>}
               {user && user !== null &&
               <LinkContainer to="/logout">
                 <NavItem eventKey={6} className="logout-link" onClick={this.handleLogout}>
@@ -97,6 +92,7 @@ export default class App extends Component {
               {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
             </Nav>
           </Navbar.Collapse>
+          {(!user || user === null) && <a className="change" href="/login">Login</a>}
           {city && <div className={styles.cityHeader}>
             <h1>{city.name}, {city.state}</h1>
             <div>

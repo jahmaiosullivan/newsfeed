@@ -1,8 +1,7 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
-import util from 'util';
-import { getBearerAuthToken } from './helpers/authHelper';
-import {logout } from 'redux/reducers/authReducer';
+// import util from 'util';
+import {isLoaded as isAuthLoaded, load as loadAuth} from 'redux/reducers/authReducer';
 import {
   App,
   Chat,
@@ -31,21 +30,21 @@ export default (store) => {
   };
 
   const requireAnonymous = (nextState, replace) => {
-    console.log( `requireAnonymous user is ${util.inspect(user)}` );
     if (user) {
       // oops, logged in, so can't be here!
       replace( '/' );
     }
   };
 
-  const logoutIfNoCookie = (nextState, replace, cb) => {
-    console.log(`logoutIfNoCookie ${util.inspect(user)}`);
-    if (user) {
-      const token = getBearerAuthToken();
+  const authenticateUserByCookie = async (nextState, replace, cb) => {
+    if (!isAuthLoaded( state )) {
+      await store.dispatch(loadAuth());
 
-      if (!token) {
-        logout();
-      }
+      /* const tokenExpire = await store.dispatch( tokenInfo() );
+      if (tokenExpire.expired) {
+        console.log(`tokenInfo authenticateUserByCookie ${util.inspect(tokenExpire.expired)}`);
+       // replace('/login');
+      } */
     }
     cb();
   };
@@ -54,7 +53,7 @@ export default (store) => {
    * Please keep routes in alphabetical order
    */
   return (
-    <Route path="/" component={App} onEnter={logoutIfNoCookie}>
+    <Route path="/" component={App} onEnter={authenticateUserByCookie}>
       { /* Home (main) route */ }
       /*<IndexRoute component={TimeLine}/>*/
 

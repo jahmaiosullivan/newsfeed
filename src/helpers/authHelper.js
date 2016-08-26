@@ -21,5 +21,5 @@ export const getBearerAuthToken = () => {
     cookieVal = window.reactCookie.load( userCookieName );
   }
 
-  return cookieVal ? 'Bearer ' + cookieVal.token : '';
+  return cookieVal ? 'Bearer ' + cookieVal : cookieVal;
 };

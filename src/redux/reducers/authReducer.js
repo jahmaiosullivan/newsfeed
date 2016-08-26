@@ -4,6 +4,9 @@ const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
 const LOGOUT = 'redux-example/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const TOKEN_INFO = 'redux-example/auth/TOKEN_INFO';
+const TOKEN_INFO_SUCCESS = 'redux-example/auth/TOKEN_INFO_SUCCESS';
+const TOKEN_INFO_FAIL = 'redux-example/auth/TOKEN_INFO_FAIL';
 const REGISTER = 'redux-example/auth/REGISTER';
 const REGISTER_SUCCESS = 'redux-example/auth/REGISTER_SUCCESS';
 const REGISTER_FAIL = 'redux-example/auth/REGISTER_FAIL';
@@ -14,6 +17,7 @@ import util from 'util';
 const initialState = {
   loaded: false,
   loading: false,
+  tokenExpired: false,
   loggingIn: false
 };
 
@@ -82,6 +86,24 @@ export default function reducer(state = initialState, action = {}) {
         registering: false,
         registerError: action.error
       };
+    case TOKEN_INFO:
+      return {
+        ...state,
+        tokenExpired: false
+      };
+    case TOKEN_INFO_SUCCESS:
+      console.log(`TOKEN_INFO success ${util.inspect(action.result.expired)}`);
+      return {
+        ...state,
+        tokenExpired: action.result.expired
+      };
+    case TOKEN_INFO_FAIL:
+      console.log(`TOKEN_INFO_FAIL with error ${util.inspect(action.error)}`);
+      return {
+        ...state,
+        tokenExpired: false,
+        loginError: action.error
+      };
     default:
       return state;
   }
@@ -98,6 +120,13 @@ export function load() {
   };
 }
 
+export function tokenInfo() {
+  return {
+    types: [TOKEN_INFO, TOKEN_INFO_SUCCESS, TOKEN_INFO_FAIL],
+    promise: (client) => client.get('/auth/token')
+  };
+}
+
 export function register(email, password) {
   return {
     types: [REGISTER, REGISTER_SUCCESS, REGISTER_FAIL],
@@ -106,7 +135,7 @@ export function register(email, password) {
         email,
         password
       }
-    } )
+    })
   };
 }
 

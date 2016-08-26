@@ -13,15 +13,6 @@ function generateJWTToken(req, res, next){
   next();
 }
 
-function verifyToken(req, res, next) {
-  console.log(`req.headers.authorization is ${req.headers.authorization}`);
-  jwt.verify(req.headers.authorization, config.auth.jwt.secret, function (err, decoded) {
-    console.log(`decoded is ${util.inspect(decoded)}`);
-  });
-  return next();
-}
-
-
 const configure = (app, config) => {
 
   app.use(passport.initialize());
@@ -120,4 +111,4 @@ const configure = (app, config) => {
   });
 };
 
-export {configure as default, generateJWTToken, verifyToken};
+export {configure as default, generateJWTToken};

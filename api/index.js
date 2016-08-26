@@ -8,7 +8,7 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
 import sequelizeTables from './database/models';
-import configureAuth,{verifyToken} from './configureAuth';
+import configureAuth from './configureAuth';
 import expressJWT from 'express-jwt';
 import schema from './graphql/schema';
 import expressGraphQL from 'express-graphql';
@@ -41,7 +41,7 @@ app.use(session(Object.assign({}, {
 
 configureAuth(app, config);
 
-app.use('/graphql', verifyToken, jwtAuth, expressGraphQL((req) => {
+app.use('/graphql', jwtAuth, expressGraphQL((req) => {
   if (!req.user) {
     console.log(`are you authorized for graphql?`);
   }
@@ -54,7 +54,7 @@ app.use('/graphql', verifyToken, jwtAuth, expressGraphQL((req) => {
   };
 }));
 
-app.use((req, res) => {
+app.use(jwtAuth, (req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
   const {action, params} = mapUrl(actions, splittedUrlPath);
   if (action) {
