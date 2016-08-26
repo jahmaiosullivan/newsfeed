@@ -1,6 +1,5 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
-import {removeBearerAuthToken} from './helpers/authHelper';
 // import util from 'util';
 import {isLoaded as isAuthLoaded, load as loadAuth, tokenInfo, logout} from 'redux/reducers/authReducer';
 import {
@@ -38,15 +37,11 @@ export default (store) => {
   };
 
   const authenticateUserByCookie = async (nextState, replace, cb) => {
-    const tokenExpire = await store.dispatch( tokenInfo() );
-    if (tokenExpire.expired) {
+    const tokenInfoResult = await store.dispatch( tokenInfo() );
+    if (tokenInfoResult.expired) {
       console.log(`tokenInfo expired`);
-      store.dispatch(logout());
-      // replace('/login');
-      removeBearerAuthToken();
-    }
-
-    if (!isAuthLoaded( state )) {
+      await store.dispatch(logout());
+    } else if (!isAuthLoaded( state )) {
       console.log(`loading auth`);
       await store.dispatch(loadAuth());
     }

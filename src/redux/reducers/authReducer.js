@@ -92,7 +92,6 @@ export default function reducer(state = initialState, action = {}) {
         tokenExpired: false
       };
     case TOKEN_INFO_SUCCESS:
-      console.log(`TOKEN_INFO success ${util.inspect(action.result.expired)}`);
       return {
         ...state,
         tokenExpired: action.result.expired
