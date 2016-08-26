@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import DropZone from '../../components/ImageUpload/DropZone';
+import ValidatedTextInput from './ValidatedTextInput';
 import { createForm } from 'rc-form';
 
 @createForm()
@@ -46,26 +47,18 @@ export default class PostForm extends Component {
   }
 
   render() {
-    const { id, title, body, uploadFileHandler, form: {getFieldProps, getFieldError} } = this.props;
-    const { images } = this.state;
+    const { id, title, body, uploadFileHandler, form} = this.props;
     const styles = require('./PostForm.scss');
+    const basicRules = [{required: true, min: 3, whitespace: true}];
 
     return (
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
-          <input {...getFieldProps('title', { initialValue: title || '', rules: [{required: true, min: 3, whitespace: true}] })}
-            type="text"
-            placeholder="Title of your post ..."
-          />
-          {getFieldError('title') && getFieldError('title').join(',')}
+          <ValidatedTextInput form={form} name="title" rules={basicRules} placeHolderText="Title of your post ..." value={title} />
         </div>
         <div>
-          <input {...getFieldProps('body', { initialValue: body || '', rules: [{required: true, min: 3, whitespace: true}] })}
-            type="text"
-            placeholder="Body of your post ..."
-          />
-          {getFieldError('body') && getFieldError('body').join(',')}
-          <DropZone images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
+          <ValidatedTextInput form={form} name="body" rules={basicRules} placeHolderText="Body of your post ..." value={body} />
+          <DropZone images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
         </div>
         <input type="submit" value="Post"/>
       </form>
