@@ -33,13 +33,11 @@ export default class PostForm extends Component {
       console.log(error, values);
 
       if (!error) {
-        const title = values.title.trim();
-        const body = values.body.trim();
         const images = this.state.images.map((image) => {
           return image.preview;
         }).join(', ');
 
-        submitHandler({id, title, body, images}).then(() => {
+        submitHandler({id: id, title: values.location.trim(), body: values.details.trim(), images}).then(() => {
           form.setFieldsValue({title: '', body: ''});
           this.setState({images: []});
         });
@@ -64,16 +62,17 @@ export default class PostForm extends Component {
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
           <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location of property ..." value={title} />
-          <ValidatedTextArea getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details about property ..." value={body} rows={4} maxLength={300} />
+          <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details about property ..." value={body} rows={4} maxLength={300} />
         </div>
         <div className={styles.imagesContainer}>
-          <DropZone images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
+          <DropZone ref="dropzone" addPhotoStyle={styles.addPhoto} images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
         </div>
         <div>
           <div>{this.formatError('location')}</div>
           <div>{this.formatError('details')}</div>
         </div>
         <div className={styles.postButtonContainer}>
+          {<button type="button" onClick={() => { console.log(this.refs.dropzone.onOpenClick()); }}>Add photo/video</button>}
           <input type="submit" value="Post" className={styles.postButton} />
         </div>
       </form>

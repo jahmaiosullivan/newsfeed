@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
 
-const ValidatedTextArea = ({ placeHolderText, name, value, getFieldProps, rows, maxLength }) => {
+const ValidatedTextArea = ({ placeHolderText, name, value, getFieldProps, rows, maxLength, className }) => {
   return (
     <div>
-      <textarea {...getFieldProps(`${name}`, { initialValue: value || '', rules: [{required: true, min: 3, whitespace: true}] })}
+      <textarea className={className} {...getFieldProps(`${name}`, { initialValue: value || '', rules: [{required: true, min: 3, whitespace: true}] })}
         rows={rows}
         maxLength={maxLength}
         placeholder={placeHolderText}
@@ -16,6 +16,7 @@ ValidatedTextArea.propTypes = {
   rows: PropTypes.number,
   maxLength: PropTypes.number,
   value: PropTypes.string,
+  className: PropTypes.string,
   placeHolderText: PropTypes.string,
   getFieldProps: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,

@@ -1,20 +1,37 @@
 .postForm {
-  border: solid 1px #eee;
+
 }
 
+.addPhoto {
+  color: #c7c7c7;
+
+
+  > div {
+    text-align: center;
+  }
+
+  i {
+    margin: 0 auto;
+    width: 50%;
+    display: block;
+    font-size: 64px;
+  }
+}
 input, textarea {
-  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   outline: none;
   margin: 0;
   width: 100%;
 }
 
-textarea {
+.details {
   resize: none;
+  border: none;
 }
 
 .imagesContainer {
-  padding: 10px;
 }
 
 .postButton {

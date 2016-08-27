@@ -14,11 +14,9 @@ export default class NewPost extends Component {
     return (
       <div className={styles.newPostForm}>
         {currentUser &&
-        <div>
           <PostForm formKey="newPost"
                     submitHandler={(formValues) => { return createNewPost({...formValues, createdBy: currentUser.id}); }}
                     uploadFileHandler={saveFile} />
-        </div>
         }
       </div>
     );

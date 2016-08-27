@@ -6,10 +6,7 @@ import ThumbnailBox from '../Thumbnail/Thumbnail';
 
 const thumbwidthHeight = '100px';
 const dropZoneStyle = {
-  width: thumbwidthHeight,
-  height: thumbwidthHeight,
-  border: '2px dashed rgb(102, 102, 102)',
-  borderRadius: '5px'
+  visibility: 'hidden'
 };
 
 export default class DropZone extends Component {
@@ -88,13 +85,12 @@ export default class DropZone extends Component {
   }
 
   render() {
-    const { showOpenButton } = this.props;
     const { images } = this.state;
     return (
       <div>
         <input type="hidden" name="selectedImages" value={`${images.map( JSON.stringify )}`}/>
         <div>
-          <div className="row">
+          <div>
             {images && images.map((image) => {
               return (<div key={`img.${image.preview}`} className="col-md-2" style={{padding: 0}}>
                 <ThumbnailBox image={image} thumbwidthHeight={thumbwidthHeight} />
@@ -102,16 +98,10 @@ export default class DropZone extends Component {
               </div>);
             })}
             <div className="col-md-2" style={{padding: 0}}>
-              <Dropzone ref="dropzone" onDrop={this._onDrop} style={dropZoneStyle}>
-                <div>
-                  <div>Add photo</div>
-                  <i className="fa fa-plus"/>
-                </div>
-              </Dropzone>
+              <Dropzone ref="dropzone" onDrop={this._onDrop} style={dropZoneStyle} />
             </div>
           </div>
         </div>
-        {showOpenButton && <button type="button" onClick={this._onOpenClick}>Open Dropzone</button>}
       </div>
     );
   }

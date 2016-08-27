@@ -77,11 +77,7 @@ export default class TimeLine extends Component {
                 <Sidebar />
               </div>
               <div className="col-lg-8 col-md-8">
-                {currentUser &&
-                <div className="row">
-                  <NewPostForm {...this.props} />
-                </div>
-                }
+                {currentUser && <NewPostForm {...this.props} />}
                 <ul className={styles.postsContainer}>
                   <InfiniteScroll
                     pageStart={1}
