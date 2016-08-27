@@ -38,8 +38,7 @@ export default class PostForm extends Component {
         }).join(', ');
 
         submitHandler({id: id, title: values.location.trim(), body: values.details.trim(), images}).then(() => {
-          form.setFieldsValue({title: '', body: ''});
-          this.setState({images: []});
+          this.clearForm();
         });
       }
     });
@@ -51,6 +50,11 @@ export default class PostForm extends Component {
     if (errors) {
       return errors.join(',');
     }
+  }
+
+  clearForm() {
+    this.props.form.setFieldsValue({details: '', location: ''});
+    this.setState({images: []});
   }
 
   render() {
