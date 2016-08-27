@@ -18,6 +18,7 @@ const udpdateArgs = {
 const deleteCommentArgs = { id: {type: new NonNull( IntType )} };
 
 const createCommentFunc = (values) => {
+  console.log(`create comment like ${util.inspect(values)}`);
   return Comment.create(values);
 };
 const updateCommentFunc = ({body, status}) => {

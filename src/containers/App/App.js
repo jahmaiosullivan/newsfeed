@@ -91,12 +91,16 @@ export default class App extends Component {
               </LinkContainer>}
             </Nav>
           </Navbar.Collapse>
-          {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
-          {(!user || user === null) && <a className="change" href="/login">Login</a>}
-          {city && <div className={styles.cityHeader}>
-            <h1>{city.name}, {city.state}</h1>
-            <div>
-              <a className="change" href="#">change city ...</a>
+          <div className="row">
+            {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
+            {(!user || user === null) && <a className="change" href="/login">Login</a>}
+          </div>
+          {city && <div className={styles.cityHeader + ' row'}>
+            <div className="col-md-offset-3 col-lg-offset-3 col-lg-6 col-md-6">
+              <h1>{city.name}, {city.state}</h1>
+              <div>
+                <a className="change" href="#">change city ...</a>
+              </div>
             </div>
           </div>}
         </Navbar>

@@ -65,8 +65,8 @@ export default class PostForm extends Component {
     return (
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
-          <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location of property ..." value={title} />
-          <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details about property ..." value={body} rows={4} maxLength={300} />
+          <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location ..." value={title} />
+          <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details ..." value={body} rows={4} maxLength={300} />
         </div>
         <div className={styles.imagesContainer}>
           <DropZone ref="dropzone" addPhotoStyle={styles.addPhoto} images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
