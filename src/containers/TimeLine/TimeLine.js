@@ -73,10 +73,10 @@ export default class TimeLine extends Component {
         <section className="pageContent">
           <div className="container">
             <div className="row">
-              <div className="col-lg-4 col-md-4">
+              <div className="col-lg-3 col-md-3">
                 <Sidebar />
               </div>
-              <div className="col-lg-8 col-md-8">
+              <div className="col-lg-6 col-md-6">
                 {currentUser && <NewPostForm {...this.props} />}
                 <ul className={styles.postsContainer}>
                   <InfiniteScroll
