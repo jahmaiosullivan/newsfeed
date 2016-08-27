@@ -1,12 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import Avatar from '../Avatar';
 import PostForm from '../PostForm/PostForm';
 import CommentList from './CommentList';
 import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
 
-const icon1 = require('./images/icon1.jpg');
-const icon4 = require('./images/icon4.jpg');
 const styles = require('./Post.scss');
 
 export default class Post extends Component {
@@ -55,46 +52,68 @@ export default class Post extends Component {
         }
         { !editing &&
         <div className="post">
-          <div>
-            {isOwner && <div>
-              <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
-              <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
-            </div>}
-            <div className={styles.userinfo + ' pull-left'}>
-              {postCreator && <Avatar src={postCreator.picture }/>}
-
-              <div className={styles.icons}>
-                <img src={icon1} alt=""/>
-                <img src={icon4} alt=""/>
+          <div className={styles.widgetItem}>
+            <div className={styles.imageTile} style={{ maxHeight: '214px' }}>
+              <div className={styles.bottom}>
+                <div className={styles.inner}>
+                  <div className={styles.tiles}>
+                    <div className="pull-right">
+                      <a href="#" className={styles.transparentHashtag}> #Art Design </a>
+                    </div>
+                    <div className="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+              {images && <img src={images[0].preview} alt="" className="lazy hover-effect-img"/>}
+            </div>
+            <div>
+              {images && images.map((postImg) => {
+                return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
+              })}
+            </div>
+            <div className={styles.tiles}>
+              <div className={styles.tilesBody}>
+                <div className="row">
+                  <div className={styles.userProfilePic}>
+                    {postCreator && <img width="69" height="69" src={postCreator.picture} alt="" />}
+                    <div className={styles.timeContainer}>
+                      <span className={styles.time}>{createdAt}</span>
+                    </div>
+                    <ul className="action-bar no-margin p-b-20 ">
+                      <li><a href="#" className="muted bold"><i className="fa fa-comment  m-r-10"></i>1584</a> </li>
+                      <li><a href="#" className="text-error bold"><i className="fa fa-heart  m-r-10"></i>47k</a> </li>
+                    </ul>
+                    {isOwner && <div>
+                      <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
+                      <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
+                    </div>}
+                  </div>
+                  <div className="col-md-5 no-padding">
+                    <div className={styles.comment}>
+                      {postCreator && <div className={styles.userName}> {postCreator.name}</div>}
+                      <div className={styles.previewWrapper}>@ revox </div>
+                    </div>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div className="col-md-7 no-padding">
+                    <div className="clearfix"></div>
+                    <p className={styles.details}>
+                      <a href="$"> {title}</a>
+                      {body}
+                    </p>
+                    <a href="#" className={styles.hashtags}> #new york city </a>
+                    <a href="#" className={styles.hashtags}> #amazing </a>
+                    <a href="#" className={styles.hashtags}> #citymax </a>
+                  </div>
+                </div>
+                <div className="row">
+                </div>
               </div>
             </div>
-            <div className={styles.posttext + ' pull-left'}>
-              <h2>
-                <a href="$"> {title}</a></h2>
-              <p>{body}</p>
-            </div>
-            <div className="clearfix"></div>
-          </div>
-          <div className={styles.postminfo + ' pull-left'}>
-            <div className={styles.coments}>
-              <div className={styles.commentbg}>
-                560
-                <div className={styles.mark}></div>
-              </div>
-
-            </div>
-            <div className={styles.views}><i className="fa fa-eye"></i> 25</div>
-            <div className={styles.time}><i className="fa fa-clock-o"></i> {createdAt}</div>
-          </div>
-          <div>
-            { images && images.map((postImg) => {
-              return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
-            })}
           </div>
           <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
         </div>
         }
-        <div className="clearfix"></div>
       </li>
     );
   }
