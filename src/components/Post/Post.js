@@ -1,11 +1,48 @@
 import React, {Component, PropTypes} from 'react';
 import PostForm from '../PostForm/PostForm';
 import CommentList from './CommentList';
-import Thumbnail from '../Thumbnail/Thumbnail';
 import lodash from 'lodash';
 import timeago from 'timeago-words';
 
 const styles = require('./Post.scss');
+
+const OwnerLinks = ({ id, isOwner, deletePost, editPostStart }) => {
+  return (<div>
+    {isOwner && <div><a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
+    <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a></div>}
+  </div>);
+};
+
+const PostMainImage = ({images}) => {
+  return (<div className={styles.imageTile}>
+    {images && <img src={images[0].preview} alt="" />}
+  </div>);
+};
+
+const TagList = ({tags}) => {
+  return (<div>{tags && tags.map((tag) => {
+    return (<a href="#" className={styles.hashtag}>{`#${tag}`}</a>);
+  })}</div>);
+};
+
+const UserDetails = ({user, height = 35, width = 35}) => {
+  return (<div className={styles.userDetails}>
+    <div className={styles.imgContainer}>
+      <img src={user.picture} alt="" width={width} height={height} />
+    </div>
+    <div className={styles.userNameContainer}>
+      <div className={styles.userName}>{user.name}</div>
+    </div>
+  </div>);
+};
+
+const IconLink = ({href, value, icon }) => {
+  return (<a href={href || '#'} className={styles.iconStyle}><i className={`fa fa-${icon}`}></i>{value}</a>);
+};
+
+const TimeAgoDate = ({date}) => {
+  return (<div>{timeago(new Date(date))}</div>);
+};
 
 export default class Post extends Component {
   static propTypes = {
@@ -38,7 +75,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { users, currentUser, saveFile, body, editing, id, title, createdAt, images, createdBy, editPost, editPostStart, editPostStop, deletePost } = this.props;
+    const { users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop } = this.props;
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
@@ -52,72 +89,29 @@ export default class Post extends Component {
         </div>
         }
         { !editing &&
-        <div className="post">
-          <div className={styles.widgetItem}>
-            {isOwner && <div>
-              <a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
-              <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a>
+        <div>
+          <h3>{title}</h3>
+          <OwnerLinks {...this.props} isOwner={isOwner} />
+          <PostMainImage images={this.props.images} />
+          <div>
+            {postCreator && <div className="row">
+              <UserDetails user={postCreator} />
+              <div className={styles.additionalDetails}>
+                <div className={styles.timeContainer}>
+                  <TimeAgoDate date={createdAt} />
+                </div>
+                <div className={styles.postLinksContainer}>
+                  <IconLink value="1584" icon="comment" />
+                  <IconLink value="47k" icon="heart" />
+                </div>
+              </div>
             </div>}
-            <div className={styles.imageTile} style={{ maxHeight: '214px' }}>
-              <div className={styles.bottom}>
-                <div className={styles.inner}>
-                  <div className={styles.tiles}>
-                    <div className="pull-right">
-                      <a href="#" className={styles.transparentHashtag}> #Art Design </a>
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                </div>
-              </div>
-              {images && <img src={images[0].preview} alt="" className="lazy hover-effect-img"/>}
-            </div>
-            <div className={styles.tiles}>
-              <div className={styles.tilesBody}>
-                <div className="row">
-                  {postCreator && <div className={styles.userCommentwrapperProfilewrapper}>
-                    <div className="profile-wrapper">
-                      <img src={postCreator.picture} alt="" width="35" height="35" />
-                    </div>
-                    <div className="comment">
-                      <div className={styles.userCommentwrapperUsername}> Jane <span className="semi-bold">Smith</span> </div>
-                      <div className="preview-wrapper">@ webarch </div>
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>}
-
-                  <div className={styles.userProfilePic}>
-                    <div className={styles.timeContainer}>
-                      <span className={styles.time}>{timeago(new Date(createdAt))}</span>
-                    </div>
-                  </div>
-                  <div className="col-md-5 no-padding">
-                    <div className={styles.comment}>
-                      {postCreator && <div className={styles.userName}> {postCreator.name}</div>}
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                  <div className="col-md-7 no-padding">
-                    <a href="#"> {title}</a>
-                    <p className={styles.details}>
-                      {body}
-                    </p>
-                    <a href="#" className={styles.hashtags}> #new york city </a>
-                    <a href="#" className={styles.hashtags}> #amazing </a>
-                    <a href="#" className={styles.hashtags}> #citymax </a>
-                    <div className="clearfix"></div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div>
-                    {images && images.map((postImg) => {
-                      return (<Thumbnail key={postImg.preview} image={postImg} thumbwidthHeight="100px"/>);
-                    })}
-                  </div>
-                </div>
-              </div>
+            <div className={ styles.postDetails + ' row'}>
+              <p>{body}</p>
+              <TagList tags={[ 'new york city', 'amazing', 'citymax']} />
+              <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
             </div>
           </div>
-          <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
         </div>
         }
       </li>
