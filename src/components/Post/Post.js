@@ -80,7 +80,6 @@ export default class Post extends Component {
         }
         { !editing &&
         <div>
-          <h3>{title}</h3>
           <OwnerLinks {...this.props} isOwner={isOwner} />
           <PostMainImage images={this.props.images} />
           <div>
@@ -98,6 +97,7 @@ export default class Post extends Component {
               </div>
             </div>
             <div className={ styles.postDetails + ' row'}>
+              <h3>{title}</h3>
               <p>{body}</p>
               <TagList tags={tags} />
             </div>
