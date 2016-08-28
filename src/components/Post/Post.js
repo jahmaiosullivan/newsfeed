@@ -84,19 +84,19 @@ export default class Post extends Component {
           <OwnerLinks {...this.props} isOwner={isOwner} />
           <PostMainImage images={this.props.images} />
           <div>
-            {postCreator && <div className="row">
-                <div className={styles.userProfilePic}>
-                  <img width="69" height="69" src={postCreator.picture} alt="" />
-                  <div className={styles.userName}>{postCreator.name}</div>
-                  <div className={styles.timeContainer}>
-                    <TimeAgoDate date={createdAt} />
-                    <div className={styles.postLinksContainer}>
-                      <IconLink value="1584" icon="comment" />
-                      <IconLink value="47k" icon="heart" />
-                    </div>
+            <div className="row">
+              <div className={styles.postCreationDetails}>
+                {postCreator && <img width="69" height="69" src={postCreator.picture} alt="" />}
+                {postCreator && <div className={styles.userName}>{postCreator.name}</div>}
+                <div className={styles.timeContainer}>
+                  <TimeAgoDate date={createdAt} />
+                  <div className={styles.postLinksContainer}>
+                    <IconLink value="1584" icon="comment" />
+                    <IconLink value="47k" icon="heart" />
                   </div>
                 </div>
-            </div>}
+              </div>
+            </div>
             <div className={ styles.postDetails + ' row'}>
               <p>{body}</p>
               <TagList tags={tags} />
