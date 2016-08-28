@@ -18,6 +18,11 @@
 
 $userImgHeightWidth: 35px;
 
+.post {
+  border-bottom: solid 1px #e7e7e7;
+  padding-bottom: 10px;
+}
+
 .imageTile {
   overflow: hidden;
   background-color: #bcbcbc;
@@ -45,52 +50,38 @@ $userImgHeightWidth: 35px;
 
 .iconStyle {
   color: #b6bfc5;
-  font-weight: bold;
 
   i {
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 10px;
   }
 }
 
 .userDetails {
-  .imgContainer {
-    float: left;
-    border-radius: 100px;
+
+}
+
+.userProfilePic {
+  position: relative;
+  z-index: 200;
+  text-align: left;
+  margin: -30px 0 0 24px;
+
+  img {
+    border-radius: 100px 100px 100px 100px;
     display: inline-block;
-    height: $userImgHeightWidth;
+    height: 68px;
     overflow: hidden;
-    width: $userImgHeightWidth;
-    margin: 6px 8px 0 0;
-    flex: 1;
-    -webkit-flex: 1;
-  }
-
-  .userNameContainer {
-    display: inline-block;
-    float: left;
-    height: $userImgHeightWidth;
-    padding-top: 14px;
-
-    .userName {
-      font-weight: bold;
-      color: #1b1e24;
-      font-size: 15px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    width: 68px;
+    border: 5px solid #ffffff;
+    background-color: #e5e9ec;
+    vertical-align: middle;
   }
 }
 
 .additionalDetails {
   margin-right: 20px;
   float: right;
-
-  .timeContainer {
-    color: #1b1e24;
-    font-size: 12px;
-    font-weight: bold;
-  }
 
   .postLinksContainer {
     display: block;
@@ -99,6 +90,20 @@ $userImgHeightWidth: 35px;
 }
 
 .postDetails {
-  margin-left: $userImgHeightWidth;
+  margin-left: 0;
   padding-top: 10px;
+}
+
+.timeContainer {
+  margin-top: 35px;
+  padding-right: 20px;
+  float: right;
+  text-align: right;
+}
+
+.userName {
+  display: inline-block;
+  position: absolute;
+  bottom: 10px;
+  font-weight: bold;
 }

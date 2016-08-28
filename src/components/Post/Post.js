@@ -25,17 +25,6 @@ const TagList = ({tags}) => {
   })}</div>);
 };
 
-const UserDetails = ({user, height = 35, width = 35}) => {
-  return (<div className={styles.userDetails}>
-    <div className={styles.imgContainer}>
-      <img src={user.picture} alt="" width={width} height={height} />
-    </div>
-    <div className={styles.userNameContainer}>
-      <div className={styles.userName}>{user.name}</div>
-    </div>
-  </div>);
-};
-
 const IconLink = ({href, value, icon }) => {
   return (<a href={href || '#'} className={styles.iconStyle}><i className={`fa fa-${icon}`}></i>{value}</a>);
 };
@@ -95,22 +84,23 @@ export default class Post extends Component {
           <PostMainImage images={this.props.images} />
           <div>
             {postCreator && <div className="row">
-              <UserDetails user={postCreator} />
-              <div className={styles.additionalDetails}>
-                <div className={styles.timeContainer}>
-                  <TimeAgoDate date={createdAt} />
+                <div className={styles.userProfilePic}>
+                  <img width="69" height="69" src={postCreator.picture} alt="" />
+                  <div className={styles.userName}>{postCreator.name}</div>
+                  <div className={styles.timeContainer}>
+                    <TimeAgoDate date={createdAt} />
+                    <div className={styles.postLinksContainer}>
+                      <IconLink value="1584" icon="comment" />
+                      <IconLink value="47k" icon="heart" />
+                    </div>
+                  </div>
                 </div>
-                <div className={styles.postLinksContainer}>
-                  <IconLink value="1584" icon="comment" />
-                  <IconLink value="47k" icon="heart" />
-                </div>
-              </div>
             </div>}
             <div className={ styles.postDetails + ' row'}>
               <p>{body}</p>
               <TagList tags={[ 'new york city', 'amazing', 'citymax']} />
-              <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
             </div>
+            <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
           </div>
         </div>
         }
