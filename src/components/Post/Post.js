@@ -68,6 +68,7 @@ export default class Post extends Component {
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
+    const tags = [ 'new york city', 'amazing', 'citymax'];
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>
@@ -98,7 +99,7 @@ export default class Post extends Component {
             </div>}
             <div className={ styles.postDetails + ' row'}>
               <p>{body}</p>
-              <TagList tags={[ 'new york city', 'amazing', 'citymax']} />
+              <TagList tags={tags} />
             </div>
             <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
           </div>
