@@ -15,7 +15,10 @@ const args = {
   images: {type: StringType }
 };
 const mutationFunction = (values, currentUser) => {
-  return Post.find({ where: {id: values.id} }).then((post) => {
+  return Post.findOne({
+      where: {id: values.id},
+      attributes: ['id', 'title', 'body', 'createdAt', 'updatedAt', 'createdBy', 'updatedBy']
+    }).then((post) => {
     if(post) {
       if (post.createdBy !== currentUser.id) {
         return new Error(`Only creator of posts can update them!`);
