@@ -16,6 +16,8 @@
   -webkit-transform: rotate($degree);
 }
 
+$userImgHeightWidth: 35px;
+
 .imageTile {
   overflow: hidden;
   background-color: #bcbcbc;
@@ -55,9 +57,9 @@
     float: left;
     border-radius: 100px;
     display: inline-block;
-    height: 35px;
+    height: $userImgHeightWidth;
     overflow: hidden;
-    width: 35px;
+    width: $userImgHeightWidth;
     margin: 6px 8px 0 0;
     flex: 1;
     -webkit-flex: 1;
@@ -66,6 +68,8 @@
   .userNameContainer {
     display: inline-block;
     float: left;
+    height: $userImgHeightWidth;
+    padding-top: 14px;
 
     .userName {
       font-weight: bold;
@@ -95,6 +99,6 @@
 }
 
 .postDetails {
-  margin-left: 35px;
-  padding-top: 10px
+  margin-left: $userImgHeightWidth;
+  padding-top: 10px;
 }
