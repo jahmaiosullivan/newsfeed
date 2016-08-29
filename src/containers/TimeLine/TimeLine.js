@@ -8,6 +8,7 @@ import * as newPostActions from 'redux/actions/postsActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
+import Helmet from 'react-helmet';
 
 @asyncConnect( [{
   deferred: false,
@@ -70,6 +71,7 @@ export default class TimeLine extends Component {
     console.log(`render timeline`);
     return (
       <div className="container-fluid">
+        <Helmet title="Timeline"/>
         <section className="pageContent">
           <div className="container">
             <div className="row">
