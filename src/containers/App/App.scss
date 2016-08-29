@@ -16,6 +16,10 @@ ul {
   margin: 0;
 }
 
+button, a {
+  outline: 0 !important;
+}
+
 .app {
   .brand {
     position: absolute;

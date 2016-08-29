@@ -18,10 +18,6 @@ const TagList = ({tags}) => {
   })}</div>);
 };
 
-const IconLink = ({href, value, icon }) => {
-  return (<a href={href || '#'} className={styles.iconStyle}><i className={`fa fa-${icon}`}></i>{value}</a>);
-};
-
 export default class Post extends Component {
   static propTypes = {
     id: PropTypes.number,
@@ -53,7 +49,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart } = this.props;
+    const { commentCount, users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart } = this.props;
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
@@ -92,8 +88,11 @@ export default class Post extends Component {
                 <div className={styles.timeContainer}>
                   <TimeAgoDate date={createdAt} />
                   <div className={styles.postLinksContainer}>
-                    <IconLink value="1584" icon="comment" />
-                    <IconLink value="47k" icon="heart" />
+                    <a href="#"
+                       className={styles.iconStyle}
+                       onClick={(event) => { event.preventDefault(); this.refs.commentList.handleCommentsToggled(); }}>
+                      <i className={`fa fa-comment`}></i>{commentCount}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -104,7 +103,7 @@ export default class Post extends Component {
               <TagList tags={tags} />
             </div>
             <div>
-              <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
+              <CommentList ref="commentList" {...this.props} onChanged={() => this.handleCommentListChanged()} />
             </div>
           </div>
         </div>
