@@ -49,7 +49,7 @@ export default class CommentList extends Component {
     const { showComments, loaded } = this.state;
     return (<div className={styles.commentList}>
       {!loaded && <div>
-        <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled();}} style={{ fontWeight: '300', color: '#505458' }}>
+        <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled();}}>
           <i className={`fa fa-comment`}></i>{commentCount ? `  ${commentCount} ${pluralize('comment', commentCount)}` : <span>  Be the first to comment</span>}
         </a>
       </div>}
