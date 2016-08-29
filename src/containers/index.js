@@ -10,3 +10,4 @@ export LoginSuccess from './LoginSuccess/LoginSuccess';
 export Survey from './Survey/Survey';
 export NotFound from './NotFound/NotFound';
 export TimeLine from './TimeLine/TimeLine';
+export Gallery from './Gallery/GalleryPage';

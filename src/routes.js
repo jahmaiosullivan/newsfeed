@@ -14,7 +14,8 @@ import {
   LoginSuccess,
   Survey,
   NotFound,
-  TimeLine
+  TimeLine,
+  Gallery
 } from './containers';
 
 export default (store) => {
@@ -73,6 +74,7 @@ export default (store) => {
       { /* Routes */ }
       <Route path="about" component={About}/>
       <Route path="timeline" component={TimeLine}/>
+      <Route path="gallery" component={Gallery}/>
       <Route path="home" component={Home}/>
       <Route path="groups" component={Groups}/>
       <Route path="survey" component={Survey}/>
