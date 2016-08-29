@@ -47,7 +47,7 @@ export default class CommentForm extends Component {
         </div>
         <div className="clearfix"></div>
         <div className={styles.submitContainer}>
-          <button type="submit" className="btn btn-success btn-cons">Comment</button>
+          <button type="submit" className="btn">Comment</button>
         </div>
       </form>
     );

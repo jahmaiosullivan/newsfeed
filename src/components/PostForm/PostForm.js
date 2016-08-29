@@ -76,8 +76,8 @@ export default class PostForm extends Component {
           <div>{this.formatError('details')}</div>
         </div>
         <div className={styles.postButtonContainer}>
-          {<button type="button" onClick={() => { console.log(this.refs.dropzone.onOpenClick()); }}>Add photo/video</button>}
-          <input type="submit" value="Post" className={styles.postButton} />
+          {<button className="btn" type="button" onClick={() => { console.log(this.refs.dropzone.onOpenClick()); }}>Add photo/video</button>}
+          <button type="submit" className={styles.postButton + ' btn btn-success'}>Post</button>
         </div>
       </form>
     );
