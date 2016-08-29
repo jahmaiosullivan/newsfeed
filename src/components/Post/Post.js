@@ -49,7 +49,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { commentCount, users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart } = this.props;
+    const { users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart } = this.props;
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
@@ -87,13 +87,6 @@ export default class Post extends Component {
                 {postCreator && <div className={styles.userName}>{postCreator.name}</div>}
                 <div className={styles.timeContainer}>
                   <TimeAgoDate date={createdAt} />
-                  <div className={styles.postLinksContainer}>
-                    <a href="#"
-                       className={styles.iconStyle}
-                       onClick={(event) => { event.preventDefault(); this.refs.commentList.handleCommentsToggled(); }}>
-                      <i className={`fa fa-comment`}></i>{commentCount}
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -103,7 +96,7 @@ export default class Post extends Component {
               <TagList tags={tags} />
             </div>
             <div>
-              <CommentList ref="commentList" {...this.props} onChanged={() => this.handleCommentListChanged()} />
+              <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
             </div>
           </div>
         </div>
