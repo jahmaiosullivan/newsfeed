@@ -55,14 +55,16 @@ export default class Gallery extends Component {
     const {images, showThumbnails, theme, previewNumImages} = this.props;
     const {currentImage, lightboxIsOpen} = this.state;
     const styles = require( './Gallery.scss' );
+    const appendedClass = images.length === 1 ? styles.fullWidth : '';
 
     return (
     <div>
       <div className={styles.gallery}>
         {images && images.slice(0, previewNumImages || 5).map((obj, index) => {
+          console.log(`images.length is ${appendedClass}`);
           return (
             <a href={obj.src}
-               className={styles.thumbnail + ' ' + styles[obj.orientation]}
+               className={styles.thumbnail + ' ' + styles[obj.orientation] + ' ' + appendedClass }
                key={index}
                onClick={(event) => this.openLightbox(index, event)}>
               <img src={obj.thumbnail} className={styles.source}/>
