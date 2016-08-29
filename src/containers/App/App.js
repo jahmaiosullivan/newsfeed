@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {IndexLink} from 'react-router';
-import {LinkContainer} from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
@@ -82,21 +81,22 @@ export default class App extends Component {
             <Navbar.Toggle/>
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav navbar pullRight>
-              {user && user !== null &&
-              <LinkContainer to="/logout">
+            {user && user !== null && <Nav navbar pullRight>
+              <Navbar.Text>{user.name}</Navbar.Text>
                 <NavItem className="logout-link" onClick={this.handleLogout}>
                   Logout
                 </NavItem>
-              </LinkContainer>}
-            </Nav>
+            </Nav>}
+            {(!user || user === null) && <Nav navbar pullRight>
+                <NavItem className="login-link">
+                  <Navbar.Link href="/login">
+                    Login
+                  </Navbar.Link>
+                </NavItem>
+            </Nav>}
           </Navbar.Collapse>
-          <div className="row">
-            {user && <p className={styles.loggedInMessage + ' navbar-text'}>{user.name}</p>}
-            {(!user || user === null) && <a className="change" href="/login">Login</a>}
-          </div>
           {city && <div className={styles.cityHeader + ' row'}>
-            <div className="col-md-offset-3 col-lg-offset-3 col-lg-6 col-md-6">
+            <div className="col-md-offset-3 col-lg-offset-3 col-lg-6 col-md-6" style={{ marginTop: '-40px' }}>
               <h1>{city.name}, {city.state}</h1>
               <div>
                 <a className="change" href="#">change city ...</a>
