@@ -58,7 +58,7 @@ export default class PostForm extends Component {
     return (
       <form id={`postForm_${id}`} key={id} className={styles.postForm} onSubmit={(event) => { this.handleSubmit(event); }}>
         <div>
-          <ValidatedTextInput ref="locationBox" getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location ..." value={title} />
+          <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location ..." value={title} />
           <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details ..." value={body} rows={4} maxLength={300} />
         </div>
         <div className={styles.imagesContainer}>
