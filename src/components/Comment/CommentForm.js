@@ -50,7 +50,9 @@ export default class CommentForm extends Component {
         <div className={styles.submitContainer}>
           <button type="submit" className="btn">Comment</button>
         </div>
-        <ValidationList errors={[...commentErrors]} />
+        <div style={{paddingLeft: '45px'}}>
+          <ValidationList errors={[...commentErrors]} />
+        </div>
       </form>
     );
   }
