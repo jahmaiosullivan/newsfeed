@@ -61,7 +61,6 @@ export default class Gallery extends Component {
     <div>
       <div className={styles.gallery}>
         {images && images.slice(0, previewNumImages || 5).map((obj, index) => {
-          console.log(`images.length is ${appendedClass}`);
           return (
             <a href={obj.src}
                className={styles.thumbnail + ' ' + styles[obj.orientation] + ' ' + appendedClass }
