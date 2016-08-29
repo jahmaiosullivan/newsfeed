@@ -1,0 +1,49 @@
+.comment {
+  display: block;
+  margin-bottom: 9px;
+  padding: 0 14px;
+
+  .details {
+    display: inline-block;
+    float: left;
+
+    .username {
+      color: #0090d9;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .body {
+      display: block;
+      color: #71798a;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .more {
+      float: left;
+      display: -webkit-flex;
+      display: flex;
+
+      .item {
+        display: inline-block;
+        float: left;
+        color: #bfbfbf;
+        margin-right: 10px;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+.commentList {
+  margin-top: 20px;
+}

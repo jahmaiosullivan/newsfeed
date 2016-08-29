@@ -3,6 +3,7 @@ import CommentForm from '../Comment/CommentForm';
 import Comment from './Comment';
 import lodash from 'lodash';
 import pluralize from 'pluralize';
+const styles = require('./Comment.scss');
 // import util from 'util';
 
 export default class CommentList extends Component {
@@ -46,7 +47,7 @@ export default class CommentList extends Component {
   render() {
     const { users, loadUsers, commentCount, currentUser, comments, id } = this.props;
     const { showComments, loaded } = this.state;
-    return (<div>
+    return (<div className={styles.commentList}>
       {!loaded && <div>
         <a href="#" onClick={(event) => {event.preventDefault(); this.handleCommentsToggled();}}>
           {commentCount ? `${showComments ? 'Hide' : 'Show'} ${commentCount} ${pluralize('comment', commentCount)}` : <span>Be the first to comment</span>}

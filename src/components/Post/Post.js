@@ -101,7 +101,9 @@ export default class Post extends Component {
               <p>{body}</p>
               <TagList tags={tags} />
             </div>
-            <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
+            <div>
+              <CommentList {...this.props} onChanged={() => this.handleCommentListChanged()} />
+            </div>
           </div>
         </div>
         }
