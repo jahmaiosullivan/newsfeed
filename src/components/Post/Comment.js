@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import UserImage from '../UserImage/UserImage';
 const styles = require('./Comment.scss');
+import TimeAgoDate from '../TimeAgoDate/TimeAgoDate';
 
 export default class Comment extends Component {
   static propTypes = {
@@ -24,7 +25,9 @@ export default class Comment extends Component {
           {creator && <div className={styles.username}> {creator.name} </div>}
           <div className={styles.body}> {comment.body} </div>
           <div className={styles.more}>
-            <div className={styles.item}><i className="icon-time"></i> 12 mins ago </div>
+            <div className={styles.item}>
+              <TimeAgoDate date={comment.createdAt} />
+            </div>
           </div>
         </div>
     </div>);

@@ -1,0 +1,26 @@
+.form {
+  .submitContainer {
+    text-align: right;
+    padding: 10px 0;
+
+    button {
+      outline: 0;
+    }
+  }
+
+  .inner {
+    width: 92%;
+  }
+
+  .commentInput {
+    border: 1px solid #e5e9ec;
+    width: 100%;
+    margin-bottom: 0;
+    outline: 0;
+    height: 16px;
+    padding: 6px 11px;
+    line-height: 15px;
+    min-height: 37px;
+    transition: background 0.2s linear 0s,box-shadow 0.2s linear 0s;
+  }
+}

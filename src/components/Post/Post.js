@@ -2,16 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import PostForm from '../PostForm/PostForm';
 import CommentList from './CommentList';
 import lodash from 'lodash';
-import timeago from 'timeago-words';
+import TimeAgoDate from '../TimeAgoDate/TimeAgoDate';
 
 const styles = require('./Post.scss');
-
-const OwnerLinks = ({ id, isOwner, deletePost, editPostStart }) => {
-  return (<div>
-    {isOwner && <div><a href="#" onClick={(event) => { event.preventDefault(); deletePost(id); }}>Delete</a>
-    <a href="#" onClick={(event) => { event.preventDefault(); editPostStart(id); }}>Edit</a></div>}
-  </div>);
-};
 
 const PostMainImage = ({images}) => {
   return (<div className={styles.imageTile}>
@@ -27,10 +20,6 @@ const TagList = ({tags}) => {
 
 const IconLink = ({href, value, icon }) => {
   return (<a href={href || '#'} className={styles.iconStyle}><i className={`fa fa-${icon}`}></i>{value}</a>);
-};
-
-const TimeAgoDate = ({date}) => {
-  return (<div>{timeago(new Date(date))}</div>);
 };
 
 export default class Post extends Component {
@@ -64,7 +53,7 @@ export default class Post extends Component {
   }
 
   render() {
-    const { users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop } = this.props;
+    const { users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart } = this.props;
     const postCreator = lodash.find(users, (postUser) => {
       return postUser.id === createdBy;
     });
@@ -80,7 +69,20 @@ export default class Post extends Component {
         }
         { !editing &&
         <div>
-          <OwnerLinks {...this.props} isOwner={isOwner} />
+          {isOwner && <div className={styles.postLinks}>
+            <div className="pull-left">
+              <a href="#" className={styles.edit} onClick={(event) => { event.preventDefault(); editPostStart(id); }}>
+                <i className="fa fa-pencil" /> edit
+              </a>
+            </div>
+            <div className="pull-right">
+              <a href="#" className={styles.remove} onClick={(event) => { event.preventDefault(); deletePost(id); }}>
+                <i className="fa fa-times" /> delete
+              </a>
+            </div>
+            <div className="clearfix"></div>
+          </div>}
+          <div className="clearfix"></div>
           <PostMainImage images={this.props.images} />
           <div>
             <div className="row">
