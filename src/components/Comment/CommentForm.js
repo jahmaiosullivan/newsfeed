@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import { createForm } from 'rc-form';
 import UserImage from '../UserImage/UserImage';
+import ValidationList from '../Validations/ValidationList';
 
 @createForm()
 export default class CommentForm extends Component {
@@ -34,6 +35,7 @@ export default class CommentForm extends Component {
   render() {
     const {currentUser, body, form: {getFieldProps, getFieldError} } = this.props;
     const styles = require('./Commentform.scss');
+    const commentErrors = getFieldError('comment') ? getFieldError('comment') : [];
     return (
       <form className={styles.form} onSubmit={this._handleSubmit}>
         <UserImage user={currentUser} widthHeight="35" />
@@ -43,12 +45,12 @@ export default class CommentForm extends Component {
             className={styles.commentInput}
             placeholder="Enter a comment..."
           />
-          {getFieldError('comment') && getFieldError('comment').join(',')}
         </div>
         <div className="clearfix"></div>
         <div className={styles.submitContainer}>
           <button type="submit" className="btn">Comment</button>
         </div>
+        <ValidationList errors={[...commentErrors]} />
       </form>
     );
   }
