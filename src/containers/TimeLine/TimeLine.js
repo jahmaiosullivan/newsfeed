@@ -91,9 +91,6 @@ export default class TimeLine extends Component {
                   </InfiniteScroll>
                 </ul>
               </div>
-              <div className="col-lg-3 col-md-3">
-                <Sidebar />
-              </div>
             </div>
           </div>
         </section>
