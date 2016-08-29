@@ -2,12 +2,8 @@ $gutter-small: 2;
 $gutter-large: 4;
 
 .gallery {
-  margin-right: 10px;
   overflow: hidden;
-
-@media (min-width: 500px) {
-  margin-right: -$gutter-large;
-}
+  height: 272px;
 };
 
 // anchor
@@ -28,11 +24,13 @@ $gutter-large: 4;
 
 // orientation
 .landscape {
-  width: 30%;
+  width: 25%;
+  border-left: solid 1px white;
+  border-bottom: solid 1px white;
 };
 .square {
   padding-bottom: 0;
-  width: 40%;
+  width: 75%;
 
 @media (min-width: 500px) {
   padding-bottom: 0;

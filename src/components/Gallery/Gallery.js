@@ -4,6 +4,7 @@ import Lightbox from 'react-images';
 export default class Gallery extends Component {
   static propTypes = {
     images: PropTypes.array,
+    previewNumImages: PropTypes.number,
     showThumbnails: PropTypes.bool,
     theme: PropTypes.any
   };
@@ -51,14 +52,14 @@ export default class Gallery extends Component {
   }
 
   render() {
-    const {images, showThumbnails, theme} = this.props;
+    const {images, showThumbnails, theme, previewNumImages} = this.props;
     const {currentImage, lightboxIsOpen} = this.state;
     const styles = require( './Gallery.scss' );
 
     return (
     <div>
       <div className={styles.gallery}>
-        {images && images.map((obj, index) => {
+        {images && images.slice(0, previewNumImages || 5).map((obj, index) => {
           return (
             <a href={obj.src}
                className={styles.thumbnail + ' ' + styles[obj.orientation]}

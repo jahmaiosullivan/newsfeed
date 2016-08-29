@@ -11,6 +11,10 @@ const TagList = ({tags, styles}) => {
   } )}</div>);
 };
 
+const theme = {
+  // container
+  gallery: { height: '273px'}
+};
 export default class Post extends Component {
   static propTypes = {
     id: PropTypes.number,
@@ -73,14 +77,14 @@ export default class Post extends Component {
             <div className="clearfix"></div>
           </div>}
           <div className="clearfix"></div>
-          <div className={styles.imageTile}>
-            {images && images !== null && <Gallery images={images.map((img) => ({
+          <div>
+            {images && images !== null && <Gallery previewNumImages={4} images={images.map((img, index) => ({
               src: img.preview,
               thumbnail: img.preview,
               caption: '',
-              orientation: 'square',
+              orientation: index === 0 ? 'square' : 'landscape',
               srcset: []
-            }))} showThumbnails />}
+            }))} theme={theme} showThumbnails />}
           </div>
           <div>
             <div className="row">

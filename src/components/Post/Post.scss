@@ -114,4 +114,8 @@ $userImgHeightWidth: 35px;
 
 .postLinks {
   z-index: 100;
+
+  .remove {
+    color: red;
+  }
 }
