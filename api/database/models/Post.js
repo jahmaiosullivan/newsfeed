@@ -1,21 +1,28 @@
 import DataType from 'sequelize';
-import Model from '../sequelize';
+import Sequelize from '../sequelize';
+import {createdUpdated} from './helpers';
 
 const tablename = 'posts';
-const Post = Model.define( 'Post', {
-  id: {
-    type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true
+const Post = Sequelize.define( 'Post', Sequelize.Utils._.extend( {
+    id: {
+      type: DataType.BIGINT,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    title: DataType.STRING,
+    body: DataType.STRING,
+    images: DataType.TEXT,
+    commentCount: DataType.INTEGER
   },
-  title: DataType.STRING,
-  body: DataType.STRING,
-  images: DataType.TEXT,
-  createdBy: DataType.UUID,
-  commentCount: DataType.INTEGER,
-  createdAt: DataType.DATE,
-  updatedBy: DataType.UUID,
-  updatedAt: DataType.DATE
-}, {tableName: tablename} );
+  createdUpdated.attributes
+  ),
+
+  Sequelize.Utils._.extend( {
+    instanceMethods: {
+      getTitle: () => {
+        return this.title;
+      }
+    }
+  }, createdUpdated.options ), {tableName: tablename} );
 
 export {Post as default, tablename};

@@ -1,7 +1,8 @@
 import DataType from 'sequelize';
-import Model from '../sequelize';
+import Sequelize from '../sequelize';
+import {createdUpdated} from './helpers';
 
-const Comment = Model.define('Comment', {
+const Comment = Sequelize.define( 'Comment', Sequelize.Utils._.extend({
   id: {
     type: DataType.BIGINT,
     primaryKey: true,
@@ -9,13 +10,8 @@ const Comment = Model.define('Comment', {
   },
   body: {type: DataType.TEXT},
   status: DataType.INTEGER,
-  statusReason: DataType.STRING,
-  createdAt: {type: DataType.DATE},
-  createdBy: {type: DataType.UUID},
-  updatedAt: {type: DataType.DATE},
-  updatedBy: {type: DataType.UUID}
-}, {
-
+  statusReason: DataType.STRING
+}, createdUpdated.attributes), {
     indexes: [
       {fields: ['status']}
     ],
