@@ -16,7 +16,8 @@ function loadPosts(page = 1) {
   };
 }
 
-function createNewPost({title, body, images, createdBy}) {
+function createNewPost({title, body, images, createdBy, tags}) {
+  console.log( `tags are ${tags}`);
   return {
     types: [actions.POST_NEW, actions.POST_NEW_SUCCESS, actions.POST_NEW_FAIL],
     promise: (client) => client.graphQL( `mutation CreatePost { createPost(title: \"${title}\",body: \"${body}\",images: \"${images}\",createdBy: \"${createdBy}\") {${postReturnFields} }}`)
