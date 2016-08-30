@@ -12,7 +12,7 @@ export default class PostForm extends Component {
     this._handleAddition = (tag) => { this.handleAddition(tag);};
     this._handleDelete = (index) => { this.handleDelete(index);};
     this._handleDrag = (tag, currPos, newPos) => { this.handleDrag(tag, currPos, newPos); };
-    this.state = { tags: props.tags, suggestions: props.suggestions };
+    this.state = { tags: props.tags ? props.tags : [], suggestions: props.suggestions ? props.suggestions : [] };
   }
 
   handleDelete(index) {
