@@ -8,7 +8,12 @@ const userActions = {
   USER_LOAD_SUCCESS: createActionName( 'users', 'LOAD_SUCCESS' ),
   USER_LOAD_FAIL: createActionName( 'users', 'LOAD_FAIL' ),
   USER_LOAD: createActionName( 'users', 'LOAD' )
+};
 
+const tagActions = {
+  TAG_LOAD_SUCCESS: createActionName( 'tags', 'LOAD_SUCCESS' ),
+  TAG_LOAD_FAIL: createActionName( 'tags', 'LOAD_FAIL' ),
+  TAG_LOAD: createActionName( 'tags', 'LOAD' )
 };
 
 const postActions = {
@@ -44,4 +49,4 @@ const cityActions = {
   CITY_LOAD_FAIL: createActionName('city', 'LOAD_FAIL')
 };
 
-export default {...postActions, ...cityActions, ...userActions};
+export default {...postActions, ...cityActions, ...userActions, ...tagActions};

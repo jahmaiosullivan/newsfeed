@@ -8,6 +8,7 @@ import groups from './queries/groups/all';
 import group from './queries/groups/single';
 import events from './queries/events/all';
 import posts from './queries/posts/all';
+import tags from './queries/tags/all';
 import comments from './queries/comments/all';
 import users from './queries/users/all';
 import event from './queries/events/single';
@@ -29,6 +30,7 @@ const schema =  new Schema({
       event,
       posts,
       comments,
+      tags,
       city,
       users
     }

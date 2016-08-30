@@ -5,6 +5,7 @@ import NewPostForm from '../../components/PostForm/NewPostForm';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import * as newPostActions from 'redux/actions/postsActionCreators';
+import {loadTags, isLoaded as isTagsLoaded } from 'redux/actions/tagActionCreators';
 import { loadUsers } from 'redux/actions/usersActionCreators';
 import lodash from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -12,24 +13,33 @@ import Helmet from 'react-helmet';
 
 @asyncConnect( [{
   deferred: false,
-  promise: ({store}) => {
-    if (!newPostActions.isLoaded( store.getState() )) {
-      return store.dispatch( newPostActions.loadPosts() ).then(({data: {posts}}) => {
+  promise: ({store: { getState, dispatch}}) => {
+    const promises = [];
+
+    if (!isTagsLoaded( getState() )) {
+      promises.push( dispatch(loadTags()));
+    }
+
+    if (!newPostActions.isLoaded( getState() )) {
+      promises.push( dispatch( newPostActions.loadPosts() ).then(({data: {posts}}) => {
         const postCreatorIds = lodash(posts)
           .filter(post => post.createdBy !== null)
           .map(post => post.createdBy)
           .uniqBy(creatorId => creatorId)
           .value();
 
-        return store.dispatch(loadUsers(postCreatorIds));
-      });
+        return dispatch(loadUsers(postCreatorIds));
+      }));
     }
+
+    return Promise.all( promises );
   }
-}] )
+}])
 @connect(
   state => ({
     currentUser: state.auth.user,
     users: state.users.data,
+    tags: state.tags.data,
     posts: state.posts.data,
     hasMore: state.posts.hasMore,
     editing: state.posts.editing,
@@ -40,6 +50,7 @@ export default class TimeLine extends Component {
   static propTypes = {
     users: PropTypes.array,
     posts: PropTypes.array,
+    tags: PropTypes.array,
     currentUser: PropTypes.object,
     hasMore: PropTypes.bool,
     loading: PropTypes.bool,
@@ -66,7 +77,7 @@ export default class TimeLine extends Component {
   }
 
   render() {
-    const { currentUser, posts, editing, hasMore } = this.props;
+    const { currentUser, posts, editing, hasMore, tags } = this.props;
     const styles = require( './Events.scss' );
     console.log(`render timeline`);
     return (
@@ -77,6 +88,9 @@ export default class TimeLine extends Component {
             <div className="row">
               <div className="col-lg-3 col-md-3">
                 <Sidebar />
+                {tags && tags.map((tag) => {
+                  return (<div>{tag.name}</div>);
+                })}
               </div>
               <div className="col-lg-6 col-md-6">
                 {currentUser && <NewPostForm {...this.props} />}
