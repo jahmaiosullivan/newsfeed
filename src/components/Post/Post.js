@@ -7,7 +7,7 @@ import Gallery from '../Gallery/Gallery';
 
 const TagList = ({tags, styles}) => {
   return (<div>{tags && tags.map( (tag) => {
-    return (<a href="#" className={styles.hashtag}>{`#${tag}`}</a>);
+    return (<a href="#" className={styles.hashtag}>{`#${tag.name}`}</a>);
   } )}</div>);
 };
 
@@ -24,6 +24,7 @@ export default class Post extends Component {
     loadUsers: PropTypes.func.isRequired,
     users: PropTypes.array,
     images: PropTypes.array,
+    tags: PropTypes.array,
     loadComments: PropTypes.func.isRequired,
     onPostChanged: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
@@ -47,11 +48,10 @@ export default class Post extends Component {
 
   render() {
     const styles = require( './Post.scss' );
-    const {users, currentUser, saveFile, body, editing, id, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart, images} = this.props;
+    const {users, currentUser, saveFile, body, editing, id, tags, title, createdAt, createdBy, editPost, editPostStop, deletePost, editPostStart, images} = this.props;
     const postCreator = lodash.find( users, (postUser) => {
       return postUser.id === createdBy;
     } );
-    const tags = ['new york city', 'amazing', 'citymax'];
     const isOwner = currentUser && postCreator && postCreator.id === currentUser.id;
     return (
       <li id={`post_${String(id)}`} className={styles.post}>

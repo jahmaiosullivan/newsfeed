@@ -1,15 +1,16 @@
-import {Post, Comment } from '../../../database/models';
+import {Post, Comment, Tag } from '../../../database/models';
 import sequelize from '../../../database/sequelize';
 import config from '../../../../config';
-import util from 'util';
+import _ from 'lodash';
+
 import {
   GraphQLList as List,
   GraphQLInt as IntType,
 } from 'graphql';
-import PostType from '../../types/PostType';
+import PostWithTagsType from '../../types/PostWithTagsType';
 
 export default  {
-  type: new List(PostType),
+  type: new List(PostWithTagsType),
   args: {
     page: {type: IntType}
   },
@@ -29,6 +30,13 @@ export default  {
           ['createdAt', 'DESC']
         ],
         raw: true
+      }).then((posts) => {
+         return Tag.findAll({raw: true}).then((tags) => {
+           posts = _.map(posts, (post) => {
+             return _.extend({}, post, {tags});
+           });
+           return posts;
+         });
       }));
     });
   }
