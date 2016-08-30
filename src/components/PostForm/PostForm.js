@@ -11,7 +11,7 @@ export default class PostForm extends Component {
   static propTypes = {
     id: PropTypes.number,
     title: PropTypes.string,
-    tags: PropTypes.array,
+    tagSuggestions: PropTypes.array,
     form: PropTypes.object,
     body: PropTypes.string,
     images: PropTypes.array,
@@ -51,7 +51,7 @@ export default class PostForm extends Component {
   }
 
   render() {
-    const { id, title, body, uploadFileHandler, tags, form: {getFieldError, getFieldProps}} = this.props;
+    const { id, title, body, uploadFileHandler, tagSuggestions, form: {getFieldError, getFieldProps}} = this.props;
     const styles = require('./PostForm.scss');
     const basicRules = [{required: true, min: 3, whitespace: true}];
     const locationErrors = getFieldError('location') ? getFieldError('location') : [];
@@ -62,7 +62,7 @@ export default class PostForm extends Component {
         <div>
           <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location ..." value={title} />
           <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details ..." value={body} rows={4} maxLength={300} />
-          <Tags suggestions={tags && tags.map((tag) => {return tag.name;})} />
+          <Tags suggestions={tagSuggestions} />
         </div>
         <div className={styles.imagesContainer}>
           <DropZone ref="dropzone" addPhotoStyle={styles.addPhoto} images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />

@@ -16,7 +16,7 @@ export default class NewPost extends Component {
       <div className={styles.newPostForm}>
         {currentUser &&
           <PostForm formKey="newPost"
-                    tags={tags}
+                    tagSuggestions={tags && tags.map((tag) => {return tag.name;})}
                     submitHandler={(formValues) => { return createNewPost({...formValues, createdBy: currentUser.id}); }}
                     uploadFileHandler={saveFile} />
         }
