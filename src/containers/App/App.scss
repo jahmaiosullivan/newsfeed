@@ -20,6 +20,23 @@ button, a {
   outline: 0 !important;
 }
 
+.tags {
+  .ReactTags__tags {
+    .ReactTags__selected {
+      span.ReactTags__tag {
+        border: 1px solid #ddd;
+        background: #eee;
+        font-size: 12px;
+        display: inline-block;
+        padding: 5px;
+        margin: 0 5px;
+        cursor: move;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
 .app {
   .brand {
     position: absolute;

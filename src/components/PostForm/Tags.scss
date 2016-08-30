@@ -1,0 +1,67 @@
+.tags {
+  position: relative;
+  margin: 10px 0;
+  display: inline-block;
+
+  .selected {
+    float: left;
+
+    .tag {
+      border: 1px solid #ddd;
+      background: #eee;
+      font-size: 12px;
+      display: inline-block;
+      padding: 5px;
+      margin: 0 5px;
+      cursor: move;
+      border-radius: 2px;
+    }
+
+    .remove {
+      color: #aaa;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+
+  .tagInput {
+    width: 200px;
+    border-radius: 2px;
+    display: inline-block;
+
+    input, input:focus {
+      height: 31px;
+      margin: 0;
+      font-size: 12px;
+      width: 100%;
+      padding: 6px 10px;
+      background-color: #fff;
+      border: 1px solid #D1D1D1;
+      border-radius: 4px;
+      box-shadow: none;
+      box-sizing: border-box;
+    }
+  }
+
+  .suggestions {
+    position: absolute;
+
+    ul {
+      list-style-type: none;
+      box-shadow: .05em .01em .5em rgba(0, 0, 0, .2);
+      background: white;
+      width: 200px;
+
+      li {
+        border-bottom: 1px solid #ddd;
+        padding: 5px 10px;
+        margin: 0;
+
+        .active {
+          background: #b7cfe0;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
