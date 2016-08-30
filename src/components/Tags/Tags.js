@@ -4,7 +4,8 @@ import { WithContext as ReactTags } from 'react-tag-input';
 export default class PostForm extends Component {
   static propTypes = {
     suggestions: PropTypes.array,
-    tags: PropTypes.array
+    tags: PropTypes.array,
+    onChange: PropTypes.func
   };
 
   constructor(props) {
@@ -16,22 +17,29 @@ export default class PostForm extends Component {
   }
 
   handleDelete(index) {
-    const tags = this.state.tags;
+    const {tags} = this.state;
+    const {onChange} = this.props;
+
     tags.splice(index, 1);
     this.setState({tags: tags});
+    onChange(tags);
   }
 
   handleAddition(tag) {
-    const tags = this.state.tags;
+    const {tags} = this.state;
+    const {onChange} = this.props;
+
     tags.push({
       id: tags.length + 1,
       text: tag
     });
     this.setState({tags: tags});
+    onChange(tags);
   }
 
   handleDrag(tag, currPos, newPos) {
-    const tags = this.state.tags;
+    const {tags} = this.state;
+    const {onChange} = this.props;
 
     // mutate array
     tags.splice(currPos, 1);
@@ -39,6 +47,7 @@ export default class PostForm extends Component {
 
     // re-render
     this.setState({ tags: tags });
+    onChange(tags);
   }
 
   render() {

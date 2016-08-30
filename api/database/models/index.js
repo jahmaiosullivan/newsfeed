@@ -20,8 +20,8 @@ Post.hasMany(Comment, {
 });
 Comment.belongsTo(Post, {as: 'post'});
 
-Tag.belongsToMany(Post, {through: 'postTags'});
-Post.belongsToMany(Tag, {through: 'postTags'});
+Tag.belongsToMany(Post, {through: 'postTags', foreignKey: 'tagId'});
+Post.belongsToMany(Tag, {through: 'postTags', foreignKey: 'postId'});
 
 function sync(...args) {
   return sequelize.sync(...args);

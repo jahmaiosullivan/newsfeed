@@ -38,7 +38,8 @@ function editPostStop(id) {
   return { type: actions.POST_EDIT_STOP, id };
 }
 
-function editPost({id, title, body, images}) {
+function editPost({id, title, body, images, tags}) {
+  console.log( `tags are ${tags}`);
   return {
     types: [actions.POST_UPDATE, actions.POST_UPDATE_SUCCESS, actions.POST_UPDATE_FAIL],
     promise: (client) => client.graphQL( `mutation UpdatePost { updatePost(id: ${id}, title: \"${title}\", body: \"${body}\",images: \"${images}\" ){ ${postReturnFields}  }}`)

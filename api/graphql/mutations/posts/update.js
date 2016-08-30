@@ -1,4 +1,4 @@
-import PostType from '../../types/PostType';
+import PostType from '../../types/PostWithTagsType';
 import { Post } from '../../../database/models';
 import util from 'util';
 import { createAuthorizedGraphQLQuery } from '../../graphQLHelper';

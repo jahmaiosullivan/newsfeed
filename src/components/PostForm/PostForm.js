@@ -5,12 +5,14 @@ import ValidatedTextInput from './ValidatedTextInput';
 import ValidatedTextArea from './ValidatedTextArea';
 import ValidationList from '../Validations/ValidationList';
 import { createForm } from 'rc-form';
+import underscore from 'lodash';
 
 @createForm()
 export default class PostForm extends Component {
   static propTypes = {
     id: PropTypes.number,
     title: PropTypes.string,
+    tags: PropTypes.array,
     tagSuggestions: PropTypes.array,
     form: PropTypes.object,
     body: PropTypes.string,
@@ -21,11 +23,15 @@ export default class PostForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { images: this.props.images ? this.props.images : []};
+    this.state = { images: props.images ? props.images : [], tags: props.tags ? underscore.map(props.tags, (tag) => { return { id: tag.id, text: tag.name}; }) : [] };
   }
 
   handleImagesChange(images) {
-    this.setState({images: images});
+    this.setState({images});
+  }
+
+  handleTagsChange(tags) {
+    this.setState({tags});
   }
 
   handleSubmit(event) {
@@ -37,8 +43,11 @@ export default class PostForm extends Component {
         const images = this.state.images.map((image) => {
           return image.preview;
         }).join(', ');
+        const tags = this.state.tags.map((tag) => {
+          return tag.text;
+        }).join(', ');
 
-        submitHandler({id: id, title: values.location.trim(), body: values.details.trim(), images}).then(() => {
+        submitHandler({id: id, title: values.location.trim(), body: values.details.trim(), images, tags}).then(() => {
           this.clearForm();
         });
       }
@@ -47,11 +56,12 @@ export default class PostForm extends Component {
 
   clearForm() {
     this.props.form.setFieldsValue({details: '', location: ''});
-    this.setState({images: []});
+    this.setState({images: [], tags: []});
   }
 
   render() {
     const { id, title, body, uploadFileHandler, tagSuggestions, form: {getFieldError, getFieldProps}} = this.props;
+    const { tags, images } = this.state;
     const styles = require('./PostForm.scss');
     const basicRules = [{required: true, min: 3, whitespace: true}];
     const locationErrors = getFieldError('location') ? getFieldError('location') : [];
@@ -62,10 +72,10 @@ export default class PostForm extends Component {
         <div>
           <ValidatedTextInput getFieldProps={getFieldProps} name="location" rules={basicRules} placeHolderText="Location ..." value={title} />
           <ValidatedTextArea className={styles.details} getFieldProps={getFieldProps} name="details" rules={basicRules} placeHolderText="Details ..." value={body} rows={4} maxLength={300} />
-          <Tags suggestions={tagSuggestions} />
+          <Tags tags={tags} suggestions={tagSuggestions} onChange={(event) => { this.handleTagsChange(event); }} />
         </div>
         <div className={styles.imagesContainer}>
-          <DropZone ref="dropzone" addPhotoStyle={styles.addPhoto} images={this.state.images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
+          <DropZone ref="dropzone" addPhotoStyle={styles.addPhoto} images={images} uploadImageHandler={uploadFileHandler} onChangeHandler={(event) => { this.handleImagesChange(event); }} />
         </div>
         <div className={styles.postButtonContainer}>
           {<button className="btn" type="button" onClick={() => { console.log(this.refs.dropzone.onOpenClick()); }}>Add photo/video</button>}
