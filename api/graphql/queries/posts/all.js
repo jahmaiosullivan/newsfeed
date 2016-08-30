@@ -13,20 +13,23 @@ export default  {
   args: {
     page: {type: IntType}
   },
-  resolve({user}, { page }) {
-    console.log(`finding posts now for user ${util.inspect(user)}`);
-    const offset = page * config.paging.rows - config.paging.rows;
-    const postsQuery = `Select "Posts".*, count("Comments"."id") as "commentCount" from Posts as "Posts"
-                        LEFT OUTER JOIN Comments as "Comments" ON "Comments"."postId" = "Posts"."id"
-                        group by "Posts"."id"
-                        order by "Posts"."createdAt" DESC
-                        LIMIT :limit OFFSET :offset`;
-    const variables = { offset, limit: config.paging.rows };
-
+  resolve(context, {page}) {
     return new Promise((resolve) => {
-      resolve(sequelize.query(postsQuery, { replacements: variables, model: Post, type: sequelize.QueryTypes.SELECT }).then((posts) => {
-          return posts;
-        }));
+      resolve( Post.findAll( {
+        attributes: ['Post.*', [sequelize.fn( 'COUNT', sequelize.col('Comments.id')), 'commentCount']],
+        offset: page * config.paging.rows - config.paging.rows,
+        limit: config.paging.rows,
+        include: [{
+          model: Comment,
+          attributes: [],
+          duplicating: false
+        }],
+        group: [sequelize.col('Post.id')],
+        order: [
+          ['createdAt', 'DESC']
+        ],
+        raw: true
+      }));
     });
   }
 };
