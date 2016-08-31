@@ -16,7 +16,7 @@ export default  {
   },
   resolve(context, {page}) {
     return new Promise((resolve) => {
-      resolve( Post.findAll( {
+      return resolve(Post.findAll( {
         attributes: ['Post.*', [sequelize.fn( 'COUNT', sequelize.col('Comments.id')), 'commentCount']],
         offset: page * config.paging.rows - config.paging.rows,
         limit: config.paging.rows,
@@ -30,13 +30,6 @@ export default  {
           ['createdAt', 'DESC']
         ],
         raw: true
-      }).then((posts) => {
-         return Tag.findAll({raw: true}).then((tags) => {
-           posts = _.map(posts, (post) => {
-             return _.extend({}, post, {tags});
-           });
-           return posts;
-         });
       }));
     });
   }

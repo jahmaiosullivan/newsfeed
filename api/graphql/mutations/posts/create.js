@@ -22,9 +22,7 @@ const mutationFunction = (values) => {
               updatedBy: values.createdBy
             }
           } ).spread( (createdTag) => {
-            console.log( `about to add ${util.inspect( createdTag )}` );
             createdPost.addTag( createdTag ).then( () => {
-              console.log( `added ${createdTag.name}` );
               resolve();
             } );
           } );
