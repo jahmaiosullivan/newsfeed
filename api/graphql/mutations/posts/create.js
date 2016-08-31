@@ -8,24 +8,27 @@ import {
 } from 'graphql';
 
 const mutationFunction = (values) => {
-
-  const addTagsToPost = (createdPost, item, cb) => {
-    Tag.findOrCreate({where: {name: {$iLike: item.trim()} }, defaults: {
-        name: item.trim(),
-        description: '',
-        createdBy: values.createdBy,
-        updatedBy: values.createdBy
-    }}).spread((createdTag) => {
-      createdPost.addTag(createdTag).then(() => {
-        cb();
-      });
-    });
-  };
-
   return Post.create(values).then((createdPost) => {
-    let savedTags = values.tags.split(',').reduce((promiseChain, tag) => {
+    const tagsList = values.tags.split(',');
+
+    let savedTags = tagsList.reduce((promiseChain, tag) => {
       return promiseChain.then( () => new Promise( (resolve) => {
-        addTagsToPost( createdPost, tag, resolve );
+        if (tag.trim() !== '') {
+          Tag.findOrCreate( {
+            where: {name: {$iLike: tag.trim()}}, defaults: {
+              name: tag.trim(),
+              description: '',
+              createdBy: values.createdBy,
+              updatedBy: values.createdBy
+            }
+          } ).spread( (createdTag) => {
+            console.log( `about to add ${util.inspect( createdTag )}` );
+            createdPost.addTag( createdTag ).then( () => {
+              console.log( `added ${createdTag.name}` );
+              resolve();
+            } );
+          } );
+        }
       }));
     }, Promise.resolve() );
 

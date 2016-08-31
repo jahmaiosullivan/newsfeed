@@ -16,6 +16,13 @@ export default class PostForm extends Component {
     this.state = { tags: props.tags ? props.tags : [], suggestions: props.suggestions ? props.suggestions : [] };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {tags} = nextProps;
+    if (tags !== this.state.tags) {
+      this.setState({tags: tags});
+    }
+  }
+
   handleDelete(index) {
     const {tags} = this.state;
     const {onChange} = this.props;
@@ -53,7 +60,7 @@ export default class PostForm extends Component {
   render() {
     const { tags, suggestions } = this.state;
     const tagStyles = require('./Tags.scss');
-
+    console.log(`rerender Tags`);
     return (
       <ReactTags tags={tags}
                  classNames={{
