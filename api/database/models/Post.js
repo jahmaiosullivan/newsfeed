@@ -13,7 +13,7 @@ const Fields = {
   title: DataType.STRING,
   body: DataType.STRING,
   images: DataType.TEXT,
-  commentCount: DataType.INTEGER,
+  commentCount: DataType.VIRTUAL,
   createdBy: DataType.UUID,
   createdAt: DataType.DATE,
   updatedBy: DataType.UUID,
