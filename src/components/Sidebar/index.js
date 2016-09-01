@@ -10,7 +10,9 @@ const Sidebar = ({tags}) => {
         <div className={styles.txt}>
           <ul className={styles.cats}>
             {tags && tags.map((tag) => {
-              return (<li><a href="#">{tag.name} <span className="badge pull-right">20</span></a></li>);
+              return (<li>
+                <a href={`#${tag.name}`}>{tag.name}</a>
+              </li>);
             })}
           </ul>
         </div>
