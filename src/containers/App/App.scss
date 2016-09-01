@@ -65,9 +65,34 @@ button, a {
     .cityHeader {
       text-align: center;
 
+      .cityContainer {
+        margin-top: -40px;
+      }
+
       h1 {
         font-weight: bold;
         margin: 0;
+      }
+
+
+      @media (max-width: 400px) {
+        h1 {
+          font-size: 12px;
+        }
+
+        a.changeCity {
+          display: none;
+        }
+
+        .cityContainer {
+          margin-top: 0;
+        }
+      }
+
+      @media (max-width: 700px) {
+        h1 {
+          font-size: 24px;
+        }
       }
     }
   }

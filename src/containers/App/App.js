@@ -96,10 +96,10 @@ export default class App extends Component {
             </Nav>}
           </Navbar.Collapse>
           {city && <div className={styles.cityHeader + ' row'}>
-            <div className="col-md-offset-3 col-lg-offset-3 col-lg-6 col-md-6" style={{ marginTop: '-40px' }}>
+            <div className={styles.cityContainer + ' col-md-offset-3 col-lg-offset-3 col-lg-6 col-md-6'}>
               <h1>{city.name}, {city.state}</h1>
               <div>
-                <a className="change" href="#">change city ...</a>
+                <a className={styles.changeCity} href="#">change city ...</a>
               </div>
             </div>
           </div>}
