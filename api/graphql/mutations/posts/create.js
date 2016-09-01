@@ -11,12 +11,13 @@ const mutationFunction = (values) => {
   return Post.create(values).then((createdPost) => {
     const tagsList = values.tags.split(',');
 
-    let savedTags = tagsList.reduce((promiseChain, tag) => {
+    const saveTags = tagsList.reduce((promiseChain, tag) => {
       return promiseChain.then( () => new Promise( (resolve) => {
-        if (tag.trim() !== '') {
+        const trimmedTag = tag.trim();
+        if (trimmedTag !== '') {
           Tag.findOrCreate( {
-            where: {name: {$iLike: tag.trim()}}, defaults: {
-              name: tag.trim(),
+            where: {name: {$iLike: trimmedTag}}, defaults: {
+              name: trimmedTag,
               description: '',
               createdBy: values.createdBy,
               updatedBy: values.createdBy
@@ -31,7 +32,7 @@ const mutationFunction = (values) => {
     }, Promise.resolve() );
 
     // Add the tags to the post manually
-    return savedTags.then( () => {
+    return saveTags.then( () => {
       createdPost.tags = createdPost.getTags();
       return createdPost;
     });
